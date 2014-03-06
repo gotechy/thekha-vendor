@@ -8,7 +8,7 @@
     tools:context=".ProfileActivity" >
     
     <ImageView
-        android:id="@+id/business_picture"
+        android:id="@+id/edit_business_picture"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/profile_image_height"
         android:cropToPadding="true"
@@ -18,28 +18,41 @@
         android:contentDescription="@string/description"
         android:src="@drawable/hotel" />
     
+    <Button
+        android:id="@+id/edit_business_picture_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/change_picture" />
+    
+    
 <RelativeLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin" >
     
-    <TextView
-        android:id="@+id/business_name"
+    <EditText
+        android:id="@+id/edit_business_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:text="Business_Name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@+id/edit_business_type"
+        android:ems="10"
+        android:hint="@string/edit_business_name" >
 
-    <TextView
-        android:id="@+id/business_type"
+        <requestFocus />
+    </EditText>
+
+    <Spinner
+        android:id="@+id/edit_business_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/business_name"
+        android:layout_below="@+id/edit_business_name"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="Business Type"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:hint="Business Type"
+        android:ems="10" />       
     
     <TextView
         android:id="@+id/business_facilities"
@@ -145,6 +158,5 @@
 
         </RelativeLayout>
     </ScrollView>
-
 </RelativeLayout>
 </LinearLayout>

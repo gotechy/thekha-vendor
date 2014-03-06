@@ -10,5 +10,7 @@
     <string name="profile_emaillable">EMail</string>
     <string name="profile_facebooklable">Facebook</string>
     <string name="profile_addresslable">Address</string>
-
+    <string name="action_edit_profile">Edit Profile</string>
+    <string name="change_picture">Change Picture</string>
+	<string name="edit_business_name">Edit Name</string>
 </resources>
