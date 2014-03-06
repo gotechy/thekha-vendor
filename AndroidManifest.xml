@@ -16,11 +16,15 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.thekha.vendor.activity.BusinessActivity"
-            android:label="@string/business_name" >
+            android:label="@string/business" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.thekha.vendor.activity.EditBusinessActivity"
+            android:label="@string/edit_business" >
         </activity>
     </application>
 
