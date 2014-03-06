@@ -13,6 +13,7 @@ public class ProfileDAO {
 		Business b = new Business(1, 
 				"Blue Moon",
 				Business.HOTEL,
+				"file:///android_asset/hotel.jpg",
 				new Address(1,"E-2a","Jwahar Park","Saket","Delhi","Bihar","India","201005"),
 				new ArrayList<Phone>(),
 				"bluemoon@gmail.com",

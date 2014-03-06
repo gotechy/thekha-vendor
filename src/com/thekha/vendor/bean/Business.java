@@ -13,6 +13,7 @@ public class Business {
 	private int id;
 	private String name = "";
 	private String  type = "";
+	private String imageURL = "";
 	private Address address =  new Address();
 	private List<Phone> phones = new ArrayList<Phone>();
 	private String email = "";
@@ -24,13 +25,14 @@ public class Business {
 		
 	}
 	
-	public Business(int id, String name, String type, Address address,
+	public Business(int id, String name, String type, String imageURL, Address address,
 			List<Phone> phones, String email, String website, String facebook,
 			Facilities facilities) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.type = type;
+		this.imageURL = imageURL;
 		this.address = address;
 		this.phones = phones;
 		this.email = email;
@@ -56,6 +58,12 @@ public class Business {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getImageURL() {
+		return imageURL;
+	}
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
 	}
 	public Address getAddress() {
 		return address;

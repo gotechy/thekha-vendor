@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="second_grey">#ffdddddd</color>
+    <color name="card_shadow">#ffdddddd</color>
+    <color name="card_white">#ffeeeeee</color>
+    <color name="bg_color">#ffeeff</color>
+    <color name="emphasis">#31b6e7</color>
+    <color name="bg_gray">#cecbce</color>
+</resources>
