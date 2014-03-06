@@ -7,7 +7,7 @@ import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Facilities;
 import com.thekha.vendor.bean.Phone;
 
-public class ProfileDAO {
+public class BusinessDAO {
 	// TODO - CRUD for ProfileDAO
 	public Business read(){
 		Business b = new Business(1, 
