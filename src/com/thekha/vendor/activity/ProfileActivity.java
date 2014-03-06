@@ -26,7 +26,7 @@ public class ProfileActivity extends Activity {
 	  public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    // action with ID action_refresh was selected
-	    case R.id.edit_profile:
+	    case R.id.edit_profile_menu:
 	      Toast.makeText(this, "Edit Selected", Toast.LENGTH_SHORT).show();
 	      break;
 	    default:

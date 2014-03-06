@@ -12,5 +12,6 @@
     <string name="profile_addresslable">Address</string>
     <string name="action_edit_profile">Edit Profile</string>
     <string name="change_picture">Change Picture</string>
-	<string name="edit_business_name">Edit Name</string>
+	<string name="edit_business_name">Business Name</string>
+	<string name="edit_business_type">Business Type</string>
 </resources>

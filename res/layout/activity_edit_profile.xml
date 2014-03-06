@@ -51,14 +51,14 @@
         android:layout_below="@+id/edit_business_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:hint="Business Type"
+        android:hint="@string/edit_business_type"
         android:ems="10" />       
     
     <TextView
         android:id="@+id/business_facilities"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/business_name"
+        android:layout_below="@+id/edit_business_name"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:text="AC | Smoking | Veg | Non-Veg | Mujra"
