@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/edit_business_menu"
+    <item android:id="@+id/editbusiness_actionmenu_cancel"
           android:showAsAction="always|withText"
-          android:title="@string/save"
-          android:icon="@drawable/ic_action_save"
+          android:title="@string/cancel"
+          android:icon="@drawable/ic_action_cancel"
+           />
+    <item android:id="@+id/editbusiness_actionmenu_done"
+          android:showAsAction="always|withText"
+          android:title="@string/done"
+          android:icon="@drawable/ic_action_accept"
            />
 </menu>

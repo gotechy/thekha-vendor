@@ -24,7 +24,11 @@
         </activity>
         <activity
             android:name="com.thekha.vendor.activity.EditBusinessActivity"
-            android:label="@string/edit_business" >
+            android:label="@string/edit_business"
+            android:parentActivityName="com.thekha.vendor.activity.BusinessActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.thekha.vendor.activity.BusinessActivity" />
         </activity>
     </application>
 
