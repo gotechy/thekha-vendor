@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".ProfileActivity" >
+    
+    <TextView
+        android:id="@+id/label_aed_deal"
+        style="@style/sectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/label_deal"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	  	<TableRow
+	  	    android:id="@+id/table_row_title"
+	  	    android:layout_width="match_parent"
+	  	    android:layout_height="wrap_content"
+	        android:layout_below="@+id/label_aed_deal" >
+	  	    
+	  	    <TextView
+	  	        android:id="@+id/label_aed_deal_title"
+	  	        android:layout_width="wrap_content"
+	  	        android:layout_height="wrap_content"
+	  	        android:text="@string/label_deal_title"
+	  	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	  	    <EditText
+	  	        android:id="@+id/edit_aed_deal_title"
+	  	        android:layout_width="fill_parent"
+	  	        android:layout_height="wrap_content"
+	  	        android:ems="10"
+	  	        android:hint=" " />
+	  	</TableRow>
+	    	    
+	   <TableRow
+	        android:id="@+id/table_row_description"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/table_row_title" >
+	       	
+		    <TextView
+		        android:id="@+id/label_aed_deal_description"
+		        style=""
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_deal_description"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		     
+		    <EditText
+		        android:id="@+id/edit_aed_deal_description"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:hint=" " />
+	
+	    </TableRow>
+	    
+	  	<TableRow
+	        android:id="@+id/table_row_code"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/table_row_description" >
+	       	
+		    <TextView
+		        android:id="@+id/label_aed_deal_code"
+		        style=""
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_deal_code"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		     
+		    <EditText
+		        android:id="@+id/edit_aed_deal_code"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:hint=" " >
+	    	</EditText>
+	        	        
+	    </TableRow>
+    
+    <TextView
+        android:id="@+id/label_aed_cover_image"
+        style="@style/sectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/label_cover_image"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/table_row_code" />
+
+	    <ImageButton
+	        android:id="@+id/iButton_aed_cover_image"
+	        android:layout_width="fill_parent"
+	        android:layout_height="@dimen/aed_upload_image_height"
+	        android:layout_alignLeft="@+id/label_aed_cover_image"
+	        android:layout_alignRight="@+id/label_aed_cover_image"
+	        android:layout_below="@+id/label_aed_cover_image"
+	        android:src="@drawable/ic_launcher"
+	        android:contentDescription="@string/cd_image_upload"/>
+  	
+    <TextView
+        android:id="@+id/label_aed_deal_active"
+        style="@style/sectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/label_deal_active"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/iButton_aed_cover_image" />
+
+	   	<TableRow
+	        android:id="@+id/table_row_from"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/label_aed_deal_active" >
+	       	
+		    <TextView
+		        android:id="@+id/label_aed_deal_active_from"
+		        style=""
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_deal_description"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		     
+		    <EditText
+		        android:id="@+id/edit_aed_deal_active_from"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:hint=" " >
+	    	</EditText>
+	        	        
+	    </TableRow>
+    	    
+
+
+</RelativeLayout>

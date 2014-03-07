@@ -17,11 +17,15 @@
         <activity
             android:name="com.thekha.vendor.activity.BusinessActivity"
             android:label="@string/business_name" >
+        </activity>
+        <activity
+            android:name="com.thekha.vendor.activity.DealsActivity"
+            android:label="@string/title_deals" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+        </application>
 
 </manifest>

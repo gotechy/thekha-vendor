@@ -14,4 +14,14 @@
     <string name="change_picture">Change Picture</string>
 	<string name="edit_business_name">Business Name</string>
 	<string name="edit_business_type">Business Type</string>
+	<string name="label_deal">Deal</string>
+		<string name="label_deal_title">Title</string>
+		<string name="label_deal_description">Description</string>
+		<string name="label_deal_code">Code</string>
+		<string name="cd_image_upload">Image Upload Button</string>
+	<string name="label_cover_image">Cover Image</string>
+  	<string name="label_deal_active">Deal Active</string>
+    <string name="label_placement">Placement</string>
+   	<string name="label_push_settings">Push Settings</string>
+   	<string name="title_deals">Deals</string>
 </resources>
