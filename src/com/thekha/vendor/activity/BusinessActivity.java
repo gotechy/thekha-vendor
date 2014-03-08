@@ -1,19 +1,18 @@
 package com.thekha.vendor.activity;
 
-import com.thekha.vendor.bean.Business;
-import com.thekha.vendor.bean.Facilities;
-import com.thekha.vendor.dao.BusinessDAO;
-
-import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.thekha.vendor.bean.Business;
+import com.thekha.vendor.bean.Facilities;
+import com.thekha.vendor.dao.BusinessDAO;
 
 public class BusinessActivity extends Activity {
 	
