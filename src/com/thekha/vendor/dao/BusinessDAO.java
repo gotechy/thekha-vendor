@@ -15,15 +15,13 @@ public class BusinessDAO {
 				Business.HOTEL,
 				"file:///android_asset/hotel.jpg",
 				new Address(1,"E-2a","Jwahar Park","Saket","Delhi","Bihar","India","201005"),
-				new ArrayList<Phone>(),
+				"9944445555",
+				"011-4445555",
 				"bluemoon@gmail.com",
 				"www.bluemoon.in",
 				"www.facebook.com/me.gaurav.rana",
-				new Facilities(1, true, true, false, true, true, true)
+				new Facilities(1, true, true, false, true, false, true)
 		);
-		b.getPhones().add(new Phone(1, "9944445555", Phone.RECEPTION));
-		b.getPhones().add(new Phone(1, "011-4445555", Phone.BOOKINGS));
-		
 		return b;
 	}
 }

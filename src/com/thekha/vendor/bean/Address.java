@@ -1,6 +1,12 @@
 package com.thekha.vendor.bean;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5075882765578088886L;
 	private int id;
 	private String line1;
 	private String line2;
@@ -25,6 +31,13 @@ public class Address {
 		this.state = state;
 		this.country = country;
 		this.pin = pin;
+	}
+
+	@Override
+	public String toString() {
+		return line1 + ", " + line2 + ", "
+				+ locality + ", " + city + ", " + state
+				+ ", " + country + ". " + pin;
 	}
 
 	public String getLine1() {
