@@ -1,21 +1,27 @@
 package com.thekha.vendor.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-public class Business {
+public class Business implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1535829335411586863L;
 	public static final String HOTEL = "Hotel";
 	public static final String BAR = "Bar";
 	public static final String RESORT = "Resort";
 	public static final String BANQUET = "Banquet";
+	
+	public static final String BUSINESS_KEY = "business";
 	
 	private int id;
 	private String name = "";
 	private String  type = "";
 	private String imageURL = "";
 	private Address address =  new Address();
-	private List<Phone> phones = new ArrayList<Phone>();
+	private String phone1 = "";
+	private String phone2 = "";
 	private String email = "";
 	private String website = "";
 	private String facebook = "";
@@ -25,21 +31,24 @@ public class Business {
 		
 	}
 	
-	public Business(int id, String name, String type, String imageURL, Address address,
-			List<Phone> phones, String email, String website, String facebook,
-			Facilities facilities) {
+	public Business(int id, String name, String type, String imageURL,
+			Address address, String phone1, String phone2, String email,
+			String website, String facebook, Facilities facilities) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.imageURL = imageURL;
 		this.address = address;
-		this.phones = phones;
+		this.phone1 = phone1;
+		this.phone2 = phone2;
 		this.email = email;
 		this.website = website;
 		this.facebook = facebook;
 		this.facilities = facilities;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -71,11 +80,17 @@ public class Business {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	public List<Phone> getPhones() {
-		return phones;
+	public String getPhone1() {
+		return phone1;
 	}
-	public void setPhones(List<Phone> phones) {
-		this.phones = phones;
+	public void setPhone1(String phone1) {
+		this.phone1 = phone1;
+	}
+	public String getPhone2() {
+		return phone2;
+	}
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
 	}
 	public String getEmail() {
 		return email;

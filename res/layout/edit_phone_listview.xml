@@ -38,4 +38,34 @@
         	android:contentDescription="@string/phoneremove" />
     </LinearLayout>
     
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+        <EditText
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:id="@+id/editbusiness_phone"
+        	android:layout_weight="2"
+        	android:layout_gravity="left"
+        	android:ems="10"
+        	android:hint="@string/phone"
+        	android:inputType="phone" >
+    	</EditText>
+    	
+    	<ImageButton
+        	android:id="@+id/editbusiness_phoneremove"
+        	android:layout_width="15dp"
+        	android:layout_weight="1"
+        	android:layout_height="30dp"
+        	android:layout_gravity="right" 
+        	android:maxHeight="5dp"
+        	android:padding="5dp"
+        	android:maxWidth="10dp"
+        	android:src="@drawable/ic_action_cancel"
+        	android:contentDescription="@string/phoneremove" />
+    </LinearLayout>
+    
+    
 </LinearLayout>

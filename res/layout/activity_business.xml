@@ -18,35 +18,40 @@
         android:contentDescription="@string/description"
         android:src="@drawable/hotel" />
     
-<RelativeLayout 
+<LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin" >
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:orientation="vertical" >
     
-    <TextView
-        android:id="@+id/business_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:text="Business_Name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <RelativeLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:orientation="horizontal" >
+        
+        <TextView
+        	android:id="@+id/business_name"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="Business_Name"
+        	android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/business_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/business_name"
-        android:layout_alignParentRight="true"
-        android:text="Business Type"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+    	<TextView
+        	android:id="@+id/business_type"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignBottom="@+id/business_name"
+        	android:layout_alignParentRight="true"
+        	android:text="Business Type"
+        	android:textAppearance="?android:attr/textAppearanceSmall" />
+    </RelativeLayout>
+    
     
     <TextView
         android:id="@+id/business_facilities"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/business_name"
-        android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:text="AC | Smoking | Veg | Non-Veg | Mujra"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -54,39 +59,40 @@
     <ScrollView
         android:id="@+id/business_scrollView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/business_facilities" >
+        android:layout_height="wrap_content" >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
             
             <TextView
                 android:id="@+id/business_phonelable"
                 style="@style/sectionHeader"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
         		android:text="@string/phone"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
-            <ListView
-                android:id="@+id/business_phone"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/business_phone1"
+        		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/business_phonelable"
-                android:text="@string/phone"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                tools:ignore="NestedScrolling" />
+        		android:text="@string/phone"
+        		android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/business_phone2"
+        		android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+        		android:text="@string/phone"
+        		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
                 android:id="@+id/business_addresslable"
                 style="@style/sectionHeader"
-                android:layout_below="@+id/business_phone"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
         		android:text="@string/address"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
@@ -94,20 +100,16 @@
                 android:id="@+id/business_address"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="6dp"
-                android:layout_below="@+id/business_addresslable"
         		android:text="@string/address"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
                 android:id="@+id/business_emaillable"
                 style="@style/sectionHeader"
-                android:layout_below="@+id/business_address"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
         		android:text="@string/email"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
@@ -115,20 +117,16 @@
                 android:id="@+id/business_email"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="6dp"
-                android:layout_below="@+id/business_emaillable"
         		android:text="@string/email"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
                 android:id="@+id/business_facebooklable"
                 style="@style/sectionHeader"
-                android:layout_below="@+id/business_email"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
         		android:text="@string/facebook"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
@@ -136,20 +134,16 @@
                 android:id="@+id/business_facebook"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="6dp"
-                android:layout_below="@+id/business_facebooklable"
         		android:text="@string/facebook"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
                 android:id="@+id/business_websitelable"
                 style="@style/sectionHeader"
-                android:layout_below="@+id/business_facebook"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
         		android:text="@string/website"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
@@ -157,15 +151,13 @@
                 android:id="@+id/business_website"
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="6dp"
-                android:layout_below="@+id/business_websitelable"
         		android:text="@string/website"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>
 </LinearLayout>

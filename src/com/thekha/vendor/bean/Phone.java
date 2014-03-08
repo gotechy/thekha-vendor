@@ -6,11 +6,6 @@ public class Phone {
 	private String number;
 	private String type;
 	
-	public static final String MANAGER = "Manager";
-	public static final String RECEPTION = "Reception";
-	public static final String BOOKINGS = "Bookings";
-	public static final String SUPPORT = "Support";
-	
 	public Phone() {
 		
 	}

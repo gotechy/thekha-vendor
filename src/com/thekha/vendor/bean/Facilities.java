@@ -1,6 +1,12 @@
 package com.thekha.vendor.bean;
 
-public class Facilities {
+import java.io.Serializable;
+
+public class Facilities implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8746020501895895647L;
 	private int id;
 	private boolean ac = false;
 	private boolean sa = false;
@@ -8,6 +14,13 @@ public class Facilities {
 	private boolean cc = false;
 	private boolean veg = false;
 	private boolean nonVeg = false;
+	
+	public static String AC = "Air Conditioned";
+	public static String SA = "Smoking Area";
+	public static String VP = "Valet Parking";
+	public static String CC = "Credit Card Accepted";
+	public static String VEG = "Vegetarian";
+	public static String NON_VEG = "Non-Vegetarian";
 	
 	public Facilities() {
 		

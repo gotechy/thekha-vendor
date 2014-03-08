@@ -24,33 +24,6 @@
         android:layout_height="wrap_content"
         android:text="@string/change_picture" />
     
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal" >
-        
-        <EditText
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:id="@+id/editbusiness_phone"
-        	android:layout_weight="2"
-        	android:layout_gravity="left"
-        	android:ems="10"
-        	android:hint="@string/phone"
-        	android:inputType="phone" >
-    	</EditText>
-    	
-    	<ImageButton
-        	android:id="@+id/editbusiness_phoneremove"
-        	android:layout_width="wrap_content"
-        	android:layout_weight="1"
-        	android:layout_height="wrap_content"
-        	android:layout_gravity="right" 
-        	android:maxHeight="10dp" 
-        	android:maxWidth="10dp"
-        	android:contentDescription="@string/phoneremove" />
-    </LinearLayout>
-    
 <ScrollView
         android:id="@+id/editbusiness_scrollView"
         android:layout_width="fill_parent"
@@ -127,6 +100,22 @@
         android:text="@string/contact"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
+    <EditText
+        android:id="@+id/editbusiness_phone1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone1"
+        android:ems="10"
+        android:inputType="textUri" />
+    
+    <EditText
+        android:id="@+id/editbusiness_phone2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone2"
+        android:ems="10"
+        android:inputType="textUri" />
+    <!--  
     <ListView
         android:id="@+id/editbusiness_phonelist"
         android:layout_width="match_parent"
@@ -134,7 +123,7 @@
         android:ems="10"
         android:inputType="textPostalAddress"
         tools:ignore="NestedScrolling" />
-    
+    -->
     <EditText
         android:id="@+id/editbusiness_website"
         android:layout_width="match_parent"

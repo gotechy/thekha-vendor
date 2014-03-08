@@ -65,6 +65,7 @@ public class PhoneListAdapter extends BaseAdapter {
 		if(!phone.getNumber().isEmpty())
 			phoneNum.setText(phone.getNumber());
 		
+		/*
 		final Spinner phoneTypeSpinner = (Spinner) itemLayout.findViewById(R.id.editbusiness_phonetype);
 		ArrayAdapter<CharSequence> phoneTypeSpinnerrAdapter = ArrayAdapter.createFromResource(context,
 				R.array.phone_types, android.R.layout.simple_list_item_1);
@@ -86,7 +87,7 @@ public class PhoneListAdapter extends BaseAdapter {
 			public void onNothingSelected(AdapterView<?> parent) {
 				// do nothing
 			}
-		});
+		});*/
 		return null;
 	}
 
