@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Theka</string>
-    <string name="action_settings">Settings</string>
-    <string name="business_name">Business</string>
-    <string name="description">Your Uploaded Image</string>
-    <string name="phonelable">Phone</string>
-    <string name="facilitieslable">Facilities</string>
-    <string name="emaillable">EMail</string>
-    <string name="facebooklable">Facebook</string>
-    <string name="addresslable">Address</string>
-    <string name="action_edit_business">Edit Business</string>
-    <string name="change_picture">Change Picture</string>
-	<string name="edit_business_name">Business Name</string>
-	<string name="edit_business_type">Business Type</string>
+<!-- added by Gaurav Rana Start-->	
 	<string name="label_deal">Deal</string>
 		<string name="label_deal_title">Title</string>
 		<string name="label_deal_description">Description</string>
@@ -21,7 +9,105 @@
 		<string name="cd_image_upload">Image Upload Button</string>
 	<string name="label_cover_image">Cover Image</string>
   	<string name="label_deal_active">Deal Active</string>
-    <string name="label_placement">Placement</string>
-   	<string name="label_push_settings">Push Settings</string>
+		<string name="label_deal_active_from">From</string>
+		<string name="label_deal_active_to">To</string>
+		<string name="label_deal_active_date">Date</string>
+		<string name="label_deal_active_time">Time</string>
+		
+  	<string name="label_placement">Placement</string>
+		<string name="label_placement_regular">Regular</string>
+  		<string name="label_placement_special">Special</string>
+		<string name="label_placement_top_listing">Top Listing</string>
+		<string name="label_placement_home_page_banner">Home Page Banner</string>
+		<string name="label_placement_category_banner">Category Banner</string>
+  	<string name="label_push_settings">Push Settings</string>
+		<string name="label_push_settings_SMS">SMS Count</string>
+		<string name="label_push_settings_email">Email Count</string>
+			
+<!-- added by Gaurav Rana End-->   	
+        
+    <string name="app_name">Theka</string>
+    <string name="business">Business</string>
+    <string name="description">Your Uploaded Image</string>
+    <string name="phone">Phone</string>
+    <string name="facilities">Facilities</string>
+    <string name="facebook">Facebook</string>
+    <string name="address">Address</string>
+    <string name="edit_business">Edit Business</string>
+    <string name="change_picture">Change Picture</string>
+	<string name="edit_business_name">Business Name</string>
+	<string name="edit_business_type">Business Type</string>
    	<string name="title_deals">Deals</string>
+	<string name="business_name">Business Name</string>
+	<string name="business_type">Business Type</string>
+	<string name="ac">Air Conditioned</string>
+	<string name="sa">Smoking Area</string>
+	<string name="vp">Valet Parking</string>
+	<string name="veg">Vegetarian</string>
+	<string name="nonveg">Non Vegetarian</string>
+	<string name="cc">Credit Card Accepted</string>
+    <string name="save_business">Save Business</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="contact">Contact</string>
+    <string name="phone_type">Phone Type</string>
+    <string name="email">eMail Address</string>
+    <string name="website">Website</string>
+    <string name="cancel">Cancel</string>
+    <string name="phoneremove">Click to remove this phone number</string>
+    <string name="done">Done</string>
+    
+    <string-array name="business_types">
+        <item>Hotel</item>
+        <item>Restaurant</item>
+        <item>Bar</item>
+    </string-array>
+    
+    <string-array name="phone_types">
+        <item>Bookings</item>
+        <item>Reception</item>
+        <item>Support</item>
+        <item>Manager</item>
+    </string-array>
+    
+    <string-array name="indian_states">
+        <item>Andaman &amp; Nicobar</item>
+        <item>Andhra Pradesh</item>
+        <item>Arunachal Pradesh</item>
+        <item>Assam</item>
+        <item>Bihar</item>
+        <item>Chandigarh</item>
+        <item>Chhattisgarh</item>
+        <item>Dadra &amp; Nagar Haveli</item>
+        <item>Daman and Diu</item>
+        <item>Delhi</item>
+        <item>Goa</item>
+        <item>Gujarat</item>
+        <item>Haryana</item>
+        <item>Himachal Pradesh</item>
+        <item>Jammu and Kashmir</item>
+        <item>Srinagar</item>
+        <item>Jharkhand</item>
+        <item>Karnataka</item>
+        <item>Kerala</item>
+        <item>Lakshadweep</item>
+        <item>Madhya Pradesh</item>
+        <item>Maharashtra</item>
+        <item>Mumbai</item>
+        <item>Mumbai</item>
+        <item>Manipur</item>
+        <item>Meghalaya</item>
+        <item>Mizoram</item>
+        <item>Nagaland</item>
+        <item>Odisha</item>
+        <item>Puducherry</item>
+        <item>Punjab</item>
+        <item>Rajasthan</item>
+        <item>Sikkim</item>
+        <item>Tamil Nadu</item>
+        <item>Tripura</item>
+        <item>Uttar Pradesh</item>
+        <item>Uttarakhand</item>
+        <item>West Bengal</item>
+    </string-array>
 </resources>

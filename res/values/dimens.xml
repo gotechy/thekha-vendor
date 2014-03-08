@@ -4,5 +4,10 @@
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">0dp</dimen>
 	<dimen name="profile_image_height">150dp</dimen>
+
+	
+<!-- added by Gaurav Rana Start-->		
 	<dimen name="aed_upload_image_height">150dp</dimen>
+	<dimen name="aed_from_to_date_time">100dp</dimen>
+<!-- added by Gaurav Rana End-->	
 </resources>

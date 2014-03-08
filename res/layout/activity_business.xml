@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ProfileActivity" >
+    tools:context=".BusinessActivity" >
     
     <ImageView
         android:id="@+id/business_picture"
@@ -67,7 +67,7 @@
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-        		android:text="@string/phonelable"
+        		android:text="@string/phone"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <ListView
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/business_phonelable"
-                android:text="@string/phonelable"
+                android:text="@string/phone"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 tools:ignore="NestedScrolling" />
             
@@ -87,7 +87,7 @@
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-        		android:text="@string/addresslable"
+        		android:text="@string/address"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
@@ -98,7 +98,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="6dp"
                 android:layout_below="@+id/business_addresslable"
-        		android:text="@string/addresslable"
+        		android:text="@string/address"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
@@ -108,7 +108,7 @@
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-        		android:text="@string/emaillable"
+        		android:text="@string/email"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
@@ -119,7 +119,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="6dp"
                 android:layout_below="@+id/business_emaillable"
-        		android:text="@string/emaillable"
+        		android:text="@string/email"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
@@ -129,7 +129,7 @@
         		android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-        		android:text="@string/facebooklable"
+        		android:text="@string/facebook"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
@@ -140,7 +140,28 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="6dp"
                 android:layout_below="@+id/business_facebooklable"
-        		android:text="@string/facebooklable"
+        		android:text="@string/facebook"
+        		android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/business_websitelable"
+                style="@style/sectionHeader"
+                android:layout_below="@+id/business_facebook"
+        		android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+        		android:text="@string/website"
+        		android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/business_website"
+        		android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="6dp"
+                android:layout_below="@+id/business_websitelable"
+        		android:text="@string/website"
         		android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </RelativeLayout>

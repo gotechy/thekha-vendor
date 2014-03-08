@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/editbusiness_phone"
+        android:layout_gravity="left"
+        android:ems="10"
+        android:hint="@string/phone"
+        android:inputType="phone" >
+    </EditText>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+        
+        <Spinner
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+        	android:id="@+id/editbusiness_phonetype"
+        	android:ems="10"
+        	android:hint="@string/phone_type" />
+    
+    	<ImageButton
+        	android:id="@+id/editbusiness_phoneremove"
+        	android:layout_width="wrap_content"
+        	android:layout_weight="1"
+        	android:layout_height="wrap_content"
+        	android:layout_gravity="right" 
+        	android:maxHeight="10dp" 
+        	android:maxWidth="10dp"
+        	android:contentDescription="@string/phoneremove" />
+    </LinearLayout>
+    
+</LinearLayout>

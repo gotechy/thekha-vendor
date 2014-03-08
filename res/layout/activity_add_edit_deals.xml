@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/editbusiness_scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+
+
+<RelativeLayout 
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical"
     tools:context=".ProfileActivity" >
     
     <TextView
@@ -18,7 +27,7 @@
         android:text="@string/label_deal"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-	  	<TableRow
+<!-- 	  	<TableRow
 	  	    android:id="@+id/table_row_title"
 	  	    android:layout_width="match_parent"
 	  	    android:layout_height="wrap_content"
@@ -31,13 +40,15 @@
 	  	        android:text="@string/label_deal_title"
 	  	        android:textAppearance="?android:attr/textAppearanceMedium" />
 	
-	  	    <EditText
+ -->
+ 	  	    <EditText
 	  	        android:id="@+id/edit_aed_deal_title"
 	  	        android:layout_width="fill_parent"
 	  	        android:layout_height="wrap_content"
 	  	        android:ems="10"
-	  	        android:hint=" " />
-	  	</TableRow>
+	  	        android:hint="@string/label_deal_title"
+	  	        android:layout_below="@+id/label_aed_deal" />
+<!-- 	  	</TableRow>
 	    	    
 	   <TableRow
 	        android:id="@+id/table_row_description"
@@ -52,15 +63,16 @@
 		        android:layout_height="wrap_content"
 		        android:text="@string/label_deal_description"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />
-		     
+ -->		     
 		    <EditText
 		        android:id="@+id/edit_aed_deal_description"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        android:ems="10"
-		        android:hint=" " />
+		        android:layout_below="@+id/edit_aed_deal_title"
+		        android:hint="@string/label_deal_description" />
 	
-	    </TableRow>
+<!-- 	    </TableRow>
 	    
 	  	<TableRow
 	        android:id="@+id/table_row_code"
@@ -76,16 +88,18 @@
 		        android:text="@string/label_deal_code"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />
 		     
-		    <EditText
+ -->
+ 		    <EditText
 		        android:id="@+id/edit_aed_deal_code"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        android:ems="10"
-		        android:hint=" " >
+		        android:hint="@string/label_deal_code"
+		        android:layout_below="@+id/edit_aed_deal_description" >
 	    	</EditText>
 	        	        
-	    </TableRow>
-    
+<!-- 	    </TableRow>
+ -->    
     <TextView
         android:id="@+id/label_aed_cover_image"
         style="@style/sectionHeader"
@@ -94,7 +108,7 @@
         android:layout_alignParentLeft="true"
         android:text="@string/label_cover_image"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/table_row_code" />
+        android:layout_below="@+id/edit_aed_deal_code" />
 
 	    <ImageButton
 	        android:id="@+id/iButton_aed_cover_image"
@@ -116,7 +130,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/iButton_aed_cover_image" />
 
-	   	<TableRow
+ 	   	<TableRow
 	        android:id="@+id/table_row_from"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
@@ -127,19 +141,180 @@
 		        style=""
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="@string/label_deal_description"
+		        android:text="@string/label_deal_active_from"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />
 		     
 		    <EditText
-		        android:id="@+id/edit_aed_deal_active_from"
-		        android:layout_width="fill_parent"
+		        android:id="@+id/edit_aed_deal_active_fromDate"
+		        android:layout_width="@dimen/aed_from_to_date_time"
 		        android:layout_height="wrap_content"
 		        android:ems="10"
-		        android:hint=" " >
+		        android:hint="@string/label_deal_active_date"
+		        android:inputType="time">
+	    	</EditText>
+
+		    <EditText
+		        android:id="@+id/edit_aed_deal_active_fromTime"
+		        android:layout_width="@dimen/aed_from_to_date_time"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:hint="@string/label_deal_active_time" >
 	    	</EditText>
 	        	        
 	    </TableRow>
-    	    
+	   	<TableRow
+	        android:id="@+id/table_row_to"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/table_row_from" >
+	       	
+		    <TextView
+		        android:id="@+id/label_aed_deal_active_to"
+		        style=""
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_deal_active_to"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		     
+		    <EditText
+		        android:id="@+id/edit_aed_deal_active_toDate"
+		        android:layout_width="@dimen/aed_from_to_date_time"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:hint="@string/label_deal_active_date"
+		        android:inputType="datetime" >
+	    	</EditText>
 
+		    <EditText
+		        android:id="@+id/edit_aed_deal_active_toTime"
+		        android:layout_width="@dimen/aed_from_to_date_time"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:hint="@string/label_deal_active_time"
+		        android:inputType="time" >
+	    	</EditText>
+		    	        	        
+	    </TableRow>
+	   		    
+    <TextView
+        android:id="@+id/label_aed_placement"
+        style="@style/sectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/label_placement"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/table_row_to" />
+
+	   	<TableRow
+	        android:id="@+id/table_row_placement1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/label_aed_placement" >
+		    <CheckBox 
+		        android:id="@+id/cb_regular"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_placement_regular" >
+		   </CheckBox>
+		    <CheckBox 
+		        android:id="@+id/cb_special"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_placement_special" >
+		   </CheckBox>
+		</TableRow>
+		<TableRow
+	        android:id="@+id/table_row_placement2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/table_row_placement1" >
+		    <CheckBox 
+		        android:id="@+id/cb_top_listing"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_placement_top_listing" >
+		   </CheckBox>
+		   <CheckBox 
+		        android:id="@+id/cb_home_page_banner"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_placement_home_page_banner" >
+		   </CheckBox>
+		</TableRow>
+		<TableRow
+	        android:id="@+id/table_row_placement3"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/table_row_placement2" >
+		   <CheckBox 
+		        android:id="@+id/cb_category_banner"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_placement_category_banner" >
+		   </CheckBox>
+	    </TableRow>
+
+	<TextView
+        android:id="@+id/label_aed_push_settings"
+        style="@style/sectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/label_push_settings"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/table_row_placement3" />
+
+<!-- 	   <TableRow
+	        android:id="@+id/table_row_sms_count"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/label_aed_push_settings" >
+	       	
+ 		    <TextView
+		        android:id="@+id/label_aed_deal_SMS"
+		        style=""
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_push_settings_SMS"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+ -->		     
+		    <EditText
+		        android:id="@+id/edit_aed_deal_SMS"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:hint="@string/label_push_settings_SMS"
+		        android:inputType="number"
+	        	android:layout_below="@+id/label_aed_push_settings" />
+		    	
+<!-- 	   </TableRow>
+	   <TableRow
+	        android:id="@+id/table_row_email_count"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/table_row_sms_count" >
+	       	
+		    <TextView
+		        android:id="@+id/label_aed_deal_email"
+		        style=""
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/label_push_settings_email"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		     
+ -->
+ 		    <EditText
+		        android:id="@+id/edit_aed_deal_email"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:hint="@string/label_push_settings_email"
+		        android:layout_below="@+id/edit_aed_deal_SMS"
+		        android:inputType="number" />
+	
+<!-- 	   </TableRow>
+ -->	   			   		   	
 
 </RelativeLayout>
+</ScrollView>

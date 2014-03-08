@@ -16,8 +16,19 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.thekha.vendor.activity.BusinessActivity"
-            android:label="@string/business_name" >
+            android:label="@string/business" >
         </activity>
+        <activity
+            android:name="com.thekha.vendor.activity.EditBusinessActivity"
+            android:label="@string/edit_business"
+            android:parentActivityName="com.thekha.vendor.activity.BusinessActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.thekha.vendor.activity.BusinessActivity" />
+        </activity>
+
+
+<!-- added by Gaurav Rana Start-->	
         <activity
             android:name="com.thekha.vendor.activity.DealsActivity"
             android:label="@string/title_deals" >
@@ -26,6 +37,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+<!-- added by Gaurav Rana End-->	
+        
         </application>
 
 </manifest>
