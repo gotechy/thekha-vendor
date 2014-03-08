@@ -25,6 +25,7 @@
 			
 <!-- added by Gaurav Rana End-->   	
         
+    <string name="title_deals">Deals</string>
     <string name="app_name">Theka</string>
     <string name="business">Business</string>
     <string name="description">Your Uploaded Image</string>
