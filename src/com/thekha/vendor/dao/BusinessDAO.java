@@ -1,11 +1,8 @@
 package com.thekha.vendor.dao;
 
-import java.util.ArrayList;
-
 import com.thekha.vendor.bean.Address;
 import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Facilities;
-import com.thekha.vendor.bean.Phone;
 
 public class BusinessDAO {
 	// TODO - CRUD for ProfileDAO

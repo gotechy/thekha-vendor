@@ -25,7 +25,8 @@
 			
 <!-- added by Gaurav Rana End-->   	
         
-    <string name="title_deals">Deals</string>
+    <string name="title_deals_details">Deal Details</string>
+    <string name="title_deals_view">Deals</string>
     <string name="app_name">Theka</string>
     <string name="business">Business</string>
     <string name="description">Your Uploaded Image</string>
@@ -53,5 +54,8 @@
     <string name="cancel">Cancel</string>
     <string name="phoneremove">Click to remove this phone number</string>
     <string name="done">Done</string>  
+    
+    <string name="dv_edit">Edit Deals</string>  
+    
     
 </resources>

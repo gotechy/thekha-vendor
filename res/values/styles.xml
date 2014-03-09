@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -27,4 +27,32 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    
+    <style name="dateTimeText" parent="android:Widget.Holo.Spinner">
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:textColor">@color/dateTimeText</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    
+    <style name="dv_deal_title" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:padding">4dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    
+    <style name="dv_deal_desc" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">72dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/dateTimeText</item>
+    </style>
+
+    <style name="dv_deal_edit_image" parent="">
+        <item name="android:padding">6dp</item>
+        <item name="android:height">60dp</item>
+        <item name="android:width">60dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/dateTimeText</item>
+    </style>
+    
+    
 </resources>

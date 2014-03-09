@@ -141,16 +141,36 @@
 		        style=""
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
 		        android:text="@string/label_deal_active_from"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+		    <Button
+		        android:id="@+id/button_aed_deal_active_fromDate"
+		        style="@style/dateTimeText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="@string/label_deal_active_date" />
 		     
-		    <EditText
+		    <Button
+		        android:id="@+id/button_aed_deal_active_fromTime"
+		        style="@style/dateTimeText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="@string/label_deal_active_time" />
+
+<!-- 		   
+			<EditText
 		        android:id="@+id/edit_aed_deal_active_fromDate"
 		        android:layout_width="@dimen/aed_from_to_date_time"
 		        android:layout_height="wrap_content"
+		        android:layout_gravity="top"
 		        android:ems="10"
 		        android:hint="@string/label_deal_active_date"
-		        android:inputType="time">
+		        android:inputType="time" >
+
 	    	</EditText>
 
 		    <EditText
@@ -160,7 +180,7 @@
 		        android:ems="10"
 		        android:hint="@string/label_deal_active_time" >
 	    	</EditText>
-	        	        
+ -->	        	        
 	    </TableRow>
 	   	<TableRow
 	        android:id="@+id/table_row_to"
@@ -174,8 +194,26 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:text="@string/label_deal_active_to"
+		        android:layout_weight="1.5"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />
 		     
+		    <Button
+		        android:id="@+id/button_aed_deal_active_toDate"
+		        style="@style/dateTimeText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="@string/label_deal_active_date" />
+		     
+		    <Button
+		        android:id="@+id/button_aed_deal_active_toTime"
+		        style="@style/dateTimeText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="@string/label_deal_active_time" />
+
+<!-- 		    
 		    <EditText
 		        android:id="@+id/edit_aed_deal_active_toDate"
 		        android:layout_width="@dimen/aed_from_to_date_time"
@@ -194,7 +232,8 @@
 		        android:inputType="time" >
 	    	</EditText>
 		    	        	        
-	    </TableRow>
+ -->	
+    </TableRow>
 	   		    
     <TextView
         android:id="@+id/label_aed_placement"

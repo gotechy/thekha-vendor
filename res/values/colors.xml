@@ -6,4 +6,5 @@
     <color name="bg_color">#ffeeff</color>
     <color name="emphasis">#31b6e7</color>
     <color name="bg_gray">#cecbce</color>
+    <color name="dateTimeText">#C1C0C4</color>
 </resources>
