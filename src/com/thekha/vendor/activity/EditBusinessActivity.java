@@ -133,7 +133,7 @@ public class EditBusinessActivity extends Activity {
 	    return true;
 	  } 
 
-	public void setUIFromBean() {
+	protected void setUIFromBean() {
 		name.setText(business.getName());
 		type.setSelection(typeAdapter.getPosition(business.getType()));
 		checkAC.setChecked(business.getFacilities().isAc());
@@ -156,7 +156,7 @@ public class EditBusinessActivity extends Activity {
 		state.setText(business.getAddress().getState());	
 	}
 	
-	public void setBeanFromUI() {
+	protected void setBeanFromUI() {
 		business.setName(name.getText().toString());
 		business.setType(type.getSelectedItem().toString());
 		business.getFacilities().setAc(checkAC.isChecked());

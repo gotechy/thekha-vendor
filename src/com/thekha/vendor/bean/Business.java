@@ -15,20 +15,24 @@ public class Business implements Serializable{
 	
 	public static final String BUSINESS_KEY = "business";
 	
+	public static final int COUNT_DATA_VARIABLES = 10;
+	
 	private int id;
-	private String name = "";
-	private String  type = "";
-	private String imageURL = "";
-	private Address address =  new Address();
-	private String phone1 = "";
-	private String phone2 = "";
-	private String email = "";
-	private String website = "";
-	private String facebook = "";
-	private Facilities facilities = new Facilities();
+	private String name ;
+	private String  type ;
+	private String imageURL ;
+	private Address address;
+	private String phone1 ;
+	private String phone2 ;
+	private String email ;
+	private String website ;
+	private String facebook ;
+	private Facilities facilities;
 	
 	public Business() {
-		
+		super();
+		address = new Address();
+		facilities = new Facilities();
 	}
 	
 	public Business(int id, String name, String type, String imageURL,
@@ -47,8 +51,31 @@ public class Business implements Serializable{
 		this.facebook = facebook;
 		this.facilities = facilities;
 	}
-
-
+	
+	public int getCompletionPercentage() {
+		int completion = 0;
+		if(!this.name.isEmpty())
+			completion++;
+		if(!this.type.isEmpty())
+			completion++;
+		if(!this.imageURL.isEmpty())
+			completion++;
+		if(this.address != null && !this.address.getCity().isEmpty())
+			completion++;
+		if(!this.phone1.isEmpty())
+			completion++;
+		if(!this.phone2.isEmpty())
+			completion++;
+		if(!this.email.isEmpty())
+			completion++;
+		if(!this.website.isEmpty())
+			completion++;
+		if(!this.facebook.isEmpty())
+			completion++;
+		if(this.facilities != null)
+			completion++;
+		return ((completion*100)/COUNT_DATA_VARIABLES);
+	}
 
 	public int getId() {
 		return id;

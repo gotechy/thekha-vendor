@@ -14,9 +14,9 @@
         android:cropToPadding="true"
         android:layout_gravity="fill"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:contentDescription="@string/description"
-        android:src="@drawable/hotel" />
+        android:src="@drawable/logo2" />
     
     <Button
         android:id="@+id/editbusiness_picture_button"
@@ -115,15 +115,7 @@
         android:hint="Phone2"
         android:ems="10"
         android:inputType="textUri" />
-    <!--  
-    <ListView
-        android:id="@+id/editbusiness_phonelist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPostalAddress"
-        tools:ignore="NestedScrolling" />
-    -->
+   
     <EditText
         android:id="@+id/editbusiness_website"
         android:layout_width="match_parent"

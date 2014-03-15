@@ -22,11 +22,11 @@
   	<string name="label_push_settings">Push Settings</string>
 		<string name="label_push_settings_SMS">SMS Count</string>
 		<string name="label_push_settings_email">Email Count</string>
-			
+    <string name="title_deals_details">Deal Details</string>
+    <string name="title_deals_view">Deals</string>			
 <!-- added by Gaurav Rana End-->   	
         
-    <string name="title_deals_details">Deal Details</string>
-    <string name="title_deals_view">Deals</string>
+
     <string name="app_name">Theka</string>
     <string name="business">Business</string>
     <string name="description">Your Uploaded Image</string>
@@ -52,10 +52,33 @@
     <string name="email">eMail Address</string>
     <string name="website">Website</string>
     <string name="cancel">Cancel</string>
-    <string name="phoneremove">Click to remove this phone number</string>
-    <string name="done">Done</string>  
-    
-    <string name="dv_edit">Edit Deals</string>  
-    
+    <string name="done">Done</string>
+    <string name="balaneclable">Your Balance</string>
+    <string name="transaction_activity_title">Your Transactions</string>
+    <string name="contactus_activity_title">Contact Us</string>
+    <string name="contactus_name_hint">Your name</string>
+    <string name="contactus_phone_hint">Phone number</string>
+    <string name="contactus_email_hint">eMail address</string>
+    <string name="contactus_subject_hint">Subject</string>
+    <string name="contactus_message_hint">Please describe your problem.</string>
+    <string name="businessListingLable">Business Listing</string>
+    <string name="businessListingDescription">Your business listing status.</string>
+    <string name="productLable">Product</string>
+    <string name="productviewLable">Product Views</string>
+    <string name="dealsavtivelable">Deals Active</string>
+    <string name="dealsaddbutton">Add new deals</string>
+    <string name="dealstilllable">Deals till date</string>
+    <string name="creditlable">Credits</string>
+    <string name="advertisinglable">Advertising</string>
+    <string name="bannerlable">Banner</string>
+    <string name="clickslable">Clicks</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="dashboard_activity_title">Dashboard</string>
+    <string name="drawer_title">Menu</string>
+    <string name="login_logo">Thekha.com logo</string>
+    <string name="brand_mantra">Hot Deals Amazing Discounts!</string>
+    <string name="supprt_info">For inquiry dial +555 555 5555 or send an email to support@thekha.com</string>
+    <string name="website_address">www.thekha.com</string>
     
 </resources>

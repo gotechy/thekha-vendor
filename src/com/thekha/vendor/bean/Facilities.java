@@ -8,12 +8,12 @@ public class Facilities implements Serializable{
 	 */
 	private static final long serialVersionUID = 8746020501895895647L;
 	private int id;
-	private boolean ac = false;
-	private boolean sa = false;
-	private boolean vp = false;
-	private boolean cc = false;
-	private boolean veg = false;
-	private boolean nonVeg = false;
+	private boolean ac ;
+	private boolean sa ;
+	private boolean vp ;
+	private boolean cc ;
+	private boolean veg ;
+	private boolean nonVeg ;
 	
 	public static String AC = "Air Conditioned";
 	public static String SA = "Smoking Area";

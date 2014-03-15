@@ -7,4 +7,7 @@
     <color name="emphasis">#31b6e7</color>
     <color name="bg_gray">#cecbce</color>
     <color name="dateTimeText">#C1C0C4</color>
+    <color name="negative_transaction">#D73B3E</color>
+    <color name="positive_transaction">#85BB65</color>
+    <color name="brand_color">#0096DC</color>
 </resources>

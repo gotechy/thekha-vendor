@@ -1,0 +1,12 @@
+BusinessActivity
+	- Spinner for image with options to : click, choose, use fb cover picture
+	- icons for email, fb
+	- combine with maps for address
+	- icons for facilities
+	
+Help
+	- Include FAQ
+	- Make help form lite, asking customer's name at the time of his query is bad customer experience, in an app.
+	- subject is redundant,  if you aleady have a query type and message.
+	- Include About Us
+	- Include info to contact manually.
