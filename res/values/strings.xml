@@ -24,6 +24,7 @@
 		<string name="label_push_settings_email">Email Count</string>
     <string name="title_deals_details">Deal Details</string>
     <string name="title_deals_view">Deals</string>			
+    <string name="dv_edit">Deal Details</string>
 <!-- added by Gaurav Rana End-->   	
         
 
@@ -36,6 +37,7 @@
     <string name="address">Address</string>
     <string name="edit_business">Edit Business</string>
     <string name="change_picture">Change Picture</string>
+
 	<string name="business_name">Business Name</string>
 	<string name="business_type">Business Type</string>
 	<string name="ac">Air Conditioned</string>

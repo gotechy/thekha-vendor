@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="productView_types">
+        <item>Week</item>
+        <item>Fortnight</item>
+        <item>Month</item>
+        <item>Last Month</item>
+        <item>Life Time</item>
+    </string-array>
+    
+    <string-array name="drawer_menu">
+        <item>Add Deals</item>
+        <item>Manage Deals</item>
+        <item>Transactions</item>
+        <item>Profile</item>
+        <item>Help</item>
+        <item>Logout</item>
+    </string-array>
     
     <string-array name="business_types">
         <item>Hotel</item>
         <item>Restaurant</item>
         <item>Bar</item>
     </string-array>
+    
+    <string-array name="query_types">
+        <item>problem</item>
+        <item>transaction</item>
+	</string-array>
     
     <string-array name="indian_states">
         <item>Andaman &amp; Nicobar</item>
