@@ -48,7 +48,7 @@ public class DealsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_edit_deals);
-		setTitle(R.string.title_deals);
+		setTitle(R.string.title_deals_view);
 
 		actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

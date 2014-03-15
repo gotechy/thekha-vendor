@@ -3,16 +3,23 @@ package com.thekha.vendor.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.thekha.vendor.activity.ActivityTemp;
+import com.thekha.vendor.activity.DealsActivity;
+import com.thekha.vendor.activity.DealsViewActivity;
 import com.thekha.vendor.bean.Deals;
-
 
 import android.R;
 import android.content.Context;
+import android.content.Intent;
+import android.sax.StartElementListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class DealsListAdapter extends BaseAdapter {
 
@@ -68,15 +75,29 @@ public class DealsListAdapter extends BaseAdapter {
 		final Deals deal = dealsList.get(position);
 		
 		LayoutInflater layInf = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		RelativeLayout dealItemView = layInf.inflate(R.layout.activity_list_item, root)
+		RelativeLayout dealItemView = (RelativeLayout) layInf.inflate(R.layout.activity_list_item, null);
 		
+		final TextView titleView = (TextView) dealItemView.findViewById(R.id.dv_deal_title);
+		titleView.setText(deal.getTitle());
 		
+		final TextView DescView = (TextView) dealItemView.findViewById(R.id.dv_deal_desc);
+		titleView.setText(deal.getTitle());
 		
-		
-		
-		
-		
-		return null;
+		final Button EditImageView = (Button) dealItemView.findViewById(R.id.dv_edit);
+		EditImageView.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			
+				mContext.startActivity(new Intent( mContext, DealsActivity.class));
+				
+				
+			}
+		});
+				
+		return dealItemView;
 	}
+
 
 }

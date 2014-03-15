@@ -18,7 +18,7 @@
         android:layout_below="@+id/dv_deal_title"
         android:maxLines="2" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/dv_edit"
         android:layout_width="60dp"
         android:layout_height="60dp"

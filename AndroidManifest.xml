@@ -15,20 +15,46 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
+            android:name="com.thekha.vendor.activity.LoginActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.thekha.vendor.activity.DashboardActivity" >
+        </activity>
+        <activity
             android:name="com.thekha.vendor.activity.BusinessActivity"
-            android:label="@string/business" >
+            android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.thekha.vendor.activity.DashboardActivity" />
         </activity>
         <activity
             android:name="com.thekha.vendor.activity.EditBusinessActivity"
-            android:label="@string/edit_business"
             android:parentActivityName="com.thekha.vendor.activity.BusinessActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.thekha.vendor.activity.BusinessActivity" />
         </activity>
-
+        <activity
+            android:name="com.thekha.vendor.activity.TransactionActivity"
+            android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.thekha.vendor.activity.DashboardActivity" />
+        </activity>
+        <activity
+            android:name="com.thekha.vendor.activity.ContactUsActivity"
+            android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.thekha.vendor.activity.DashboardActivity" />
+        </activity>
 
 <!-- added by Gaurav Rana Start-->	
+
         <activity
             android:name="com.thekha.vendor.activity.DealsActivity"
             android:label="@string/title_deals_details" >
@@ -40,10 +66,6 @@
         <activity
             android:name="com.thekha.vendor.activity.ActivityTemp"
             android:label="temp_screen" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         
 
