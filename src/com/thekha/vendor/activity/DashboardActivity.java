@@ -137,9 +137,9 @@ public class DashboardActivity extends Activity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         	TextView temp = (TextView) view;
         	if(temp.getText().toString().equals(drawerMenu[0]))
-        		startActivity(new Intent(getApplicationContext(), BusinessActivity.class));
+        		startActivity(new Intent(getApplicationContext(), DealsActivity.class));
         	if(temp.getText().toString().equals(drawerMenu[1]))
-        		startActivity(new Intent(getApplicationContext(), BusinessActivity.class));
+        		startActivity(new Intent(getApplicationContext(), DealsViewActivity.class));
         	if(temp.getText().toString().equals(drawerMenu[2]))
         		startActivity(new Intent(getApplicationContext(), TransactionActivity.class));
         	if(temp.getText().toString().equals(drawerMenu[3]))

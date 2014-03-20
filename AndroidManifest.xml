@@ -57,11 +57,13 @@
 
         <activity
             android:name="com.thekha.vendor.activity.DealsActivity"
-            android:label="@string/title_deals_details" >
+            android:label="@string/title_deals_details"
+            android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" >
         </activity>
         <activity
             android:name="com.thekha.vendor.activity.DealsViewActivity"
-            android:label="@string/title_deals_view" >
+            android:label="@string/title_deals_view"
+            android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" >
         </activity>
         <activity
             android:name="com.thekha.vendor.activity.ActivityTemp"
