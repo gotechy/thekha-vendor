@@ -1,9 +1,8 @@
 package com.thekha.vendor.bean;
 
-import java.io.Serializable;
-import java.util.GregorianCalendar;
+import hirondelle.date4j.DateTime;
 
-import android.content.Intent;
+import java.io.Serializable;
 
 public class Deals implements Serializable {
 	
@@ -15,23 +14,25 @@ public class Deals implements Serializable {
 	
 	public static final String DEALS_KEY = "deals";
 	
+	private int id;
 	private String title ="";
 	private String description = "";
 	private String code = "";
 	private String imageURL ="";
-	private GregorianCalendar from;
-	private GregorianCalendar to;
+	private DateTime from;
+	private DateTime to;
 	private DealsPlacement placement;
 	private int SMSCount;
 	private int emailCount;
 	
 	
 	public Deals() {
-		
+		super();
+		placement = new DealsPlacement();
 	}
 	
 	public Deals(String title, String description, String code, 
-			String imageURL, GregorianCalendar from, GregorianCalendar to, 
+			String imageURL, DateTime from, DateTime to, 
 			DealsPlacement placement, int SMSCount, int emailCount) {
 		
 		super();
@@ -46,32 +47,33 @@ public class Deals implements Serializable {
 		this.SMSCount = SMSCount;
 		this.emailCount = emailCount;
 	}
-
-	public Deals(Intent intent) {
+	
+	public Deals(int id, String title, String description, String code, 
+			String imageURL, DateTime from, DateTime to, 
+			DealsPlacement placement, int SMSCount, int emailCount) {
 		
 		super();
 		
-		Deals dealTemp = (Deals) intent.getExtras().getSerializable(DEALS_KEY);
-		
-		this.title = dealTemp.getTitle();
-		this.description = dealTemp.getDescription();
-		this.code = dealTemp.getCode();
-		this.imageURL = dealTemp.getImageURL();
-		this.from = dealTemp.getFrom();
-		this.to = dealTemp.getTo();
-		this.placement = dealTemp.getPlacement();
-		this.SMSCount = dealTemp.getSMSCount();
-		this.emailCount = dealTemp.getEmailCount();
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.code = code;
+		this.imageURL = imageURL;
+		this.from = from;
+		this.to = to;
+		this.placement = placement;
+		this.SMSCount = SMSCount;
+		this.emailCount = emailCount;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
-	public static void packageIntent(Intent intent, Deals src) {
-		
-		intent.putExtra(DEALS_KEY, src);
-		
+	public void setId(int id) {
+		this.id = id;
 	}
-	
-	
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -96,16 +98,16 @@ public class Deals implements Serializable {
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
 	}
-	public GregorianCalendar getFrom() {
+	public DateTime getFrom() {
 		return from;
 	}
-	public void setFrom(GregorianCalendar from) {
+	public void setFrom(DateTime from) {
 		this.from = from;
 	}
-	public GregorianCalendar getTo() {
+	public DateTime getTo() {
 		return to;
 	}
-	public void setTo(GregorianCalendar to) {
+	public void setTo(DateTime to) {
 		this.to = to;
 	}
 	public DealsPlacement getPlacement() {

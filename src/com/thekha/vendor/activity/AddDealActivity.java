@@ -1,25 +1,25 @@
 package com.thekha.vendor.activity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import hirondelle.date4j.DateTime;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import com.thekha.vendor.bean.Deals;
-import com.thekha.vendor.dao.DealsDAO;
-
+import java.util.TimeZone;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,17 +29,28 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-public class DealsActivity extends Activity {
+import com.thekha.vendor.bean.Deals;
+import com.thekha.vendor.dao.BusinessDAO;
+import com.thekha.vendor.dao.DealsDAO;
+
+public class AddDealActivity extends Activity {
+	
+	private String LOG_TAG;
 	
 	ActionBar actionBar;
-	Deals deal;
+	private Deals deal = new Deals();
+	private DealsDAO dealDAO = new DealsDAO();
+	
 //	TextView name, type, facilities,  phone1, phone2, address, email,website, facebook;
 	EditText title, description, code, smsCount, emailCount;	
 	CheckBox checkRegular, checkSpecial, checkTopListing, checkHomePageBanner, checkCategoryBanner;
 	static int fromToFlag;
 	static Button  fromDate, fromTime, toDate, toTime;
-	String imageURL;
+	String imageURL, uid;
+	private ProgressDialog pDialog;
+
 
 	
 	static String dateString, timeString;
@@ -47,17 +58,14 @@ public class DealsActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_edit_deals);
+		setContentView(R.layout.activity_add_deal);
 		setTitle(R.string.title_deals_view);
-
+		LOG_TAG = getString(R.string.app_name);
+		uid = getIntent().getStringExtra(BusinessDAO.TAG_UID);
+		
 		actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
-        deal = (Deals) getIntent().getSerializableExtra(Deals.DEALS_KEY);
-		
-		deal = new DealsDAO().read();
-		
-		title = (EditText) findViewById(R.id.edit_aed_deal_title);
+        title = (EditText) findViewById(R.id.edit_aed_deal_title);
 		description = (EditText) findViewById(R.id.edit_aed_deal_description);
 		code = (EditText) findViewById(R.id.edit_aed_deal_code);
 		smsCount = (EditText) findViewById(R.id.edit_aed_deal_SMS);
@@ -74,38 +82,29 @@ public class DealsActivity extends Activity {
 		checkHomePageBanner = (CheckBox) findViewById(R.id.cb_home_page_banner);
 		checkCategoryBanner = (CheckBox) findViewById(R.id.cb_category_banner);
 		
-		setUIFromBean();
 		
 		fromDate.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				showDatePickerDialog();
 				fromToFlag = 1 ;
 			}
 		});
-	
-		
 		toDate.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				showDatePickerDialog();
 				fromToFlag = 2 ;
 			}
 		});
-		
 		fromTime.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				showTimePickerDialog();
 				fromToFlag = 3;
 			}
 		});
-
 		toTime.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				showTimePickerDialog();
@@ -113,23 +112,60 @@ public class DealsActivity extends Activity {
 			}
 		});
 	}
-
+	
+	private class AddDealTask  extends AsyncTask<Void, Void, Boolean> {
+		
+		@Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // check for internet connection
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+            	cancel(true);
+            }
+            // Showing progress dialog
+            pDialog = new ProgressDialog(AddDealActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			return dealDAO.add(uid, deal);
+		}
+		
+		@Override
+        protected void onPostExecute(Boolean param) {
+            super.onPostExecute(param);
+			pDialog.dismiss();
+			if(param){
+				Toast.makeText(getApplicationContext(), "Your deal has been added, you will hear from us shortly.", Toast.LENGTH_LONG).show();
+				Log.d(LOG_TAG, "Deal successfully added, at "+DateTime.now(TimeZone.getDefault()));
+				
+				Intent data = new Intent();
+				data.putExtra(BusinessDAO.TAG_UID, uid);
+				data.putExtra(Deals.DEALS_KEY, deal);
+				setResult(RESULT_OK, data);
+				finish();
+			}else{
+				Toast.makeText(getApplicationContext(), "Your deal cannot be saved, please try again later.", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
 
 	public static void setFromToDateTime() {
-		// TODO Auto-generated method stub
-		
-
-	if ( fromToFlag == 1)
-		fromDate.setText(dateString);
-	else if (fromToFlag == 2)
-		toDate.setText(dateString);
-	else if (fromToFlag == 3)
-		fromTime.setText(timeString);
-	else if (fromToFlag == 4)
-		toTime.setText(timeString);
+		if ( fromToFlag == 1)
+			fromDate.setText(dateString);
+		else if (fromToFlag == 2)
+			toDate.setText(dateString);
+		else if (fromToFlag == 3)
+			fromTime.setText(timeString);
+		else if (fromToFlag == 4)
+			toTime.setText(timeString);
 	}
-	
-
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,30 +178,10 @@ public class DealsActivity extends Activity {
 	@Override
 	  public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	    // action with ID action_refresh was selected
-	    case android.R.id.home:
-          Intent upIntent = NavUtils.getParentActivityIntent(this);
-          if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-              // This activity is NOT part of this app's task, so create a new task
-              // when navigating up, with a synthesized back stack.
-              TaskStackBuilder.create(this)
-                      // Add all of this activity's parents to the back stack
-                      .addNextIntentWithParentStack(upIntent)
-                      // Navigate up to the closest parent
-                      .startActivities();
-          } else {
-              // This activity is part of this app's task, so simply
-              // navigate up to the logical parent activity.
-              NavUtils.navigateUpTo(this, upIntent);
-          }
-          return true;
 	    case R.id.aed_done:
-	    	// - Save the data and take back to profile.
-	    	setBeanFromUI();
-	    	Intent data = new Intent();
-	    	data.putExtra(Deals.DEALS_KEY, deal);
-	    	setResult(RESULT_OK,data);
-	    	finish();
+	    	if(setBeanFromUI())
+	    		new AddDealTask().execute();
+	    	break;
 	    case R.id.aed_cancel:
 	    	setResult(RESULT_CANCELED);
 	    	finish();
@@ -264,69 +280,50 @@ public class DealsActivity extends Activity {
 		timeString = hour + ":" + min + ":00";
 	}
 
-
-	
-	
-	private void setUIFromBean() {
-		// TODO Auto-generated method stub
+	private boolean setBeanFromUI() {
+		if(!title.getText().toString().isEmpty())
+			deal.setTitle(title.getText().toString());
+		else{makeToastForIncompleteForm();return false;}
 		
-		title.setText(deal.getTitle());
-		description.setText(deal.getDescription());
-		code.setText(deal.getCode());
-//		deal.getImageURL(imageURL);
-
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss", Locale.ENGLISH);
+		if(!description.getText().toString().isEmpty())
+			deal.setDescription(description.getText().toString());
+		else
+			{makeToastForIncompleteForm();return false;}
 		
-		GregorianCalendar temp = new GregorianCalendar();
+		if(!code.getText().toString().isEmpty())
+			deal.setCode(code.getText().toString());
+		else
+			{makeToastForIncompleteForm();return false;}
 		
-		try {
+		// TODO - image URL
+		deal.setImageURL("");
 		
-			temp.setTime(dateFormat.parse(fromDate.getText().toString()+" "+fromTime.getText().toString()));
+		DateTime temp;
+		if(DateTime.isParseable(fromDate.getText().toString())){
+			temp = new DateTime(fromDate.getText().toString());
 			deal.setFrom(temp);
+		}else
+			{makeToastForIncompleteForm();return false;}
 		
-			temp.setTime(dateFormat.parse(toDate.getText().toString()+" "+toTime.getText().toString()));
-			deal.setTo(temp);
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		checkRegular.setChecked(deal.getPlacement().getRegular());
-		checkSpecial.setChecked(deal.getPlacement().getSpecial());
-		checkTopListing.setChecked(deal.getPlacement().getTopListing());
-		checkHomePageBanner.setChecked(deal.getPlacement().getHomePageBanner());
-		checkRegular.setChecked(deal.getPlacement().getCategoryBanner());
+		DateTime temp2;
+		if(DateTime.isParseable(toDate.getText().toString())){
+			temp2 = new DateTime(toDate.getText().toString());
+			if(temp.lt(temp2))
+				{deal.setTo(new DateTime(toDate.getText().toString()));}
+			else
+				{Toast.makeText(getApplicationContext(), "From date cannot be after To date.", Toast.LENGTH_LONG).show();return false;}
+		}else
+			{makeToastForIncompleteForm();return false;}
+				
+		if(!smsCount.getText().toString().isEmpty())
+			deal.setSMSCount(Integer.parseInt(smsCount.getText().toString()));
+		else
+			{makeToastForIncompleteForm();return false;}
 		
-		smsCount.setText(Integer.toString(deal.getSMSCount()));
-		emailCount.setText(Integer.toString(deal.getEmailCount()));
-		
-	}
-
-	private void setBeanFromUI() {
-		// TODO Auto-generated method stub
-
-		deal.setTitle(title.getText().toString());
-		deal.setDescription(description.getText().toString());
-		deal.setCode(code.getText().toString());
-		deal.setImageURL(imageURL);
-
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss", Locale.ENGLISH);
-		
-		GregorianCalendar temp = new GregorianCalendar();
-		
-		try {
-		
-			temp.setTime(dateFormat.parse(fromDate.getText().toString()+" "+fromTime.getText().toString()));
-			deal.setFrom(temp);
-		
-			temp.setTime(dateFormat.parse(toDate.getText().toString()+" "+toTime.getText().toString()));
-			deal.setTo(temp);
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		if(!emailCount.getText().toString().isEmpty())
+			deal.setEmailCount(Integer.parseInt(emailCount.getText().toString()));
+		else
+			{makeToastForIncompleteForm();return false;}
 
 		deal.getPlacement().setRegular(checkRegular.isChecked());
 		deal.getPlacement().setSpecial(checkSpecial.isChecked());
@@ -334,12 +331,11 @@ public class DealsActivity extends Activity {
 		deal.getPlacement().setHomePageBanner(checkHomePageBanner.isChecked());
 		deal.getPlacement().setCategoryBanner(checkRegular.isChecked());
 		
-		deal.setSMSCount(Integer.parseInt(smsCount.getText().toString()));
-		deal.setEmailCount(Integer.parseInt(emailCount.getText().toString()));
-		
-		
+		return true;
 	}
-
-
+	
+	private void makeToastForIncompleteForm(){
+		Toast.makeText(getApplicationContext(), "Please completely fill the form.", Toast.LENGTH_LONG).show();
+	}
 	
 }

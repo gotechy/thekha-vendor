@@ -1,5 +1,10 @@
 package com.thekha.vendor.activity;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.json.JSONException;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,34 +23,59 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.dao.BusinessDAO;
+import com.thekha.vendor.dao.LoginDAO;
 
 public class DashboardActivity extends Activity {
+	
+	private String LOG_TAG;
 	
 	ActionBar actionBar;
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
 	private DrawerLayout drawerLayout;
 	private String[] drawerMenu;
-	String title, drawerTitle;
+	private String title, drawerTitle;
+	private String uid;
 		
 	Business business;
 	BusinessDAO businessDAO;
 	
 	ArrayAdapter<CharSequence> productViewTypeAdapter;
+	ArrayAdapter<String> drawerAdapter;
 	Spinner productViewType;
 	ProgressBar profileCompletion;
 	
+	private static final int ADD_DEAL_REQUEST = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
 		setTitle(R.string.dashboard_activity_title);
-        
-		// ******** Setup Navigation Drawer *********
+		LOG_TAG = getString(R.string.app_name);
+		
+		uid = getIntent().getStringExtra(BusinessDAO.TAG_UID);
+        if(uid == null){
+        	try {
+        		LoginDAO ldao = new LoginDAO();
+    			uid = ldao.loginFromCache(getApplicationContext());
+    		}
+    		catch (IOException e) {
+    			Log.d(LOG_TAG, "Cached file cannot be read, login manually.");
+    			Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
+    			Intent i = new Intent(DashboardActivity.this, LoginActivity.class);
+    			startActivity(i);
+    			finish();
+    		} catch (JSONException e) {
+    			Log.d(LOG_TAG, "Please login again.");
+    		}
+        }
+		
+        // ******** Setup Navigation Drawer *********
 		actionBar = getActionBar();
         title = getResources().getString(R.string.dashboard_activity_title);
 		drawerTitle = getResources().getString(R.string.drawer_title);
@@ -54,7 +85,9 @@ public class DashboardActivity extends Activity {
         drawerList = (ListView) findViewById(R.id.left_drawer);
         
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        drawerList.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.drawer_list_item, drawerMenu));
+        
+        drawerAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.drawer_list_item, drawerMenu);
+        drawerList.setAdapter(drawerAdapter);
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
         
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -77,9 +110,6 @@ public class DashboardActivity extends Activity {
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
-        //**************************************
-        // TODO - get from server
-        //business = businessDAO.read();
         
         //******* Setup Dashboard UI ***********
         productViewType = (Spinner) findViewById(R.id.dashboard_productviewtype);
@@ -91,16 +121,69 @@ public class DashboardActivity extends Activity {
         profileCompletion.setMax(100);
         profileCompletion.setIndeterminate(false);
         businessDAO = new BusinessDAO();
-        business = businessDAO.read();
+        
+        
 	}
 	
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        	TextView temp = (TextView) view;
+        	if(temp.getText().toString().equals(drawerMenu[0])){
+        		Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
+        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		startActivityForResult(i, ADD_DEAL_REQUEST);
+        	}
+        	if(temp.getText().toString().equals(drawerMenu[1])){
+        		Intent i = new Intent(getApplicationContext(), DealsViewActivity.class);
+        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		startActivity(i);
+        	}
+        	if(temp.getText().toString().equals(drawerMenu[2])){
+        		Intent i = new Intent(getApplicationContext(), TransactionActivity.class);
+        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		startActivity(i);
+        	}
+        	if(temp.getText().toString().equals(drawerMenu[3])){
+        		Intent i = new Intent(getApplicationContext(), BusinessActivity.class);
+        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		startActivity(i);
+        	}
+        	if(temp.getText().toString().equals(drawerMenu[4])){
+        		Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
+        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		startActivity(i);
+        	}
+        	if(temp.getText().toString().equals(drawerMenu[5])){
+        		File cacheFile = new File(getApplicationContext().getCacheDir()+File.separator+"login");
+        		if(cacheFile.exists())
+        			cacheFile.delete();
+        		finish();
+        	}
+        }
+    }
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		// - Check result code and request code.
+		if(requestCode == ADD_DEAL_REQUEST && resultCode == RESULT_OK){
+			uid = data.getStringExtra(BusinessDAO.TAG_UID);
+		}
+
+	}
+
 	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		profileCompletion.setProgress(business.getCompletionPercentage());
-		
-		
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		// Save the user's current game state
+		savedInstanceState.putString(BusinessDAO.TAG_UID, uid);
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		// Always call the superclass so it can restore the view hierarchy
+		super.onRestoreInstanceState(savedInstanceState);
+		uid = savedInstanceState.getString(BusinessDAO.TAG_UID);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,23 +215,7 @@ public class DashboardActivity extends Activity {
 	    }
 	}
 	
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        	TextView temp = (TextView) view;
-        	if(temp.getText().toString().equals(drawerMenu[0]))
-        		startActivity(new Intent(getApplicationContext(), DealsActivity.class));
-        	if(temp.getText().toString().equals(drawerMenu[1]))
-        		startActivity(new Intent(getApplicationContext(), DealsViewActivity.class));
-        	if(temp.getText().toString().equals(drawerMenu[2]))
-        		startActivity(new Intent(getApplicationContext(), TransactionActivity.class));
-        	if(temp.getText().toString().equals(drawerMenu[3]))
-        		startActivity(new Intent(getApplicationContext(), BusinessActivity.class));
-        	if(temp.getText().toString().equals(drawerMenu[4]))
-        		startActivity(new Intent(getApplicationContext(), ContactUsActivity.class));
-        }
-    }
-    
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

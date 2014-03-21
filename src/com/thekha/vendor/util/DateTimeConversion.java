@@ -10,6 +10,6 @@ public class DateTimeConversion {
 	public static final String TF_NUMERIC_MHSAP = "hh:mm:ss a";
 	public static final String TF_NUMERIC_MHAP = "hh:mm a";
 	public static final String FF_ENGLISH = "WWWW, MMMM D, YYYY at hh:mm a";
-	public static final String FF_NUMERIC = "YYYY/MM/DD hh:mm:ss";
+	public static final String FF_NUMERIC = "YYYY-MM-DD hh:mm:ss";
 	
 }

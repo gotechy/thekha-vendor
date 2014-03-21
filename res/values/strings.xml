@@ -30,7 +30,7 @@
 <!-- added by Gaurav Rana End-->   	
         
 
-    <string name="app_name">Theka</string>
+    <string name="app_name">Thekha</string>
     <string name="business">Business</string>
     <string name="description">Your Uploaded Image</string>
     <string name="phone">Phone</string>
@@ -84,5 +84,7 @@
     <string name="brand_mantra">Hot Deals Amazing Discounts!</string>
     <string name="supprt_info">For inquiry dial +555 555 5555 or send an email to support@thekha.com</string>
     <string name="website_address">www.thekha.com</string>
+    <string name="invalid_login_details_toastmsg">Username and password do not match. Please use valid details to login.</string>
+    <string name="incomplete_login_details_toastmsg">Please provide both username and password to login.</string>
     
 </resources>

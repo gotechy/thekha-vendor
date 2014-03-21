@@ -16,7 +16,7 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         android:contentDescription="@string/description"
-        android:src="@drawable/logo2" />
+        android:src="@drawable/logo" />
     
     <Button
         android:id="@+id/editbusiness_picture_button"

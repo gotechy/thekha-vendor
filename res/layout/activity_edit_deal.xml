@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools" android:id="@+id/editbusiness_scrollView"
+	android:layout_width="fill_parent" android:layout_height="wrap_content">
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="match_parent" android:layout_height="wrap_content"
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:paddingTop="@dimen/activity_vertical_margin" tools:context=".BusinessActivity"
+		android:scrollbarStyle="insideOverlay" android:scrollbars="vertical">
+
+		<ImageView android:id="@+id/editdeal_cover_image"
+			android:layout_width="fill_parent" android:layout_height="@dimen/aed_upload_image_height"
+			android:cropToPadding="true" android:layout_gravity="fill"
+			android:adjustViewBounds="true" android:scaleType="fitXY"
+			android:contentDescription="@string/cd_image_upload" android:src="@drawable/ic_launcher" />
+
+		<Button android:id="@+id/editdeal_cover_image_button"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/change_picture" />
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+			android:paddingRight="@dimen/activity_horizontal_margin"
+			android:orientation="vertical">
+
+			<RelativeLayout android:layout_width="match_parent"
+				android:layout_height="match_parent">
+				<TextView android:id="@+id/editdeal_title"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true" android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="Title" />
+				<TextView android:id="@+id/editdeal_code"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:layout_alignParentRight="true" android:layout_alignBottom="@id/editdeal_title"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:text="Code" />
+			</RelativeLayout>
+
+			<TextView android:id="@+id/editdeal_description"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="Description" />
+
+			<TextView android:id="@+id/label_edit_deal_active" style="@style/sectionHeader"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:text="@string/label_deal_active" android:textAppearance="?android:attr/textAppearanceMedium" />
+
+			<LinearLayout android:layout_width="match_parent"
+				android:layout_height="match_parent" android:orientation="horizontal">
+				<TextView android:id="@+id/label_edit_deal_active_from"
+					style="" android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/label_deal_active_from" android:paddingRight="10dp"
+					android:paddingTop="10dp" android:textAppearance="?android:attr/textAppearanceMedium" />
+				<TextView android:id="@+id/editdeal_from"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:text="From Date" />
+			</LinearLayout>
+
+			<LinearLayout android:layout_width="match_parent"
+				android:layout_height="match_parent" android:orientation="horizontal">
+				<TextView android:id="@+id/label_edit_deal_active_to"
+					style="" android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/label_deal_active_to" android:paddingRight="10dp"
+					android:textAppearance="?android:attr/textAppearanceMedium" />
+				<TextView android:id="@+id/editdeal_to"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:text="To Date" />
+			</LinearLayout>
+
+			<TextView android:id="@+id/label_aed_placement" style="@style/sectionHeader"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:text="@string/label_placement" android:textAppearance="?android:attr/textAppearanceMedium" />
+
+			<TableRow android:id="@+id/table_row_placement1"
+				android:layout_width="match_parent" android:layout_height="wrap_content">
+				<CheckBox android:id="@+id/editdeal_regular"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/label_placement_regular" />
+
+				<CheckBox android:id="@+id/editdeal_special"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/label_placement_special" />
+
+			</TableRow>
+			<TableRow android:id="@+id/table_row_placement2"
+				android:layout_width="match_parent" android:layout_height="wrap_content">
+				<CheckBox android:id="@+id/editdeal_top_listing"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/label_placement_top_listing" />
+
+				<CheckBox android:id="@+id/editdeal_home_page_banner"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/label_placement_home_page_banner" />
+
+			</TableRow>
+			<TableRow android:id="@+id/table_row_placement3"
+				android:layout_width="match_parent" android:layout_height="wrap_content">
+				<CheckBox android:id="@+id/editdeal_category_banner"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/label_placement_category_banner" />
+
+			</TableRow>
+
+			<TextView android:id="@+id/label_aed_push_settings" style="@style/sectionHeader"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:text="@string/label_push_settings" android:textAppearance="?android:attr/textAppearanceMedium" />
+
+			<EditText android:id="@+id/editdeal_SMS"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:ems="10" android:hint="@string/label_push_settings_SMS"
+				android:inputType="number" />
+
+			<EditText
+			    android:id="@+id/editdeal_email"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:ems="10"
+			    android:hint="@string/label_push_settings_email"
+			    android:inputType="number"
+			    tools:ignore="TextFields" />
+
+		</LinearLayout>
+	</LinearLayout>
+</ScrollView>

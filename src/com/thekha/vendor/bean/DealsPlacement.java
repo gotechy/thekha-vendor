@@ -1,7 +1,15 @@
 package com.thekha.vendor.bean;
 
-public class DealsPlacement {
+import java.io.Serializable;
 
+public class DealsPlacement implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3146048448569853218L;
+	
+	private int id;
 	private Boolean regular;
 	private Boolean special;
 	private Boolean topListing;
@@ -9,7 +17,6 @@ public class DealsPlacement {
 	private Boolean categoryBanner;
 
 	public DealsPlacement() {
-		// TODO Auto-generated constructor stub
 		
 	}
 	
@@ -23,6 +30,24 @@ public class DealsPlacement {
 		this.categoryBanner = categoryBanner;	
 	}
 	
+	public DealsPlacement(int id, Boolean regular, Boolean special,
+			Boolean topListing, Boolean homePageBanner, Boolean categoryBanner) {
+		super();
+		this.id = id;
+		this.regular = regular;
+		this.special = special;
+		this.topListing = topListing;
+		this.homePageBanner = homePageBanner;
+		this.categoryBanner = categoryBanner;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public Boolean getRegular() {
 		return regular;

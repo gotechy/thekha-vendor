@@ -1,72 +1,80 @@
 package com.thekha.vendor.activity;
 
-import com.thekha.vendor.adapter.DealsListAdapter;
-import com.thekha.vendor.bean.Deals;
-import com.thekha.vendor.dao.DealsDAO;
+import java.util.List;
+
+import org.json.JSONException;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class DealsViewActivity extends ListActivity {
+import com.thekha.vendor.adapter.DealsListAdapter;
+import com.thekha.vendor.bean.Deals;
+import com.thekha.vendor.dao.BusinessDAO;
+import com.thekha.vendor.dao.DealsDAO;
 
-	DealsListAdapter deals_list_adapter;
+public class DealsViewActivity extends Activity {
+
+	private String LOG_TAG;
+	
+	DealsListAdapter dealsAdapter;
 	Deals deal;	
 	ActionBar actionBar;
+	private ProgressDialog pDialog;
+	String uid;
+	private DealsDAO dealDAO;
+	private ListView lv;
 	
-	public DealsViewActivity() {
-		// TODO Auto-generated constructor stub
-	}
-
+	List<Deals> deals;
+	public static final int ADD_DEAL_REQUEST = 0;
+	public static final int EDIT_DEAL_REQUEST = 1;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_deals_view);
+		LOG_TAG = getString(R.string.app_name);
+		uid = getIntent().getStringExtra(BusinessDAO.TAG_UID);
+		dealDAO = new DealsDAO();
+		
 		actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        
+        lv = (ListView) findViewById(R.id.editdeals_listView);
 
-		deals_list_adapter = new DealsListAdapter(getApplicationContext());
-		
-		setListAdapter(deals_list_adapter);
-		
-        deal = (Deals) getIntent().getSerializableExtra(Deals.DEALS_KEY);
-		
-		deal = new DealsDAO().read();
-		
-		loadItems();
-		
-		
+        new DealsTask().execute();
 	}	
 	
-	public void onResume() {
-		super.onResume();
-
-		// Load saved ToDoItems, if necessary
-
-		if (deals_list_adapter.getCount() == 0)
-			loadItems();
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		 super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == ADD_DEAL_REQUEST && resultCode == RESULT_OK){
+	    	dealsAdapter.add((Deals) data.getSerializableExtra(Deals.DEALS_KEY));
+	    }
+	    if (requestCode == EDIT_DEAL_REQUEST && resultCode == RESULT_OK){
+	    	dealsAdapter.update((Deals) data.getSerializableExtra(Deals.DEALS_KEY));
+	    }
 	}
-
-	private void loadItems() {
-
-	deals_list_adapter.add(deal);
-		
-	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.actionmenu_view_deals, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
 	
 	@Override
 	  public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,13 +98,60 @@ public class DealsViewActivity extends ListActivity {
           return true;
 	    case R.id.dv_add_deals:
 	    	// - Save the data and take back to profile.
-	    	startActivity(new Intent(getApplicationContext(), DealsActivity.class));
+	    	Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
+    		i.putExtra(BusinessDAO.TAG_UID, uid);
+    		startActivityForResult(i, ADD_DEAL_REQUEST);
+    		break;
 	    default:
 	      break;
 	    }
 	    return true;
 	  } 
 
-	
+private class DealsTask  extends AsyncTask<Void, Void, Void> {
+		
+		@Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // check for internet connection
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+            	cancel(true);
+            }
+            // Showing progress dialog
+            pDialog = new ProgressDialog(DealsViewActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				deals = dealDAO.read(uid);
+			} catch (JSONException e) {
+				Log.d(LOG_TAG, "Cannot parse dashboard service JSON response.");
+			}
+			return null;
+		}
+		
+		@Override
+        protected void onPostExecute(Void param) {
+            super.onPostExecute(param);
+			if(deals != null){
+				dealsAdapter = new DealsListAdapter(DealsViewActivity.this, deals);
+				lv.setAdapter(dealsAdapter);
+	            Log.d(LOG_TAG, "Deals successfully loaded.");
+	            //TODO - implement caching
+	            //cacheData();
+	            //Log.d(LOG_TAG, "Business profile successfully cached.");
+			}else{
+				Toast.makeText(getApplicationContext(), "Your deals cannot be loaded, please try again later.", Toast.LENGTH_SHORT).show();
+			}
+			pDialog.dismiss();            
+		}
+	}
 	
 }

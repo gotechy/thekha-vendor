@@ -40,14 +40,13 @@
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_alignParentLeft="true"
-        	android:ems="10"
+        	android:text="Time : "
         	android:textAppearance="?android:attr/textAppearanceSmall" />
         <TextView
         	android:id="@+id/transaction_timestamp"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:layout_alignParentRight="true"
-        	android:ems="10"
+        	android:layout_toRightOf="@id/transaction_timestamplable"
         	android:textAppearance="?android:attr/textAppearanceSmall" />
         
     </RelativeLayout>
