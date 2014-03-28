@@ -2,6 +2,7 @@ package com.thekha.vendor.dao;
 
 import hirondelle.date4j.DateTime;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
@@ -13,6 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.content.Context;
+
+import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.DealsPlacement;
 import com.thekha.vendor.util.ServiceHandler;
@@ -22,12 +26,9 @@ public class DealsDAO {
 	Deals d;
 	List<Deals> deals;
 	String jsonResp;
-
-	public static final String TAG_UID = "user_id";
-	public static final String TAG_PLACEMENTID = "placement";
 	
 	// Deal Tags
-	public static final String TAG_DEALSID = "deals_id";
+	public static final String TAG_DEALID = "deals_id";
 	public static final String TAG_TITLE = "title";
 	public static final String TAG_DESCRIPTION = "description";
 	public static final String TAG_CODE = "code";
@@ -41,28 +42,23 @@ public class DealsDAO {
 	public static final String TAG_UPDATEDON = "updated_date";
 	
 	// Deal placement tags
+	public static final String TAG_PLACEMENTID = "placement_id";
 	public static final String TAG_REGULAR = "regular";
 	public static final String TAG_SEPCIAL = "special";
 	public static final String TAG_TOPLISTING = "topListing";
 	public static final String TAG_HOMEPAGEBANNER = "homePageBanner";
 	public static final String TAG_CATEGORYBANNER = "categoryBanner";
 
-	public Deals readSample(){
-		d = new Deals ( "Free Chicken", "There would be a free chicken treat only for today!!!", "FBP11101", 
-				"", DateTime.now(TimeZone.getDefault()), DateTime.now(TimeZone.getDefault()),
-				new DealsPlacement( Boolean.FALSE , Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE), 500, 100);
-		return d;
-	}
-
 	public Boolean add(String uid, Deals deal) {
-		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(TAG_UID, String.valueOf(uid)));
 		
-		reqParams.add(new BasicNameValuePair(TAG_REGULAR, deal.getPlacement().getRegular()?"1":"0"));
-		reqParams.add(new BasicNameValuePair(TAG_SEPCIAL, deal.getPlacement().getSpecial()?"1":"0"));
-		reqParams.add(new BasicNameValuePair(TAG_TOPLISTING, deal.getPlacement().getTopListing()?"1":"0"));
-		reqParams.add(new BasicNameValuePair(TAG_HOMEPAGEBANNER, deal.getPlacement().getHomePageBanner()?"1":"0"));
-		reqParams.add(new BasicNameValuePair(TAG_CATEGORYBANNER, deal.getPlacement().getCategoryBanner()?"1":"0"));
+		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
+		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, uid));
+		
+		reqParams.add(new BasicNameValuePair(TAG_REGULAR, deal.getPlacement().isRegular()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_SEPCIAL, deal.getPlacement().isSpecial()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_TOPLISTING, deal.getPlacement().isTopListing()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_HOMEPAGEBANNER, deal.getPlacement().isHomePageBanner()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_CATEGORYBANNER, deal.getPlacement().isCategoryBanner()?"1":"0"));
 		
 		reqParams.add(new BasicNameValuePair(TAG_TITLE, deal.getTitle()));
 		reqParams.add(new BasicNameValuePair(TAG_DESCRIPTION, deal.getDescription()));
@@ -86,9 +82,19 @@ public class DealsDAO {
 		return true;
 	}
 
-	public List<Deals> read(String uid) throws JSONException{
+	public List<Deals> read(Context c, String uid) throws JSONException{
+		BusinessDAO bdao = new BusinessDAO();
+		Business b;
+		try {
+			b = bdao.readFromCache(c);
+		} catch (IOException e) {
+			b = bdao.read(uid);
+		} catch (JSONException e) {
+			b = bdao.read(uid);
+		}
+		
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(TAG_UID, String.valueOf(uid)));
+		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, String.valueOf(b.getId())));
 		
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.GET_DEALS_SERVICE, ServiceHandler.GET, reqParams);
@@ -98,13 +104,14 @@ public class DealsDAO {
 	
 	public boolean update(Deals deal) {
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(TAG_DEALSID, String.valueOf(deal.getId())));
+		reqParams.add(new BasicNameValuePair(TAG_DEALID, String.valueOf(deal.getId())));
+		reqParams.add(new BasicNameValuePair(TAG_PLACEMENTID, String.valueOf(deal.getPlacement().getId())));
 		
-		reqParams.add(new BasicNameValuePair(TAG_REGULAR, deal.getPlacement().getRegular()?"1":"0"));
-		reqParams.add(new BasicNameValuePair(TAG_SEPCIAL, deal.getPlacement().getSpecial()?"1":"0"));
-		reqParams.add(new BasicNameValuePair(TAG_TOPLISTING, deal.getPlacement().getTopListing()?"1":"0"));
-		reqParams.add(new BasicNameValuePair(TAG_HOMEPAGEBANNER, deal.getPlacement().getHomePageBanner()?"1":"0"));
-		reqParams.add(new BasicNameValuePair(TAG_CATEGORYBANNER, deal.getPlacement().getCategoryBanner()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_REGULAR, deal.getPlacement().isRegular()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_SEPCIAL, deal.getPlacement().isSpecial()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_TOPLISTING, deal.getPlacement().isTopListing()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_HOMEPAGEBANNER, deal.getPlacement().isHomePageBanner()?"1":"0"));
+		reqParams.add(new BasicNameValuePair(TAG_CATEGORYBANNER, deal.getPlacement().isCategoryBanner()?"1":"0"));
 		
 		reqParams.add(new BasicNameValuePair(TAG_TITLE, deal.getTitle()));
 		reqParams.add(new BasicNameValuePair(TAG_DESCRIPTION, deal.getDescription()));
@@ -115,12 +122,7 @@ public class DealsDAO {
 		reqParams.add(new BasicNameValuePair(TAG_TO, deal.getTo().toString()));
 		reqParams.add(new BasicNameValuePair(TAG_SMSCOUNT, String.valueOf(deal.getSMSCount())));
 		reqParams.add(new BasicNameValuePair(TAG_EMAILCOUNT, String.valueOf(deal.getEmailCount())));
-		
-		// TODO - created by, updated by
-		reqParams.add(new BasicNameValuePair(TAG_CREATEDBY, String.valueOf(deal.getId())));
-		reqParams.add(new BasicNameValuePair(TAG_UPDATEDBY, String.valueOf(deal.getId())));
-		reqParams.add(new BasicNameValuePair(TAG_UPDATEDON, DateTime.now(TimeZone.getDefault()).toString()));
-		
+				
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.UPDATE_DEAL_SERVICE, ServiceHandler.POST, reqParams);
 		if (jsonResp.isEmpty()) {
@@ -150,7 +152,7 @@ public class DealsDAO {
 				jsonObj.getString(TAG_CATEGORYBANNER).equals("1")
 				);
 		d = new Deals(
-				jsonObj.getInt(TAG_DEALSID),
+				jsonObj.getInt(TAG_DEALID),
 				jsonObj.getString(TAG_TITLE),
 				jsonObj.getString(TAG_DESCRIPTION),
 				jsonObj.getString(TAG_CODE),

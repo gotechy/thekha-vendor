@@ -1,32 +1,53 @@
 package com.thekha.vendor.activity;
 
+import hirondelle.date4j.DateTime;
+
+import java.util.TimeZone;
+
+import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Query;
+import com.thekha.vendor.dao.ContactUsDAO;
+import com.thekha.vendor.dao.LoginDAO;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class ContactUsActivity extends Activity {
+	
+	private String LOG_TAG;
 	
 	ActionBar actionBar;
 	EditText name, email, phone, subject, message;
 	Spinner type;
 	ArrayAdapter<CharSequence> typeAdapter;
 	Query query;
+
+	private ProgressDialog pDialog;
+	
+	ContactUsDAO cudao = new ContactUsDAO();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contactus);
 		setTitle(R.string.contactus_activity_title);
+		LOG_TAG = getString(R.string.app_name);
 		
 		actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -41,6 +62,7 @@ public class ContactUsActivity extends Activity {
         typeAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
 				R.array.query_types, R.layout.spinner_item);
 		type.setAdapter(typeAdapter);
+		
 	}
 
 	protected void setBeanFromUI(){
@@ -61,20 +83,64 @@ public class ContactUsActivity extends Activity {
 	@Override
 	  public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	    case android.R.id.home:
-          Intent upIntent = NavUtils.getParentActivityIntent(this);
-          if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-              TaskStackBuilder.create(this)
-                      .addNextIntentWithParentStack(upIntent)
-                      .startActivities();
-          } else {
-              NavUtils.navigateUpTo(this, upIntent);
-          }
-          return true;
 	    case R.id.contact_done:
 	    	setBeanFromUI();
-	    	// TODO - save data
+			new ContactUsTask().execute(getIntent().getStringExtra(LoginDAO.TAG_USERID));
+	    case R.id.contact_cancel:
+			setResult(RESULT_CANCELED);
+			finish();
+		default:
+			break;
 	    }
 	    return true;
 	  }
+	
+	private class ContactUsTask  extends AsyncTask<String, Void, Boolean> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			// Showing progress dialog
+			pDialog = new ProgressDialog(ContactUsActivity.this);
+			pDialog.setMessage("Please wait...");
+			pDialog.setCancelable(false);
+			pDialog.show();
+			// check for internet connection
+			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+				cancel(true);
+			}
+		}
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+			if(!isCancelled()){
+				return cudao.add(params[0], query);
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean param) {
+			super.onPostExecute(param);
+			pDialog.dismiss();
+			if(param){
+				Toast.makeText(getApplicationContext(), "Your query has been received. We will contact you in 72Hrs", Toast.LENGTH_SHORT).show();
+				Log.d(LOG_TAG, "Query raised, at "+DateTime.now(TimeZone.getDefault()));
+				Intent data = new Intent();
+				setResult(RESULT_OK,data);
+				finish();
+			}else{
+				Toast.makeText(getApplicationContext(), "Your cannot be sent, please try again later.", Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
+		}
+	}
 }

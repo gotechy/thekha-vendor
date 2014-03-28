@@ -78,7 +78,7 @@ public class LoginActivity extends Activity {
 
 	private void startDashboardActivity(String id){
 		Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-		i.putExtra(BusinessDAO.TAG_UID, id);
+		i.putExtra(LoginDAO.TAG_USERID, id);
 		startActivity(i);
 		finish();
 	}
@@ -88,6 +88,11 @@ public class LoginActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			// Showing progress dialog
+			pDialog = new ProgressDialog(LoginActivity.this);
+			pDialog.setMessage("Please wait...");
+			pDialog.setCancelable(false);
+			pDialog.show();
 			// check for internet connection
 			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -95,25 +100,23 @@ public class LoginActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
 				cancel(true);
 			}
-			// Showing progress dialog
-			pDialog = new ProgressDialog(LoginActivity.this);
-			pDialog.setMessage("Please wait...");
-			pDialog.setCancelable(false);
-			pDialog.show();
 		}
 
 		@Override
 		protected String doInBackground(String... params) {
-			try {
-				return ldao.login(getApplicationContext(), params[0], params[1]);
-			} catch (JSONException e) {
-				Toast.makeText(getApplicationContext(), "Something is very wrong, please contact our support services.", Toast.LENGTH_SHORT).show();
-				Log.d(LOG_TAG, "Cannot parse login service JSON response.");
-				return null;
-			} catch (IOException e) {
-				Log.d(LOG_TAG, "Cannot cache login details.");
-				return null;
+			if(!isCancelled()){
+				try {
+					return ldao.login(getApplicationContext(), params[0], params[1]);
+				} catch (JSONException e) {
+					Toast.makeText(getApplicationContext(), "Something is very wrong, please contact our support services.", Toast.LENGTH_SHORT).show();
+					Log.d(LOG_TAG, "Cannot parse login service JSON response.");
+					return null;
+				} catch (IOException e) {
+					Log.d(LOG_TAG, "Cannot cache login details.");
+					return null;
+				}
 			}
+			return null;
 		}
 
 
@@ -129,6 +132,12 @@ public class LoginActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "Could not login now, please try again later. If problem persists, please contact our support services.", Toast.LENGTH_SHORT).show();
 				cancel(true);
 			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
 		}
 	}
 }

@@ -21,14 +21,15 @@ import com.thekha.vendor.util.ServiceHandler;
 
 public class LoginDAO {
 	
+	
 	private final String cacheFileName = "login";
-
+	
 	// JSON Node names - request
 	private static final String TAG_USERNAME = "username";
 	private static final String TAG_PASSWORD = "password";
 
 	// JSON Node names - response
-	private static final String TAG_USERID = "id";
+	public static final String TAG_USERID = "id";
 	//private static final String TAG_CREATEDBY = "created_by";
 	//private static final String TAG_UPDATEDBY = "updated_by";
 	//private static final String TAG_CREATEDDATE = "created_date";
@@ -63,6 +64,12 @@ public class LoginDAO {
 		fw.write(str);
 		fw.flush();
 		fw.close();
+	}
+	
+	public void logout(Context c){
+		File cacheFile = new File(c.getCacheDir()+File.separator+cacheFileName);
+		if(cacheFile.exists())
+			cacheFile.delete();
 	}
 
 	public String loginFromCache(Context c) throws IOException, JSONException {

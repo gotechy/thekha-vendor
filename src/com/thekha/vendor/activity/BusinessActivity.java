@@ -26,29 +26,29 @@ import android.widget.Toast;
 import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Facilities;
 import com.thekha.vendor.dao.BusinessDAO;
+import com.thekha.vendor.dao.LoginDAO;
 
 public class BusinessActivity extends Activity {
 	
 	private String LOG_TAG;
-	
+
 	ActionBar actionBar;
 	Business business;
 	BusinessDAO businessDAO;
 	TextView name, type, facilities,  phone1, phone2, address, email, website, facebook;
 	ImageView picture;
 	private ProgressDialog pDialog;
-	
-	private File cacheFile;
-	
+
+	private String uid;
+
 	static final int EDIT_BUSINESS_REQUEST = 1;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_business);
 		setTitle(R.string.business);
 		LOG_TAG = getString(R.string.app_name);
-		cacheFile = new File(getApplicationContext().getCacheDir()+File.separator+"business");
 		
 		actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -65,13 +65,34 @@ public class BusinessActivity extends Activity {
 		picture = (ImageView) findViewById(R.id.business_picture);
 		
 		businessDAO = new BusinessDAO();
-		String uid = getIntent().getStringExtra(BusinessDAO.TAG_UID);
-		new BusinessTask().execute(Integer.parseInt(uid));
+		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
+		new BusinessTask().execute(uid);
+	}
+	
+	@Override
+	protected void onStart() {
+		// Check UID, if null get from cache, otherwise login user again manually.
+		if(uid == null){
+        	try {
+        		LoginDAO ldao = new LoginDAO();
+    			uid = ldao.loginFromCache(getApplicationContext());
+    		}
+    		catch (IOException e) {
+    			Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
+    			startActivity(new Intent(BusinessActivity.this, LoginActivity.class));
+    			finish();
+    		} catch (JSONException e) {
+    			Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
+    			startActivity(new Intent(BusinessActivity.this, LoginActivity.class));
+    			finish();
+    		}
+        }
+		super.onStart();
 	}
 	
 	private void cacheData(){
 		try {
-			businessDAO.cache(cacheFile);
+			businessDAO.cache(getApplicationContext());
 		} catch (NullPointerException e) {
 			Log.d(LOG_TAG, "No business object to cache.");
 		} catch (IOException e) {
@@ -122,7 +143,6 @@ public class BusinessActivity extends Activity {
 	    // action with ID action_refresh was selected
 	    case android.R.id.home:
             Intent upIntent = NavUtils.getParentActivityIntent(this);
-            upIntent.putExtra(BusinessDAO.TAG_UID, getIntent().getStringExtra(BusinessDAO.TAG_UID));
             if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                 // This activity is NOT part of this app's task, so create a new task
                 // when navigating up, with a synthesized back stack.
@@ -140,7 +160,7 @@ public class BusinessActivity extends Activity {
 	    case R.id.business_edit:
 	      Intent editBusiness = new Intent(getApplicationContext(), EditBusinessActivity.class);
 	      editBusiness.putExtra(Business.BUSINESS_KEY, business);
-	      editBusiness.putExtra(BusinessDAO.TAG_UID, getIntent().getStringExtra(BusinessDAO.TAG_UID));
+	      editBusiness.putExtra(LoginDAO.TAG_USERID, uid);
 	      startActivityForResult(editBusiness, EDIT_BUSINESS_REQUEST);
 	      break;
 	    default:
@@ -165,11 +185,16 @@ public class BusinessActivity extends Activity {
 	    }
 	}
 
-	private class BusinessTask  extends AsyncTask<Integer, Void, Void> {
+	private class BusinessTask  extends AsyncTask<String, Void, Void> {
 		
 		@Override
         protected void onPreExecute() {
             super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(BusinessActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
             // check for internet connection
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -177,21 +202,18 @@ public class BusinessActivity extends Activity {
             	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
             	cancel(true);
             }
-            // Showing progress dialog
-            pDialog = new ProgressDialog(BusinessActivity.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
+		}
 		
 		@Override
-		protected Void doInBackground(Integer... params) {
-			try {
-				business = businessDAO.read(params[0]);
-			} catch (JSONException e) {
-				Toast.makeText(getApplicationContext(), "Something is very wrong, please contact our support services.", Toast.LENGTH_SHORT).show();
-	        	Log.d(LOG_TAG, "Cannot parse dashboard service JSON response.");
-	        	cancel(true);
+		protected Void doInBackground(String... params) {
+			if(!isCancelled()){
+				try {
+					business = businessDAO.read(params[0]);
+				} catch (JSONException e) {
+					Toast.makeText(getApplicationContext(), "Something is very wrong, please contact our support services.", Toast.LENGTH_SHORT).show();
+		        	Log.d(LOG_TAG, "Cannot parse dashboard service JSON response.");
+		        	cancel(true);
+				}
 			}
 			return null;
 		}
@@ -204,6 +226,12 @@ public class BusinessActivity extends Activity {
             Log.d(LOG_TAG, "Business profile successfully loaded.");
             cacheData();
             Log.d(LOG_TAG, "Business profile successfully cached.");
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
 		}
 	}
 }

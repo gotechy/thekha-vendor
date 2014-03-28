@@ -27,12 +27,13 @@ public class ServiceHandler {
 	private static final String TAG_SECRET = "secret";
 	
 	public static final String LOGIN_SERVICE = "login/UserLogin";
-	public static final String GET_PROFILE_SERVICE = "profile/GetProfile";
+	public static final String GET_PROFILE_SERVICE = "getProfile/Profile";
 	public static final String UPDATE_PROFILE_SERVICE = "profile/UpdateProfile";
 	public static final String CREATE_PROFILE_SERVICE = "profile/CreateProfile";
 	public static final String CREATE_DEAL_SERVICE = "createDeal/CreateDeal";
-	public static final String GET_DEALS_SERVICE = "getDeal/GetDeal";
-	public static final String UPDATE_DEAL_SERVICE = "updateDeal/UpdateDeal";
+	public static final String GET_DEALS_SERVICE = "getDeal/Deal";
+	public static final String UPDATE_DEAL_SERVICE = "updateDeal/Deal";
+	public static final String POST_QUERY_SERVICE = ""; //TODO
 	
 
 	public ServiceHandler() {

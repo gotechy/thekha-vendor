@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.content.Context;
+
 import com.thekha.vendor.bean.Address;
 import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Facilities;
@@ -23,16 +25,13 @@ import com.thekha.vendor.util.ServiceHandler;
 public class BusinessDAO {
 	Business b;
 	String jsonResp;
-
-	private File cacheFile;
-	
-	public static final String TAG_UID = "user_id";
-	
+	private final String cacheFileName = "business";
+		
 	// ID tags
 	//private static final String TAG_UBAID = "uba_id";
-	private static final String TAG_BID = "bid";
-	private static final String TAG_AID = "aid";
-	private static final String TAG_FID = "fid";
+	public static final String TAG_BID = "business_id";
+	public static final String TAG_AID = "address_id";
+	public static final String TAG_FID = "facilities_id";
 	
 	// Business Tags
 	private static final String TAG_NAME = "name";
@@ -40,7 +39,7 @@ public class BusinessDAO {
 	private static final String TAG_IMAGEURL = "imageURL";
 	private static final String TAG_PHONE1 = "phone1";
 	private static final String TAG_PHONE2 = "phone2";
-	private static final String TAG_EMAIL = "email";
+	private static final String TAG_EMAIL = "business_email";
 	private static final String TAG_WEBSITE = "website";
 	private static final String TAG_FACEBOOK = "facebook";
 	
@@ -63,9 +62,9 @@ public class BusinessDAO {
 	
 	// TODO - CUD for ProfileDAO
 	
-	public Business read(int uid) throws JSONException{
+	public Business read(String uid) throws JSONException{
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(TAG_UID, String.valueOf(uid)));
+		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, uid));
 		
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.GET_PROFILE_SERVICE, ServiceHandler.GET, reqParams);
@@ -75,7 +74,7 @@ public class BusinessDAO {
 	
 	public boolean update(Integer uid, Business business) {
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(TAG_UID, String.valueOf(uid)));
+		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, String.valueOf(uid)));
 		
 		reqParams.add(new BasicNameValuePair(TAG_AC, business.getFacilities().isAc()?"1":"0"));
 		reqParams.add(new BasicNameValuePair(TAG_SA, business.getFacilities().isSa()?"1":"0"));
@@ -103,22 +102,26 @@ public class BusinessDAO {
 		
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.UPDATE_PROFILE_SERVICE, ServiceHandler.POST, reqParams);
-		if (jsonResp.isEmpty()) {
-			return false;
+		if (jsonResp != null) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
-	public void cache(File file) throws IOException, NullPointerException{
+	public void cache(Context c) throws IOException, NullPointerException{
+		File cacheFile = new File(c.getCacheDir()+File.separator+cacheFileName);
+
 		if(jsonResp != null){
-			FileWriter fw = new FileWriter(file);
+			FileWriter fw = new FileWriter(cacheFile);
 			fw.write(jsonResp.toString()); fw.flush(); fw.close();
 		}else
 			throw new NullPointerException();
 	}
 	
-	public Business readFromCache(File file) throws IOException, JSONException{
-		FileReader fr = new FileReader(file);
+	public Business readFromCache(Context c) throws IOException, JSONException{
+		File cacheFile = new File(c.getCacheDir()+File.separator+cacheFileName);
+
+		FileReader fr = new FileReader(cacheFile);
 		BufferedReader br = new BufferedReader(fr);
 		if(br.ready()){
 			jsonResp = br.readLine();

@@ -42,7 +42,7 @@ public class DashboardActivity extends Activity {
 	private String uid;
 		
 	Business business;
-	BusinessDAO businessDAO;
+	BusinessDAO businessDAO = new BusinessDAO();;
 	
 	ArrayAdapter<CharSequence> productViewTypeAdapter;
 	ArrayAdapter<String> drawerAdapter;
@@ -50,6 +50,7 @@ public class DashboardActivity extends Activity {
 	ProgressBar profileCompletion;
 	
 	private static final int ADD_DEAL_REQUEST = 0;
+	private static final int CONTACT_US_REQUEST = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +59,8 @@ public class DashboardActivity extends Activity {
 		setTitle(R.string.dashboard_activity_title);
 		LOG_TAG = getString(R.string.app_name);
 		
-		uid = getIntent().getStringExtra(BusinessDAO.TAG_UID);
-        if(uid == null){
-        	try {
-        		LoginDAO ldao = new LoginDAO();
-    			uid = ldao.loginFromCache(getApplicationContext());
-    		}
-    		catch (IOException e) {
-    			Log.d(LOG_TAG, "Cached file cannot be read, login manually.");
-    			Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
-    			Intent i = new Intent(DashboardActivity.this, LoginActivity.class);
-    			startActivity(i);
-    			finish();
-    		} catch (JSONException e) {
-    			Log.d(LOG_TAG, "Please login again.");
-    		}
-        }
+		// Get User ID for any other operation from intent.
+		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
 		
         // ******** Setup Navigation Drawer *********
 		actionBar = getActionBar();
@@ -120,9 +107,30 @@ public class DashboardActivity extends Activity {
         profileCompletion = (ProgressBar) findViewById(R.id.dashboard_profile);
         profileCompletion.setMax(100);
         profileCompletion.setIndeterminate(false);
-        businessDAO = new BusinessDAO();
         
-        
+	}
+	
+	@Override
+	protected void onStart() {
+		// Check UID, if null get from cache, otherwise login user again manually.
+		if(uid == null){
+        	try {
+        		LoginDAO ldao = new LoginDAO();
+    			uid = ldao.loginFromCache(getApplicationContext());
+    		}
+    		catch (IOException e) {
+    			Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
+    			Intent i = new Intent(DashboardActivity.this, LoginActivity.class);
+    			startActivity(i);
+    			finish();
+    		} catch (JSONException e) {
+    			Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
+    			Intent i = new Intent(DashboardActivity.this, LoginActivity.class);
+    			startActivity(i);
+    			finish();
+    		}
+        }
+		super.onStart();
 	}
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -131,33 +139,31 @@ public class DashboardActivity extends Activity {
         	TextView temp = (TextView) view;
         	if(temp.getText().toString().equals(drawerMenu[0])){
         		Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
-        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		i.putExtra(LoginDAO.TAG_USERID, uid);
         		startActivityForResult(i, ADD_DEAL_REQUEST);
         	}
         	if(temp.getText().toString().equals(drawerMenu[1])){
         		Intent i = new Intent(getApplicationContext(), DealsViewActivity.class);
-        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		i.putExtra(LoginDAO.TAG_USERID, uid);
         		startActivity(i);
         	}
         	if(temp.getText().toString().equals(drawerMenu[2])){
         		Intent i = new Intent(getApplicationContext(), TransactionActivity.class);
-        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		i.putExtra(LoginDAO.TAG_USERID, uid);
         		startActivity(i);
         	}
         	if(temp.getText().toString().equals(drawerMenu[3])){
         		Intent i = new Intent(getApplicationContext(), BusinessActivity.class);
-        		i.putExtra(BusinessDAO.TAG_UID, uid);
+        		i.putExtra(LoginDAO.TAG_USERID, uid);
         		startActivity(i);
         	}
         	if(temp.getText().toString().equals(drawerMenu[4])){
         		Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
-        		i.putExtra(BusinessDAO.TAG_UID, uid);
-        		startActivity(i);
+        		i.putExtra(LoginDAO.TAG_USERID, uid);
+        		startActivityForResult(i, CONTACT_US_REQUEST);
         	}
         	if(temp.getText().toString().equals(drawerMenu[5])){
-        		File cacheFile = new File(getApplicationContext().getCacheDir()+File.separator+"login");
-        		if(cacheFile.exists())
-        			cacheFile.delete();
+        		new LoginDAO().logout(getApplicationContext());
         		finish();
         	}
         }
@@ -167,23 +173,26 @@ public class DashboardActivity extends Activity {
 
 		// - Check result code and request code.
 		if(requestCode == ADD_DEAL_REQUEST && resultCode == RESULT_OK){
-			uid = data.getStringExtra(BusinessDAO.TAG_UID);
+			// TODO - Result of add deal.
+			// uid = data.getStringExtra(BusinessDAO.TAG_UID);
 		}
-
+		if(requestCode == CONTACT_US_REQUEST && resultCode == RESULT_OK){
+			// TODO - Result of contact us.
+		}
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		// Save the user's current game state
-		savedInstanceState.putString(BusinessDAO.TAG_UID, uid);
+		savedInstanceState.putString(LoginDAO.TAG_USERID, uid);
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		// Always call the superclass so it can restore the view hierarchy
+		uid = savedInstanceState.getString(LoginDAO.TAG_USERID);
 		super.onRestoreInstanceState(savedInstanceState);
-		uid = savedInstanceState.getString(BusinessDAO.TAG_UID);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

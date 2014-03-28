@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.DealsDAO;
+import com.thekha.vendor.dao.LoginDAO;
 
 public class AddDealActivity extends Activity {
 	
@@ -61,7 +62,7 @@ public class AddDealActivity extends Activity {
 		setContentView(R.layout.activity_add_deal);
 		setTitle(R.string.title_deals_view);
 		LOG_TAG = getString(R.string.app_name);
-		uid = getIntent().getStringExtra(BusinessDAO.TAG_UID);
+		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
 		
 		actionBar = getActionBar();
 
@@ -81,6 +82,10 @@ public class AddDealActivity extends Activity {
 		checkTopListing = (CheckBox) findViewById(R.id.cb_top_listing);
 		checkHomePageBanner = (CheckBox) findViewById(R.id.cb_home_page_banner);
 		checkCategoryBanner = (CheckBox) findViewById(R.id.cb_category_banner);
+		
+		// regular deal must be purchased.
+		checkRegular.setChecked(true);
+		checkRegular.setEnabled(false);
 		
 		
 		fromDate.setOnClickListener(new OnClickListener() {
@@ -118,6 +123,11 @@ public class AddDealActivity extends Activity {
 		@Override
         protected void onPreExecute() {
             super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(AddDealActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
             // check for internet connection
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -125,16 +135,13 @@ public class AddDealActivity extends Activity {
             	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
             	cancel(true);
             }
-            // Showing progress dialog
-            pDialog = new ProgressDialog(AddDealActivity.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
+		}
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			return dealDAO.add(uid, deal);
+			if(!isCancelled())
+				return dealDAO.add(uid, deal);
+			return null;
 		}
 		
 		@Override
@@ -146,13 +153,19 @@ public class AddDealActivity extends Activity {
 				Log.d(LOG_TAG, "Deal successfully added, at "+DateTime.now(TimeZone.getDefault()));
 				
 				Intent data = new Intent();
-				data.putExtra(BusinessDAO.TAG_UID, uid);
+				data.putExtra(LoginDAO.TAG_USERID, uid);
 				data.putExtra(Deals.DEALS_KEY, deal);
 				setResult(RESULT_OK, data);
 				finish();
 			}else{
 				Toast.makeText(getApplicationContext(), "Your deal cannot be saved, please try again later.", Toast.LENGTH_SHORT).show();
 			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
 		}
 	}
 

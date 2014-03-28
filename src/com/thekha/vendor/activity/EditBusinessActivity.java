@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.dao.BusinessDAO;
+import com.thekha.vendor.dao.LoginDAO;
 
 public class EditBusinessActivity extends Activity {
 
@@ -63,7 +64,7 @@ public class EditBusinessActivity extends Activity {
 		actionBar = getActionBar();
 
 		business = (Business) getIntent().getSerializableExtra(Business.BUSINESS_KEY);
-		uid = Integer.parseInt(getIntent().getStringExtra(BusinessDAO.TAG_UID));
+		uid = Integer.parseInt(getIntent().getStringExtra(LoginDAO.TAG_USERID));
 
 		// populate spinner for business type
 		type = (Spinner) findViewById(R.id.editbusiness_type);
@@ -164,6 +165,11 @@ public class EditBusinessActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			// Showing progress dialog
+			pDialog = new ProgressDialog(EditBusinessActivity.this);
+			pDialog.setMessage("Please wait...");
+			pDialog.setCancelable(false);
+			pDialog.show();
 			// check for internet connection
 			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -171,17 +177,15 @@ public class EditBusinessActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
 				cancel(true);
 			}
-			// Showing progress dialog
-			pDialog = new ProgressDialog(EditBusinessActivity.this);
-			pDialog.setMessage("Please wait...");
-			pDialog.setCancelable(false);
-			pDialog.show();
 		}
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			setBeanFromUI();
-			return businessDAO.update(uid, business);
+			if(!isCancelled()){
+				setBeanFromUI();
+				return businessDAO.update(uid, business);
+			}
+			return null;
 		}
 
 		@Override
@@ -198,6 +202,12 @@ public class EditBusinessActivity extends Activity {
 			}else{
 				Toast.makeText(getApplicationContext(), "Business profile cannot be saved, please try again later.", Toast.LENGTH_SHORT).show();
 			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
 		}
 	}
 

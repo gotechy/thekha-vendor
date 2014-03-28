@@ -1,5 +1,6 @@
 package com.thekha.vendor.activity;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.json.JSONException;
@@ -25,6 +26,7 @@ import com.thekha.vendor.adapter.DealsListAdapter;
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.DealsDAO;
+import com.thekha.vendor.dao.LoginDAO;
 
 public class DealsViewActivity extends Activity {
 
@@ -47,7 +49,7 @@ public class DealsViewActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_deals_view);
 		LOG_TAG = getString(R.string.app_name);
-		uid = getIntent().getStringExtra(BusinessDAO.TAG_UID);
+		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
 		dealDAO = new DealsDAO();
 		
 		actionBar = getActionBar();
@@ -99,7 +101,7 @@ public class DealsViewActivity extends Activity {
 	    case R.id.dv_add_deals:
 	    	// - Save the data and take back to profile.
 	    	Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
-    		i.putExtra(BusinessDAO.TAG_UID, uid);
+    		i.putExtra(LoginDAO.TAG_USERID, uid);
     		startActivityForResult(i, ADD_DEAL_REQUEST);
     		break;
 	    default:
@@ -112,27 +114,30 @@ private class DealsTask  extends AsyncTask<Void, Void, Void> {
 		
 		@Override
         protected void onPreExecute() {
-            super.onPreExecute();
-            // check for internet connection
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
-            	cancel(true);
-            }
-            // Showing progress dialog
-            pDialog = new ProgressDialog(DealsViewActivity.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-		
+			super.onPreExecute();
+			// Showing progress dialog
+			pDialog = new ProgressDialog(DealsViewActivity.this);
+			pDialog.setMessage("Please wait...");
+			pDialog.setCancelable(false);
+			pDialog.show();
+			// check for internet connection
+			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+				cancel(true);
+			}
+		}
+
 		@Override
 		protected Void doInBackground(Void... params) {
-			try {
-				deals = dealDAO.read(uid);
-			} catch (JSONException e) {
-				Log.d(LOG_TAG, "Cannot parse dashboard service JSON response.");
+			if(!isCancelled()){
+				try {
+					
+					deals = dealDAO.read(getApplicationContext(), uid);
+				} catch (JSONException e) {
+					Log.d(LOG_TAG, "Cannot parse dashboard service JSON response.");
+				}
 			}
 			return null;
 		}
@@ -151,6 +156,12 @@ private class DealsTask  extends AsyncTask<Void, Void, Void> {
 				Toast.makeText(getApplicationContext(), "Your deals cannot be loaded, please try again later.", Toast.LENGTH_SHORT).show();
 			}
 			pDialog.dismiss();            
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
 		}
 	}
 	

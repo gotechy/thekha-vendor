@@ -96,24 +96,27 @@ private class EditDealTask  extends AsyncTask<Void, Void, Boolean> {
 		
 		@Override
         protected void onPreExecute() {
-            super.onPreExecute();
-            // check for internet connection
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
-            	cancel(true);
-            }
-            // Showing progress dialog
-            pDialog = new ProgressDialog(EditDealActivity.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
+			super.onPreExecute();
+			// Showing progress dialog
+			pDialog = new ProgressDialog(EditDealActivity.this);
+			pDialog.setMessage("Please wait...");
+			pDialog.setCancelable(false);
+			pDialog.show();
+			// check for internet connection
+			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+				cancel(true);
+			}
+		}
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			return dealDAO.update(deal);
+			if(!isCancelled()){
+				return dealDAO.update(deal);
+			}
+			return null;
 		}
 		
 		@Override
@@ -130,6 +133,12 @@ private class EditDealTask  extends AsyncTask<Void, Void, Boolean> {
 			}else{
 				Toast.makeText(getApplicationContext(), "Deal cannot be saved, please try again later.", Toast.LENGTH_SHORT).show();
 			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
 		}
 	}
 
@@ -165,11 +174,11 @@ private class EditDealTask  extends AsyncTask<Void, Void, Boolean> {
 		from.setText(deal.getFrom().toString());
 		to.setText(deal.getTo().toString());
 		
-		checkRegular.setChecked(deal.getPlacement().getRegular());
-		checkSpecial.setChecked(deal.getPlacement().getSpecial());
-		checkTopListing.setChecked(deal.getPlacement().getTopListing());
-		checkHomePageBanner.setChecked(deal.getPlacement().getHomePageBanner());
-		checkRegular.setChecked(deal.getPlacement().getCategoryBanner());
+		checkRegular.setChecked(deal.getPlacement().isRegular());
+		checkSpecial.setChecked(deal.getPlacement().isSpecial());
+		checkTopListing.setChecked(deal.getPlacement().isTopListing());
+		checkHomePageBanner.setChecked(deal.getPlacement().isHomePageBanner());
+		checkCategoryBanner.setChecked(deal.getPlacement().isCategoryBanner());
 		
 		sms.setText(Integer.toString(deal.getSMSCount()));
 		email.setText(Integer.toString(deal.getEmailCount()));

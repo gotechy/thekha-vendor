@@ -10,11 +10,11 @@ public class DealsPlacement implements Serializable{
 	private static final long serialVersionUID = -3146048448569853218L;
 	
 	private int id;
-	private Boolean regular;
-	private Boolean special;
-	private Boolean topListing;
-	private Boolean homePageBanner;
-	private Boolean categoryBanner;
+	private boolean regular;
+	private boolean special;
+	private boolean topListing;
+	private boolean homePageBanner;
+	private boolean categoryBanner;
 
 	public DealsPlacement() {
 		
@@ -49,47 +49,44 @@ public class DealsPlacement implements Serializable{
 		this.id = id;
 	}
 
-	public Boolean getRegular() {
+	public boolean isRegular() {
 		return regular;
 	}
 
-	public void setRegular(Boolean regular) {
+	public void setRegular(boolean regular) {
 		this.regular = regular;
 	}
 
-	public Boolean getSpecial() {
+	public boolean isSpecial() {
 		return special;
 	}
 
-	public void setSpecial(Boolean special) {
+	public void setSpecial(boolean special) {
 		this.special = special;
 	}
 
-	public Boolean getTopListing() {
+	public boolean isTopListing() {
 		return topListing;
 	}
 
-	public void setTopListing(Boolean topListing) {
+	public void setTopListing(boolean topListing) {
 		this.topListing = topListing;
 	}
 
-	public Boolean getHomePageBanner() {
+	public boolean isHomePageBanner() {
 		return homePageBanner;
 	}
 
-	public void setHomePageBanner(Boolean homePageBanner) {
+	public void setHomePageBanner(boolean homePageBanner) {
 		this.homePageBanner = homePageBanner;
 	}
 
-	public Boolean getCategoryBanner() {
+	public boolean isCategoryBanner() {
 		return categoryBanner;
 	}
 
-	public void setCategoryBanner(Boolean categoryBanner) {
+	public void setCategoryBanner(boolean categoryBanner) {
 		this.categoryBanner = categoryBanner;
 	}
 	
-	
-	
-
 }
