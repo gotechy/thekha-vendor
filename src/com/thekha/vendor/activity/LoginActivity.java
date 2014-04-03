@@ -93,7 +93,7 @@ public class LoginActivity extends Activity {
 			pDialog.setMessage("Please wait...");
 			pDialog.setCancelable(false);
 			pDialog.show();
-			// check for internet connection
+			// check for Internet connection
 			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){

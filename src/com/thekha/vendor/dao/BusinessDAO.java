@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +29,6 @@ public class BusinessDAO {
 	private final String cacheFileName = "business";
 		
 	// ID tags
-	//private static final String TAG_UBAID = "uba_id";
 	public static final String TAG_BID = "business_id";
 	public static final String TAG_AID = "address_id";
 	public static final String TAG_FID = "facilities_id";
@@ -60,9 +60,7 @@ public class BusinessDAO {
 	private static final String TAG_VEG = "veg";
 	private static final String TAG_NONVEG = "nonveg";
 	
-	// TODO - CUD for ProfileDAO
-	
-	public Business read(String uid) throws JSONException{
+	public Business read(String uid) throws JSONException, ClientProtocolException, IOException{
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, uid));
 		
@@ -72,10 +70,10 @@ public class BusinessDAO {
 		return b;
 	}
 	
-	public boolean update(Integer uid, Business business) {
+	public boolean update(Business business) throws ClientProtocolException, IOException  {
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, String.valueOf(uid)));
 		
+		reqParams.add(new BasicNameValuePair(TAG_FID, String.valueOf(business.getFacilities().getId())));
 		reqParams.add(new BasicNameValuePair(TAG_AC, business.getFacilities().isAc()?"1":"0"));
 		reqParams.add(new BasicNameValuePair(TAG_SA, business.getFacilities().isSa()?"1":"0"));
 		reqParams.add(new BasicNameValuePair(TAG_CC, business.getFacilities().isCc()?"1":"0"));
@@ -83,6 +81,7 @@ public class BusinessDAO {
 		reqParams.add(new BasicNameValuePair(TAG_VEG, business.getFacilities().isVeg()?"1":"0"));
 		reqParams.add(new BasicNameValuePair(TAG_NONVEG, business.getFacilities().isNonVeg()?"1":"0"));
 		
+		reqParams.add(new BasicNameValuePair(TAG_AID, String.valueOf(business.getAddress().getId())));
 		reqParams.add(new BasicNameValuePair(TAG_LINE1, business.getAddress().getLine1()));
 		reqParams.add(new BasicNameValuePair(TAG_LINE2, business.getAddress().getLine2()));
 		reqParams.add(new BasicNameValuePair(TAG_LOCALITY, business.getAddress().getLocality()));
@@ -91,6 +90,7 @@ public class BusinessDAO {
 		reqParams.add(new BasicNameValuePair(TAG_COUNTRY, business.getAddress().getCountry()));
 		reqParams.add(new BasicNameValuePair(TAG_PIN, business.getAddress().getPin()));
 		
+		reqParams.add(new BasicNameValuePair(TAG_BID, String.valueOf(business.getId())));
 		reqParams.add(new BasicNameValuePair(TAG_NAME, business.getName()));
 		reqParams.add(new BasicNameValuePair(TAG_TYPE, business.getType()));
 		reqParams.add(new BasicNameValuePair(TAG_IMAGEURL, business.getImageURL()));

@@ -2,7 +2,10 @@ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
+import java.io.IOException;
 import java.util.TimeZone;
+
+import org.apache.http.client.ClientProtocolException;
 
 import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Query;
@@ -86,6 +89,7 @@ public class ContactUsActivity extends Activity {
 	    case R.id.contact_done:
 	    	setBeanFromUI();
 			new ContactUsTask().execute(getIntent().getStringExtra(LoginDAO.TAG_USERID));
+			break;
 	    case R.id.contact_cancel:
 			setResult(RESULT_CANCELED);
 			finish();
@@ -117,7 +121,13 @@ public class ContactUsActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(String... params) {
 			if(!isCancelled()){
-				return cudao.add(params[0], query);
+				try {
+					return cudao.add(params[0], query);
+				} catch (ClientProtocolException e) {
+					return false;
+				} catch (IOException e) {
+					return false;
+				}
 			}
 			return null;
 		}
@@ -127,13 +137,13 @@ public class ContactUsActivity extends Activity {
 			super.onPostExecute(param);
 			pDialog.dismiss();
 			if(param){
-				Toast.makeText(getApplicationContext(), "Your query has been received. We will contact you in 72Hrs", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Your query has been received. We will contact you in 72Hrs.", Toast.LENGTH_LONG).show();
 				Log.d(LOG_TAG, "Query raised, at "+DateTime.now(TimeZone.getDefault()));
 				Intent data = new Intent();
 				setResult(RESULT_OK,data);
 				finish();
 			}else{
-				Toast.makeText(getApplicationContext(), "Your cannot be sent, please try again later.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
 			}
 		}
 		

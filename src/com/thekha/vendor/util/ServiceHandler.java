@@ -14,6 +14,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.net.http.AndroidHttpClient;
+import android.util.Log;
 
 public class ServiceHandler {
 
@@ -27,14 +28,17 @@ public class ServiceHandler {
 	private static final String TAG_SECRET = "secret";
 	
 	public static final String LOGIN_SERVICE = "login/UserLogin";
+	
 	public static final String GET_PROFILE_SERVICE = "getProfile/Profile";
-	public static final String UPDATE_PROFILE_SERVICE = "profile/UpdateProfile";
-	public static final String CREATE_PROFILE_SERVICE = "profile/CreateProfile";
+	public static final String UPDATE_PROFILE_SERVICE = "updateProfile/Profile";
+	
 	public static final String CREATE_DEAL_SERVICE = "createDeal/CreateDeal";
 	public static final String GET_DEALS_SERVICE = "getDeal/Deal";
 	public static final String UPDATE_DEAL_SERVICE = "updateDeal/Deal";
-	public static final String POST_QUERY_SERVICE = ""; //TODO
 	
+	public static final String CREATE_QUERY_SERVICE = "contactUs/Queries";
+	
+	public static final String GET_PRICES_SERVICE = "getPrices/Prices"; // TODO
 
 	public ServiceHandler() {
 
@@ -42,31 +46,33 @@ public class ServiceHandler {
 	
 	/**
 	 * Making service call
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
 	 * 
 	 * @url - url to make request
 	 * @method - http request method
 	 * */
-	public String makeServiceCall(String service, int method) {
+	public String makeServiceCall(String service, int method) throws ClientProtocolException, IOException  {
 		return this.makeServiceCall(service, method, null);
 	}
 
 	/**
 	 * Making service call
-	 * 
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
 	 * @url - url to make request
 	 * @method - http request method
 	 * @params - http request params
 	 * */
 	public String makeServiceCall(String service, int method,
-			List<NameValuePair> params) {
+			List<NameValuePair> params) throws ClientProtocolException, IOException {
+		// http client
+		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
+		// attach service to URL
+		URL += service;
+		BasicResponseHandler responseHandler = new BasicResponseHandler();
+		String json = "";
 		try {
-			// http client
-			AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
-			
-			// attach service to URL
-			URL += service;
-			BasicResponseHandler responseHandler = new BasicResponseHandler();
-			String json = "";
 			// Checking http request method type
 			if (method == POST) {
 				URL += "?" + TAG_SECRET +"="+secret;
@@ -83,17 +89,9 @@ public class ServiceHandler {
 				HttpGet getRequest = new HttpGet(URL);
 				json = httpClient.execute(getRequest, responseHandler);
 			}
-			httpClient.close();
 			return json;
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+		} finally {
+			httpClient.close();
 		}
 	}
 }

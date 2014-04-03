@@ -1,8 +1,8 @@
 package com.thekha.vendor.activity;
 
-import java.io.File;
 import java.io.IOException;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
 import android.app.ActionBar;
@@ -117,7 +117,8 @@ public class BusinessActivity extends Activity {
 			facility.append(Facilities.VEG+" | ");
 		if(business.getFacilities().isNonVeg())
 			facility.append(Facilities.NON_VEG+" | ");
-		facility.replace(facility.length()-3, facility.length(), "");
+		if(facility.length()>3)
+			facility.replace(facility.length()-3, facility.length(), "");
 		facilities.setText(facility);
 		
 		phone1.setText(business.getPhone1());
@@ -185,7 +186,7 @@ public class BusinessActivity extends Activity {
 	    }
 	}
 
-	private class BusinessTask  extends AsyncTask<String, Void, Void> {
+	private class BusinessTask  extends AsyncTask<String, Void, String> {
 		
 		@Override
         protected void onPreExecute() {
@@ -199,33 +200,44 @@ public class BusinessActivity extends Activity {
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
             if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and retry.", Toast.LENGTH_SHORT).show();
             	cancel(true);
             }
 		}
 		
 		@Override
-		protected Void doInBackground(String... params) {
+		protected String doInBackground(String... params) {
 			if(!isCancelled()){
 				try {
+					business = null;
 					business = businessDAO.read(params[0]);
+					return "Business profile successfully loaded.";
 				} catch (JSONException e) {
-					Toast.makeText(getApplicationContext(), "Something is very wrong, please contact our support services.", Toast.LENGTH_SHORT).show();
-		        	Log.d(LOG_TAG, "Cannot parse dashboard service JSON response.");
-		        	cancel(true);
-				}
+		        	return "Something is very wrong, please contact our support services.";
+				} catch (ClientProtocolException e) {
+					return "Connection cannot be established, please try again later.";
+				} catch (IOException e) {
+					return "Connection cannot be established, please try again later.";
+				} 
 			}
 			return null;
 		}
 		
 		@Override
-        protected void onPostExecute(Void param) {
+        protected void onPostExecute(String param) {
             super.onPostExecute(param);
 			pDialog.dismiss();
-            setUIFromBean();
-            Log.d(LOG_TAG, "Business profile successfully loaded.");
-            cacheData();
-            Log.d(LOG_TAG, "Business profile successfully cached.");
+            if(business!=null){
+            	setUIFromBean();
+                Log.d(LOG_TAG, param);
+                cacheData();
+                Log.d(LOG_TAG, "Business profile cached.");
+            }else{
+            	Log.d(LOG_TAG, param);
+            	Toast.makeText(getApplicationContext(), param, Toast.LENGTH_SHORT).show();
+            	startActivity(new Intent(BusinessActivity.this, DashboardActivity.class));
+            	finish();
+            }
 		}
 		
 		@Override

@@ -3,6 +3,7 @@ package com.thekha.vendor.activity;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
 import android.app.ActionBar;
@@ -110,7 +111,7 @@ public class DealsViewActivity extends Activity {
 	    return true;
 	  } 
 
-private class DealsTask  extends AsyncTask<Void, Void, Void> {
+private class DealsTask  extends AsyncTask<Void, Void, String> {
 		
 		@Override
         protected void onPreExecute() {
@@ -130,32 +131,40 @@ private class DealsTask  extends AsyncTask<Void, Void, Void> {
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected String doInBackground(Void... params) {
 			if(!isCancelled()){
 				try {
-					
+					deals = null;
 					deals = dealDAO.read(getApplicationContext(), uid);
+					return "Deals successfully loaded.";
 				} catch (JSONException e) {
-					Log.d(LOG_TAG, "Cannot parse dashboard service JSON response.");
-				}
+		        	return "Something is very wrong, please contact our support services.";
+				} catch (ClientProtocolException e) {
+					return "Connection cannot be established, please try again later.";
+				} catch (IOException e) {
+					return "Connection cannot be established, please try again later.";
+				} 
 			}
 			return null;
 		}
 		
 		@Override
-        protected void onPostExecute(Void param) {
+        protected void onPostExecute(String param) {
             super.onPostExecute(param);
+			pDialog.dismiss(); 
 			if(deals != null){
 				dealsAdapter = new DealsListAdapter(DealsViewActivity.this, deals);
 				lv.setAdapter(dealsAdapter);
-	            Log.d(LOG_TAG, "Deals successfully loaded.");
-	            //TODO - implement caching
+	            Log.d(LOG_TAG, param);
+	            //TODO - implement caching for deals
 	            //cacheData();
 	            //Log.d(LOG_TAG, "Business profile successfully cached.");
 			}else{
-				Toast.makeText(getApplicationContext(), "Your deals cannot be loaded, please try again later.", Toast.LENGTH_SHORT).show();
-			}
-			pDialog.dismiss();            
+				Log.d(LOG_TAG, param);
+				Toast.makeText(getApplicationContext(), param, Toast.LENGTH_SHORT).show();
+				startActivity(new Intent(DealsViewActivity.this, DashboardActivity.class));
+            	finish();
+			}           
 		}
 		
 		@Override

@@ -7,7 +7,7 @@
 
 
 
-<RelativeLayout 
+<LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -16,6 +16,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:scrollbarStyle="insideOverlay"
     android:scrollbars="vertical"
+    android:orientation="vertical"
     tools:context=".ProfileActivity" >
     
     <TextView
@@ -23,7 +24,6 @@
         style="@style/sectionHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:text="@string/label_deal"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -46,8 +46,7 @@
 	  	        android:layout_width="fill_parent"
 	  	        android:layout_height="wrap_content"
 	  	        android:ems="10"
-	  	        android:hint="@string/label_deal_title"
-	  	        android:layout_below="@+id/label_aed_deal" />
+	  	        android:hint="@string/label_deal_title" />
 <!-- 	  	</TableRow>
 	    	    
 	   <TableRow
@@ -69,7 +68,6 @@
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        android:ems="10"
-		        android:layout_below="@+id/edit_aed_deal_title"
 		        android:hint="@string/label_deal_description" />
 	
 <!-- 	    </TableRow>
@@ -94,8 +92,7 @@
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        android:ems="10"
-		        android:hint="@string/label_deal_code"
-		        android:layout_below="@+id/edit_aed_deal_description" >
+		        android:hint="@string/label_deal_code" >
 	    	</EditText>
 	        	        
 <!-- 	    </TableRow>
@@ -105,18 +102,13 @@
         style="@style/sectionHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:text="@string/label_cover_image"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/edit_aed_deal_code" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 	    <ImageButton
 	        android:id="@+id/iButton_aed_cover_image"
 	        android:layout_width="fill_parent"
 	        android:layout_height="@dimen/aed_upload_image_height"
-	        android:layout_alignLeft="@+id/label_aed_cover_image"
-	        android:layout_alignRight="@+id/label_aed_cover_image"
-	        android:layout_below="@+id/label_aed_cover_image"
 	        android:src="@drawable/ic_launcher"
 	        android:contentDescription="@string/cd_image_upload"/>
   	
@@ -125,16 +117,13 @@
         style="@style/sectionHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:text="@string/label_deal_active"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/iButton_aed_cover_image" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
  	   	<TableRow
 	        android:id="@+id/table_row_from"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/label_aed_deal_active" >
+	        android:layout_height="wrap_content" >
 	       	
 		    <TextView
 		        android:id="@+id/label_aed_deal_active_from"
@@ -185,8 +174,7 @@
 	   	<TableRow
 	        android:id="@+id/table_row_to"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/table_row_from" >
+	        android:layout_height="wrap_content" >
 	       	
 		    <TextView
 		        android:id="@+id/label_aed_deal_active_to"
@@ -240,17 +228,10 @@
         style="@style/sectionHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:text="@string/label_placement"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/table_row_to" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-	   	<TableRow
-	        android:id="@+id/table_row_placement1"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/label_aed_placement" >
-		    <CheckBox 
+	   	<CheckBox 
 		        android:id="@+id/cb_regular"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
@@ -262,12 +243,7 @@
 		        android:layout_height="wrap_content"
 		        android:text="@string/label_placement_special" >
 		   </CheckBox>
-		</TableRow>
-		<TableRow
-	        android:id="@+id/table_row_placement2"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/table_row_placement1" >
+		
 		    <CheckBox 
 		        android:id="@+id/cb_top_listing"
 		        android:layout_width="wrap_content"
@@ -280,29 +256,21 @@
 		        android:layout_height="wrap_content"
 		        android:text="@string/label_placement_home_page_banner" >
 		   </CheckBox>
-		</TableRow>
-		<TableRow
-	        android:id="@+id/table_row_placement3"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/table_row_placement2" >
+		
 		   <CheckBox 
 		        android:id="@+id/cb_category_banner"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:text="@string/label_placement_category_banner" >
 		   </CheckBox>
-	    </TableRow>
 
 	<TextView
         android:id="@+id/label_aed_push_settings"
         style="@style/sectionHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:text="@string/label_push_settings"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/table_row_placement3" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 <!-- 	   <TableRow
 	        android:id="@+id/table_row_sms_count"
@@ -324,8 +292,7 @@
 		        android:layout_height="wrap_content"
 		        android:ems="10"
 		        android:hint="@string/label_push_settings_SMS"
-		        android:inputType="number"
-	        	android:layout_below="@+id/label_aed_push_settings" />
+		        android:inputType="number" />
 		    	
 <!-- 	   </TableRow>
 	   <TableRow
@@ -349,11 +316,10 @@
 		        android:layout_height="wrap_content"
 		        android:ems="10"
 		        android:hint="@string/label_push_settings_email"
-		        android:layout_below="@+id/edit_aed_deal_SMS"
 		        android:inputType="number" />
 	
 <!-- 	   </TableRow>
  -->	   			   		   	
 
-</RelativeLayout>
+</LinearLayout>
 </ScrollView>

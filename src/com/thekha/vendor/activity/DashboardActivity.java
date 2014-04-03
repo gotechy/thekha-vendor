@@ -148,7 +148,7 @@ public class DashboardActivity extends Activity {
         		startActivity(i);
         	}
         	if(temp.getText().toString().equals(drawerMenu[2])){
-        		Intent i = new Intent(getApplicationContext(), TransactionActivity.class);
+        		Intent i = new Intent(getApplicationContext(), TransactionsViewActivity.class);
         		i.putExtra(LoginDAO.TAG_USERID, uid);
         		startActivity(i);
         	}

@@ -1,9 +1,11 @@
 package com.thekha.vendor.dao;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.thekha.vendor.bean.Business;
@@ -23,7 +25,7 @@ public class ContactUsDAO {
 	private static final String TAG_SUBJECT = "subject";
 	private static final String TAG_DESCRIPTION = "description";
 	
-	public boolean add(String uid, Query query) {
+	public boolean add(String uid, Query query) throws ClientProtocolException, IOException {
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, String.valueOf(uid)));
 		
@@ -35,7 +37,7 @@ public class ContactUsDAO {
 		reqParams.add(new BasicNameValuePair(TAG_DESCRIPTION, query.getMessage()));
 		
 		ServiceHandler sh = new ServiceHandler();
-		jsonResp = sh.makeServiceCall(ServiceHandler.POST_QUERY_SERVICE, ServiceHandler.POST, reqParams);
+		jsonResp = sh.makeServiceCall(ServiceHandler.CREATE_QUERY_SERVICE, ServiceHandler.POST, reqParams);
 		if (jsonResp != null) {
 			return true;
 		}

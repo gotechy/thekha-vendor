@@ -2,7 +2,10 @@ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
+import java.io.IOException;
 import java.util.TimeZone;
+
+import org.apache.http.client.ClientProtocolException;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -183,9 +186,16 @@ public class EditBusinessActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			if(!isCancelled()){
 				setBeanFromUI();
-				return businessDAO.update(uid, business);
+				try {
+					return businessDAO.update(business);
+				} catch (ClientProtocolException e) {
+					return false;
+				} catch (IOException e) {
+					return false;
+				}
+				
 			}
-			return null;
+			return false;
 		}
 
 		@Override
@@ -193,14 +203,14 @@ public class EditBusinessActivity extends Activity {
 			super.onPostExecute(param);
 			pDialog.dismiss();
 			if(param){
-				Toast.makeText(getApplicationContext(), "Your business profile has been updated.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Your business profile has been updated.", Toast.LENGTH_LONG).show();
 				Log.d(LOG_TAG, "Business profile successfully updated, at "+DateTime.now(TimeZone.getDefault()));
 				Intent data = new Intent();
 				data.putExtra(Business.BUSINESS_KEY, business);
 				setResult(RESULT_OK,data);
 				finish();
 			}else{
-				Toast.makeText(getApplicationContext(), "Business profile cannot be saved, please try again later.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
 			}
 		}
 		

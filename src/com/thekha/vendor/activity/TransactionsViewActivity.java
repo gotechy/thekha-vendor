@@ -19,7 +19,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class TransactionActivity extends Activity {
+public class TransactionsViewActivity extends Activity {
 	
 	TextView balance;
 	ActionBar actionBar;
@@ -30,7 +30,7 @@ public class TransactionActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_transactions);
+		setContentView(R.layout.activity_transactions_view);
 		setTitle(R.string.transaction_activity_title);
 		
 		actionBar = getActionBar();

@@ -2,9 +2,13 @@ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -32,9 +36,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.thekha.vendor.bean.Deals;
-import com.thekha.vendor.dao.BusinessDAO;
+import com.thekha.vendor.bean.Prices;
 import com.thekha.vendor.dao.DealsDAO;
 import com.thekha.vendor.dao.LoginDAO;
+import com.thekha.vendor.dao.PricesDAO;
 
 public class AddDealActivity extends Activity {
 	
@@ -43,6 +48,8 @@ public class AddDealActivity extends Activity {
 	ActionBar actionBar;
 	private Deals deal = new Deals();
 	private DealsDAO dealDAO = new DealsDAO();
+	private Prices prices;
+	private PricesDAO pDAO = new PricesDAO();
 	
 //	TextView name, type, facilities,  phone1, phone2, address, email,website, facebook;
 	EditText title, description, code, smsCount, emailCount;	
@@ -116,6 +123,8 @@ public class AddDealActivity extends Activity {
 				fromToFlag = 4 ;
 			}
 		});
+		
+		new GetPriceTask().execute();
 	}
 	
 	private class AddDealTask  extends AsyncTask<Void, Void, Boolean> {
@@ -140,8 +149,14 @@ public class AddDealActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			if(!isCancelled())
-				return dealDAO.add(uid, deal);
-			return null;
+				try {
+					return dealDAO.add(uid, deal);
+				} catch (ClientProtocolException e) {
+					return false;
+				} catch (IOException e) {
+					return false;
+				}
+			return false;
 		}
 		
 		@Override
@@ -158,7 +173,7 @@ public class AddDealActivity extends Activity {
 				setResult(RESULT_OK, data);
 				finish();
 			}else{
-				Toast.makeText(getApplicationContext(), "Your deal cannot be saved, please try again later.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
 			}
 		}
 		
@@ -167,6 +182,73 @@ public class AddDealActivity extends Activity {
 			super.onCancelled();
 			pDialog.dismiss();
 		}
+	}
+	
+	private class GetPriceTask  extends AsyncTask<Void, Void, String> {
+		
+		@Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(AddDealActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+            // check for internet connection
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+            	cancel(true);
+            }
+		}
+		
+		@Override
+		protected String doInBackground(Void... params) {
+			if(!isCancelled())
+				try {prices = null;
+					prices = pDAO.read();
+					return "Prices loaded successfully.";
+				} catch (JSONException e) {
+		        	return "Something is very wrong, please contact our support services.";
+				} catch (ClientProtocolException e) {
+					return "Connection cannot be established, please try again later.";
+				} catch (IOException e) {
+					return "Connection cannot be established, please try again later.";
+				} 
+			return null;
+		}
+		
+		@Override
+        protected void onPostExecute(String param) {
+            super.onPostExecute(param);
+			pDialog.dismiss();
+			if(prices != null){
+				setPrices();
+                Log.d(LOG_TAG, param);
+            }else{
+            	Log.d(LOG_TAG, param);
+            	Toast.makeText(getApplicationContext(), param, Toast.LENGTH_SHORT).show();
+            	startActivity(new Intent(AddDealActivity.this, DashboardActivity.class));
+            	finish();
+            }
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
+		}
+	}
+	
+	private void setPrices() {
+		checkRegular.setText(checkRegular.getText().toString() + " ("+prices.getRegular()+" credits)");
+		checkSpecial.setText(checkSpecial.getText().toString() + " ("+prices.getSpecial()+" credits)");
+		checkTopListing.setText(checkTopListing.getText().toString() + " ("+prices.getTopListing()+" credits)");
+		checkHomePageBanner.setText(checkHomePageBanner.getText().toString() + " ("+prices.getHomePageBanner()+" credits)");
+		checkCategoryBanner.setText(checkCategoryBanner.getText().toString() + " ("+prices.getCategoryBanner()+" credits)");
+		smsCount.setHint(smsCount.getHint().toString() + " ("+prices.getPushSMS()+" credits per sms)");
+		emailCount.setHint(emailCount.getHint().toString() + " ("+prices.getPushEMail()+" credits per email)");
 	}
 
 	public static void setFromToDateTime() {

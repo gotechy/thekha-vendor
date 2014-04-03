@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +50,7 @@ public class DealsDAO {
 	public static final String TAG_HOMEPAGEBANNER = "homePageBanner";
 	public static final String TAG_CATEGORYBANNER = "categoryBanner";
 
-	public Boolean add(String uid, Deals deal) {
+	public Boolean add(String uid, Deals deal) throws ClientProtocolException, IOException {
 		
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, uid));
@@ -82,7 +83,11 @@ public class DealsDAO {
 		return true;
 	}
 
-	public List<Deals> read(Context c, String uid) throws JSONException{
+	public List<Deals> read(Context c, String uid) throws JSONException, ClientProtocolException, IOException{
+		/*
+		 * Read business profile from cache to get its deals, if data not in cache, invoke get profile service.
+		 */
+		
 		BusinessDAO bdao = new BusinessDAO();
 		Business b;
 		try {
@@ -102,7 +107,7 @@ public class DealsDAO {
 		return deals;
 	}
 	
-	public boolean update(Deals deal) {
+	public boolean update(Deals deal) throws ClientProtocolException, IOException {
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(TAG_DEALID, String.valueOf(deal.getId())));
 		reqParams.add(new BasicNameValuePair(TAG_PLACEMENTID, String.valueOf(deal.getPlacement().getId())));
