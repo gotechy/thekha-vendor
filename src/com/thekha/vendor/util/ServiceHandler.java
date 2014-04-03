@@ -2,6 +2,7 @@ package com.thekha.vendor.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -38,7 +39,8 @@ public class ServiceHandler {
 	
 	public static final String CREATE_QUERY_SERVICE = "contactUs/Queries";
 	
-	public static final String GET_PRICES_SERVICE = "getPrices/Prices"; // TODO
+	public static final String GET_PRICES_SERVICE = "getPrices/Transactions";
+	public static final String GET_TRANSACTIONS_SERVICE = "getTransactions/Transactions";
 
 	public ServiceHandler() {
 
@@ -66,6 +68,9 @@ public class ServiceHandler {
 	 * */
 	public String makeServiceCall(String service, int method,
 			List<NameValuePair> params) throws ClientProtocolException, IOException {
+		if(params == null){
+			params = new ArrayList<NameValuePair>();
+		}
 		// http client
 		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("");
 		// attach service to URL

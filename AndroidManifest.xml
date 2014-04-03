@@ -24,7 +24,7 @@
 				android:value="com.thekha.vendor.activity.DashboardActivity" />
 		</activity>
 		<activity android:name="com.thekha.vendor.activity.EditBusinessActivity" />
-		<activity android:name="com.thekha.vendor.activity.TransactionActivity"
+		<activity android:name="com.thekha.vendor.activity.TransactionsViewActivity"
 			android:parentActivityName="com.thekha.vendor.activity.DashboardActivity">
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.thekha.vendor.activity.DashboardActivity" />

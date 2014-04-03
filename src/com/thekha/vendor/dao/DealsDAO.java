@@ -30,30 +30,37 @@ public class DealsDAO {
 	
 	// Deal Tags
 	public static final String TAG_DEALID = "deals_id";
-	public static final String TAG_TITLE = "title";
-	public static final String TAG_DESCRIPTION = "description";
-	public static final String TAG_CODE = "code";
-	public static final String TAG_IMAGEURL = "imageURL";
-	public static final String TAG_FROM = "deals_from";
-	public static final String TAG_TO = "deals_to";
-	public static final String TAG_SMSCOUNT = "smscount";
-	public static final String TAG_EMAILCOUNT = "emailcount";
-	public static final String TAG_CREATEDBY = "created_by";
-	public static final String TAG_UPDATEDBY = "updated_by";
-	public static final String TAG_UPDATEDON = "updated_date";
+	private static final String TAG_TITLE = "title";
+	private static final String TAG_DESCRIPTION = "description";
+	private static final String TAG_CODE = "code";
+	private static final String TAG_IMAGEURL = "imageURL";
+	private static final String TAG_FROM = "deals_from";
+	private static final String TAG_TO = "deals_to";
+	private static final String TAG_SMSCOUNT = "smscount";
+	private static final String TAG_EMAILCOUNT = "emailcount";
+	private static final String TAG_CREATEDBY = "created_by";
+	private static final String TAG_UPDATEDBY = "updated_by";
+	private static final String TAG_UPDATEDON = "updated_date";
+	private static final String TAG_PAYMENTSTATUS = "payment_status";
+	
+	public static final String PAYMENT_PENDING = "1";
+	public static final String PAYMENT_RECEIVED = "2";
+	public static final String PAYMENT_CHANGE = "3";
 	
 	// Deal placement tags
-	public static final String TAG_PLACEMENTID = "placement_id";
-	public static final String TAG_REGULAR = "regular";
-	public static final String TAG_SEPCIAL = "special";
-	public static final String TAG_TOPLISTING = "topListing";
-	public static final String TAG_HOMEPAGEBANNER = "homePageBanner";
-	public static final String TAG_CATEGORYBANNER = "categoryBanner";
+	private static final String TAG_PLACEMENTID = "placement_id";
+	private static final String TAG_REGULAR = "regular";
+	private static final String TAG_SEPCIAL = "special";
+	private static final String TAG_TOPLISTING = "topListing";
+	private static final String TAG_HOMEPAGEBANNER = "homePageBanner";
+	private static final String TAG_CATEGORYBANNER = "categoryBanner";
 
 	public Boolean add(String uid, Deals deal) throws ClientProtocolException, IOException {
 		
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, uid));
+		
+		reqParams.add(new BasicNameValuePair(TAG_PAYMENTSTATUS, PAYMENT_PENDING));
 		
 		reqParams.add(new BasicNameValuePair(TAG_REGULAR, deal.getPlacement().isRegular()?"1":"0"));
 		reqParams.add(new BasicNameValuePair(TAG_SEPCIAL, deal.getPlacement().isSpecial()?"1":"0"));
@@ -71,9 +78,9 @@ public class DealsDAO {
 		reqParams.add(new BasicNameValuePair(TAG_SMSCOUNT, String.valueOf(deal.getSMSCount())));
 		reqParams.add(new BasicNameValuePair(TAG_EMAILCOUNT, String.valueOf(deal.getEmailCount())));
 		
-		reqParams.add(new BasicNameValuePair(TAG_CREATEDBY, String.valueOf(uid)));
-		reqParams.add(new BasicNameValuePair(TAG_UPDATEDBY, String.valueOf(uid)));
-		reqParams.add(new BasicNameValuePair(TAG_UPDATEDON, DateTime.now(TimeZone.getDefault()).toString()));
+		//reqParams.add(new BasicNameValuePair(TAG_CREATEDBY, String.valueOf(uid)));
+		//reqParams.add(new BasicNameValuePair(TAG_UPDATEDBY, String.valueOf(uid)));
+		//reqParams.add(new BasicNameValuePair(TAG_UPDATEDON, DateTime.now(TimeZone.getDefault()).toString()));
 
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.CREATE_DEAL_SERVICE, ServiceHandler.POST, reqParams);

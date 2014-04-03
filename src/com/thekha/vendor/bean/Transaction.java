@@ -1,9 +1,6 @@
 package com.thekha.vendor.bean;
 
-import hirondelle.date4j.DateTime;
-
 import java.io.Serializable;
-import java.util.Random;
 
 public class Transaction implements Serializable{
 	
@@ -11,21 +8,20 @@ public class Transaction implements Serializable{
 	
 	private String title, description;
 	private int amount;
-	private static int balance;
-	private DateTime dateTime;
+	private static int balance = 0;
+	private String timeStamp;
 	
 	public Transaction() {
 		
 	}
 	
 	public Transaction(String title, String description, int amount,
-			DateTime dateTime) {
+			String timeStamp) {
 		super();
 		this.title = title;
 		this.description = description;
 		this.amount = amount;
-		this.dateTime = dateTime;
-		balance = (new Random().nextInt()) * 1000;
+		this.timeStamp = timeStamp;
 	}
 
 	public static int getBalance() {
@@ -60,12 +56,12 @@ public class Transaction implements Serializable{
 		this.amount = amount;
 	}
 
-	public DateTime getDateTime() {
-		return dateTime;
+	public String getTimeStamp() {
+		return timeStamp;
 	}
 
-	public void setDateTime(DateTime dateTime) {
-		this.dateTime = dateTime;
+	public void setTimeStamp(String timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 	
 }

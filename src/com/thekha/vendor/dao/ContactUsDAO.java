@@ -15,7 +15,6 @@ import com.thekha.vendor.util.ServiceHandler;
 public class ContactUsDAO {
 	Business b;
 	String jsonResp;
-	private final String cacheFileName = "business";
 	
 	// TODO - Query Tags
 	private static final String TAG_NAME = "name";

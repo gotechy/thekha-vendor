@@ -111,7 +111,7 @@ public class DealsViewActivity extends Activity {
 	    return true;
 	  } 
 
-private class DealsTask  extends AsyncTask<Void, Void, String> {
+	private class DealsTask  extends AsyncTask<Void, Void, String> {
 		
 		@Override
         protected void onPreExecute() {

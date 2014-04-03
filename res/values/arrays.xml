@@ -9,10 +9,10 @@
     </string-array>
     
     <string-array name="drawer_menu">
-        <item>Add Deals</item>
+        <item>Add Deal</item>
         <item>Manage Deals</item>
         <item>Transactions</item>
-        <item>Profile</item>
+        <item>Busness Profile</item>
         <item>Help</item>
         <item>Logout</item>
     </string-array>
