@@ -56,11 +56,8 @@ public class AddDealActivity extends Activity {
 	CheckBox checkRegular, checkSpecial, checkTopListing, checkHomePageBanner, checkCategoryBanner;
 	static int fromToFlag;
 	static Button  fromDate, fromTime, toDate, toTime;
-	String imageURL, uid;
+	String imageURL, bid;
 	private ProgressDialog pDialog;
-
-
-	
 	static String dateString, timeString;
 	
 	@Override
@@ -69,7 +66,8 @@ public class AddDealActivity extends Activity {
 		setContentView(R.layout.activity_add_deal);
 		setTitle(R.string.title_deals_view);
 		LOG_TAG = getString(R.string.app_name);
-		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
+		bid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
+		// For current model uid == bid unless app implemented for multiple business profiles.
 		
 		actionBar = getActionBar();
 
@@ -150,7 +148,7 @@ public class AddDealActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			if(!isCancelled())
 				try {
-					return dealDAO.add(uid, deal);
+					return dealDAO.add(bid, deal);
 				} catch (ClientProtocolException e) {
 					return false;
 				} catch (IOException e) {
@@ -166,11 +164,10 @@ public class AddDealActivity extends Activity {
 			if(param){
 				Toast.makeText(getApplicationContext(), "Your deal has been added, you will hear from us shortly.", Toast.LENGTH_LONG).show();
 				Log.d(LOG_TAG, "Deal successfully added, at "+DateTime.now(TimeZone.getDefault()));
-				
-				Intent data = new Intent();
-				data.putExtra(LoginDAO.TAG_USERID, uid);
-				data.putExtra(Deals.DEALS_KEY, deal);
-				setResult(RESULT_OK, data);
+				Intent i = new Intent();
+				i.putExtra(Prices.PRICES_KEY, prices);
+				i.putExtra(Deals.DEALS_KEY, deal);
+				startActivity(i);
 				finish();
 			}else{
 				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
@@ -278,7 +275,7 @@ public class AddDealActivity extends Activity {
 	    		new AddDealTask().execute();
 	    	break;
 	    case R.id.aed_cancel:
-	    	setResult(RESULT_CANCELED);
+	    	startActivity(getParentActivityIntent());
 	    	finish();
 	    default:
 	      break;

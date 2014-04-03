@@ -14,7 +14,6 @@ import org.json.JSONTokener;
 
 import android.content.Context;
 
-import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.Transaction;
 import com.thekha.vendor.util.ServiceHandler;
 
@@ -30,8 +29,6 @@ public class TransactionDAO {
 	private static final String TAG_DESCRIPTION = "description";
 	private static final String TAG_TIMESTAMP = "timestamp";
 
-	private static final String TITLE_DEBIT = "Debited";
-
 	public List<Transaction> read(Context c, String uid) throws JSONException, ClientProtocolException, IOException{
 
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
@@ -43,18 +40,17 @@ public class TransactionDAO {
 		return transactions;
 	}
 
-	public Boolean add(Deals d, Transaction t) throws ClientProtocolException, IOException {
+	public Boolean add(String dealID, Transaction t) throws ClientProtocolException, IOException {
 
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(DealsDAO.TAG_DEALID, String.valueOf(d.getId())));
+		reqParams.add(new BasicNameValuePair(DealsDAO.TAG_DEALID, dealID));
 
-		reqParams.add(new BasicNameValuePair(TAG_TITLE, TITLE_DEBIT));
-
-		String desc = String.valueOf((t.getAmount()*-1))+" debited for deal "+d.getTitle();
-		reqParams.add(new BasicNameValuePair(TAG_DESCRIPTION, desc));
-
+		reqParams.add(new BasicNameValuePair(TAG_TITLE, t.getTitle()));
+		reqParams.add(new BasicNameValuePair(TAG_AMOUNT, String.valueOf(t.getAmount())));
+		reqParams.add(new BasicNameValuePair(TAG_DESCRIPTION, t.getDescription()));
+		
 		ServiceHandler sh = new ServiceHandler();
-		jsonResp = sh.makeServiceCall(ServiceHandler.CREATE_DEAL_SERVICE, ServiceHandler.POST, reqParams);
+		jsonResp = sh.makeServiceCall(ServiceHandler.CREATE_TRANSACTION_SERVICE, ServiceHandler.POST, reqParams);
 		if (jsonResp.isEmpty()) {
 			return false;
 		}

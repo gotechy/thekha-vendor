@@ -1,6 +1,5 @@
 package com.thekha.vendor.activity;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.json.JSONException;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +28,7 @@ import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
 public class DashboardActivity extends Activity {
-	
-	private String LOG_TAG;
-	
+		
 	ActionBar actionBar;
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
@@ -57,7 +53,6 @@ public class DashboardActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
 		setTitle(R.string.dashboard_activity_title);
-		LOG_TAG = getString(R.string.app_name);
 		
 		// Get User ID for any other operation from intent.
 		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
@@ -140,7 +135,7 @@ public class DashboardActivity extends Activity {
         	if(temp.getText().toString().equals(drawerMenu[0])){
         		Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
         		i.putExtra(LoginDAO.TAG_USERID, uid);
-        		startActivityForResult(i, ADD_DEAL_REQUEST);
+        		startActivity(i);
         	}
         	if(temp.getText().toString().equals(drawerMenu[1])){
         		Intent i = new Intent(getApplicationContext(), DealsViewActivity.class);
@@ -172,10 +167,6 @@ public class DashboardActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		// - Check result code and request code.
-		if(requestCode == ADD_DEAL_REQUEST && resultCode == RESULT_OK){
-			// TODO - Result of add deal.
-			// uid = data.getStringExtra(BusinessDAO.TAG_UID);
-		}
 		if(requestCode == CONTACT_US_REQUEST && resultCode == RESULT_OK){
 			// TODO - Result of contact us.
 		}

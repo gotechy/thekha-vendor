@@ -1,20 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin" >
-    
-    <TextView android:id="@+id/transaction_regularlable" style="@style/sectionHeader"
-			android:layout_width="match_parent" android:layout_height="wrap_content"
-			android:text="Regular Placement" android:textAppearance="?android:attr/textAppearanceMedium" />
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent" android:layout_height="match_parent"
+	android:orientation="vertical">
 
-	<TextView android:id="@+id/business_facebook"
-			android:layout_width="match_parent" android:layout_height="wrap_content"
-			android:layout_marginTop="10dp" android:layout_marginLeft="6dp"
-			android:text="@string/facebook" android:textAppearance="?android:attr/textAppearanceMedium" />
+	<TextView android:background="@drawable/cell_shape"
+		android:padding="5dp" android:id="@+id/payment_title"
+		android:gravity="center"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:text="Payment Details" />
 
-</LinearLayout>
+	<TableRow android:id="@+id/payment_title_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_title_item" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="Item" />
+		<TextView android:id="@+id/payment_title_qty" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="2" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="Qty" />
+		<TextView android:id="@+id/payment_title_credits" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="right"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="Credits" />
+	</TableRow>
+	
+	<TableRow android:id="@+id/payment_regular_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_regular_lable" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Regular Placement" />
+		<TextView android:id="@+id/payment_regular_qty" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="2" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView android:id="@+id/payment_regular" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="right"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+	</TableRow>
+
+	<TableRow android:id="@+id/payment_special_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_special_lable" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Special Placement" />
+		<TextView android:id="@+id/payment_special_qty" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="2" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView android:id="@+id/payment_special" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="right"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+	</TableRow>
+	
+	<TableRow android:id="@+id/payment_top_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_top_lable" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Top Placement" />
+		<TextView android:id="@+id/payment_top_qty" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="2" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView android:id="@+id/payment_top" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="right"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+	</TableRow>
+	
+	<TableRow android:id="@+id/payment_homebanner_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_homebanner_lable" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Home Page Banner" />
+		<TextView android:id="@+id/payment_homebanner_qty" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="2" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView android:id="@+id/payment_homebanner" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="right"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+	</TableRow>
+	
+	<TableRow android:id="@+id/payment_categorybanner_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_categorybanner_lable" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Category Banner" />
+		<TextView android:id="@+id/payment_categorybanner_qty" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="2" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView android:id="@+id/payment_categorybanner" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="right"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+	</TableRow>
+	
+	<TableRow android:id="@+id/payment_sms_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_sms_lable" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Push SMS(s)" />
+		<TextView android:id="@+id/payment_sms_qty" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="2" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView android:id="@+id/payment_sms" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="right"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+	</TableRow>
+	
+	<TableRow android:id="@+id/payment_email_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_email_lable" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Push E-Mail(s)" />
+		<TextView android:id="@+id/payment_email_qty" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="2" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView android:id="@+id/payment_email" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="right"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+	</TableRow>
+	
+	<TableRow android:id="@+id/payment_total_row" android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView android:id="@+id/payment_total_lable" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="1" android:gravity="left"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="TOTAL" />
+		<TextView android:id="@+id/payment_total" android:background="@drawable/cell_shape"
+			android:padding="5dp"
+			android:layout_column="3" android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceLarge" />
+	</TableRow>
+	
+</TableLayout>
+

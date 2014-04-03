@@ -5,7 +5,6 @@ import hirondelle.date4j.DateTime;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -38,9 +37,8 @@ public class DealsDAO {
 	private static final String TAG_TO = "deals_to";
 	private static final String TAG_SMSCOUNT = "smscount";
 	private static final String TAG_EMAILCOUNT = "emailcount";
-	private static final String TAG_CREATEDBY = "created_by";
-	private static final String TAG_UPDATEDBY = "updated_by";
-	private static final String TAG_UPDATEDON = "updated_date";
+	//private static final String TAG_CREATEDBY = "created_by";
+	//private static final String TAG_UPDATEDBY = "updated_by";
 	private static final String TAG_PAYMENTSTATUS = "payment_status";
 	
 	public static final String PAYMENT_PENDING = "1";
@@ -55,10 +53,10 @@ public class DealsDAO {
 	private static final String TAG_HOMEPAGEBANNER = "homePageBanner";
 	private static final String TAG_CATEGORYBANNER = "categoryBanner";
 
-	public Boolean add(String uid, Deals deal) throws ClientProtocolException, IOException {
+	public Boolean add(String bid, Deals deal) throws ClientProtocolException, IOException {
 		
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, uid));
+		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, bid));
 		
 		reqParams.add(new BasicNameValuePair(TAG_PAYMENTSTATUS, PAYMENT_PENDING));
 		

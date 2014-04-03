@@ -11,24 +11,33 @@
 	<application android:allowBackup="true" android:icon="@drawable/ic_launcher"
 		android:logo="@drawable/logo" android:label="@string/app_name"
 		android:theme="@style/AppTheme">
+		
 		<activity android:name="com.thekha.vendor.activity.LoginActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		
 		<activity android:name="com.thekha.vendor.activity.DashboardActivity" />
+		
 		<activity android:name="com.thekha.vendor.activity.BusinessActivity"
 			android:parentActivityName="com.thekha.vendor.activity.DashboardActivity">
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.thekha.vendor.activity.DashboardActivity" />
 		</activity>
+		
+		<activity android:name="com.thekha.vendor.activity.TransactionActivity"
+		    android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" />
+		
 		<activity android:name="com.thekha.vendor.activity.EditBusinessActivity" />
+		
 		<activity android:name="com.thekha.vendor.activity.TransactionsViewActivity"
 			android:parentActivityName="com.thekha.vendor.activity.DashboardActivity">
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.thekha.vendor.activity.DashboardActivity" />
 		</activity>
+		
 		<activity android:name="com.thekha.vendor.activity.ContactUsActivity"
 			android:parentActivityName="com.thekha.vendor.activity.DashboardActivity">
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
@@ -38,7 +47,8 @@
 		<!-- added by Gaurav Rana Start -->
 
 		<activity android:name="com.thekha.vendor.activity.AddDealActivity"
-			android:label="@string/title_deals_details" />
+			android:label="@string/title_deals_details"
+			android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" />
 		<activity android:name="com.thekha.vendor.activity.EditDealActivity"
 			android:label="@string/title_deals_details" />
 		<activity android:name="com.thekha.vendor.activity.DealsViewActivity"
@@ -47,8 +57,7 @@
 				android:value="com.thekha.vendor.activity.DashboardActivity" />
 		</activity>
 
-
-		<!-- added by Gaurav Rana End -->
+		<!-- end of added by Gaurav Rana End -->
 
 	</application>
 

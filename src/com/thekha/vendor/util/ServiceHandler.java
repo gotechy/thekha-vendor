@@ -1,7 +1,6 @@
 package com.thekha.vendor.util;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.net.http.AndroidHttpClient;
-import android.util.Log;
 
 public class ServiceHandler {
 
@@ -33,14 +31,16 @@ public class ServiceHandler {
 	public static final String GET_PROFILE_SERVICE = "getProfile/Profile";
 	public static final String UPDATE_PROFILE_SERVICE = "updateProfile/Profile";
 	
-	public static final String CREATE_DEAL_SERVICE = "createDeal/CreateDeal";
+	public static final String CREATE_DEAL_SERVICE = "createDeal/Deal";
 	public static final String GET_DEALS_SERVICE = "getDeal/Deal";
 	public static final String UPDATE_DEAL_SERVICE = "updateDeal/Deal";
 	
 	public static final String CREATE_QUERY_SERVICE = "contactUs/Queries";
 	
 	public static final String GET_PRICES_SERVICE = "getPrices/Transactions";
+	
 	public static final String GET_TRANSACTIONS_SERVICE = "getTransactions/Transactions";
+	public static final String CREATE_TRANSACTION_SERVICE = "createTransaction/Transactions";
 
 	public ServiceHandler() {
 

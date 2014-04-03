@@ -6,6 +6,8 @@ public class Transaction implements Serializable{
 	
 	private static final long serialVersionUID = -597885129713459391L;
 	
+	public static final String TITLE_DEBIT = "Debited";
+	
 	private String title, description;
 	private int amount;
 	private static int balance = 0;
@@ -15,6 +17,13 @@ public class Transaction implements Serializable{
 		
 	}
 	
+	public Transaction(String title, String description, int amount) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.amount = amount;
+	}
+
 	public Transaction(String title, String description, int amount,
 			String timeStamp) {
 		super();

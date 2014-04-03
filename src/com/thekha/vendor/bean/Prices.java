@@ -1,6 +1,12 @@
 package com.thekha.vendor.bean;
 
-public class Prices {
+import java.io.Serializable;
+
+public class Prices implements Serializable{
+	
+	private static final long serialVersionUID = 3200583165664527833L;
+
+	public static final String PRICES_KEY = "prices";
 	
 	private String regular;
 	private String special;
