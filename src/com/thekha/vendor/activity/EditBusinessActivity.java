@@ -2,7 +2,13 @@ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.TimeZone;
 
 import org.apache.http.client.ClientProtocolException;
@@ -36,12 +42,12 @@ import android.widget.Toast;
 
 import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.dao.BusinessDAO;
-import com.thekha.vendor.dao.LoginDAO;
+import com.thekha.vendor.util.UploadImage;
 
 public class EditBusinessActivity extends Activity {
 
 	private String LOG_TAG;
-	private int uid, RESULT_LOAD_IMAGE = 0;
+	private int RESULT_LOAD_IMAGE = 0;
 
 	Business business;
 	BusinessDAO businessDAO = new BusinessDAO();;
@@ -51,11 +57,12 @@ public class EditBusinessActivity extends Activity {
 	CheckBox checkAC, checkVP, checkCC, checkSA, checkVeg, checkNonVeg;
 	AutoCompleteTextView state;
 	Button changeImage;
-	ImageView iv;
+	ImageView picture;
 	private ProgressDialog pDialog;
 
 	ArrayAdapter<CharSequence> typeAdapter;
 	ArrayAdapter<String> stateAdapter;
+	String picturePath, pictureName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +74,6 @@ public class EditBusinessActivity extends Activity {
 		actionBar = getActionBar();
 
 		business = (Business) getIntent().getSerializableExtra(Business.BUSINESS_KEY);
-		uid = Integer.parseInt(getIntent().getStringExtra(LoginDAO.TAG_USERID));
 
 		// populate spinner for business type
 		type = (Spinner) findViewById(R.id.editbusiness_type);
@@ -97,13 +103,12 @@ public class EditBusinessActivity extends Activity {
 		country = (EditText) findViewById(R.id.editbusiness_country);
 		pinCode = (EditText) findViewById(R.id.editbusiness_pincode);
 
-		iv = (ImageView) findViewById(R.id.editbusiness_picture);
+		picture = (ImageView) findViewById(R.id.editbusiness_picture);
 
 		changeImage = (Button) findViewById(R.id.editbusiness_picture_button);
 		changeImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				// TODO - Change Image of business profile
 				Intent i = new Intent(
 						Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 				startActivityForResult(i, RESULT_LOAD_IMAGE);
@@ -132,139 +137,167 @@ public class EditBusinessActivity extends Activity {
 			cursor.moveToFirst();
 
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			String picturePath = cursor.getString(columnIndex);
+			picturePath = cursor.getString(columnIndex);
+			pictureName = picturePath.substring(picturePath.lastIndexOf(File.separator)+1);
 			cursor.close();
-			iv.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-			business.setImageURL(picturePath);
-			
-			//TODO - Upload Selected Picture
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.actionmenu_edit_business, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.business_done:
-			new EditBusinessTask().execute();
-			break;
-		case R.id.business_cancel:
-			setResult(RESULT_CANCELED);
-			finish();
-		default:
-			break;
-		}
-		return true;
-	}
-
-	private class EditBusinessTask  extends AsyncTask<Void, Void, Boolean> {
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			// Showing progress dialog
-			pDialog = new ProgressDialog(EditBusinessActivity.this);
-			pDialog.setMessage("Please wait...");
-			pDialog.setCancelable(false);
-			pDialog.show();
-			// check for internet connection
-			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
-				cancel(true);
-			}
-		}
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			if(!isCancelled()){
-				setBeanFromUI();
-				try {
-					return businessDAO.update(business);
-				} catch (ClientProtocolException e) {
-					return false;
-				} catch (IOException e) {
-					return false;
-				}
+			try {
+				File afile =new File(picturePath);
+				picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;
+				File bfile =new File(picturePath);
+				InputStream inStream = new FileInputStream(afile);
 				
+				OutputStream outStream = new FileOutputStream(bfile);
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((length = inStream.read(buffer)) > 0){
+					outStream.write(buffer, 0, length);
+				}
+				inStream.close();
+				outStream.close();
+				picture.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+			} catch (FileNotFoundException e) {
+				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
+			} catch (IOException e) {
+				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
 			}
-			return false;
+		}
+	}
+		@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			// Inflate the menu; this adds items to the action bar if it is present.
+			getMenuInflater().inflate(R.menu.actionmenu_edit_business, menu);
+			return super.onCreateOptionsMenu(menu);
 		}
 
 		@Override
-		protected void onPostExecute(Boolean param) {
-			super.onPostExecute(param);
-			pDialog.dismiss();
-			if(param){
-				Toast.makeText(getApplicationContext(), "Your business profile has been updated.", Toast.LENGTH_LONG).show();
-				Log.d(LOG_TAG, "Business profile successfully updated, at "+DateTime.now(TimeZone.getDefault()));
-				Intent data = new Intent();
-				data.putExtra(Business.BUSINESS_KEY, business);
-				setResult(RESULT_OK,data);
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.business_done:
+				new EditBusinessTask().execute();
+				break;
+			case R.id.business_cancel:
+				setResult(RESULT_CANCELED);
 				finish();
-			}else{
-				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
+			default:
+				break;
+			}
+			return true;
+		}
+
+		private class EditBusinessTask  extends AsyncTask<Void, Void, Boolean> {
+
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				// Showing progress dialog
+				pDialog = new ProgressDialog(EditBusinessActivity.this);
+				pDialog.setMessage("Please wait...");
+				pDialog.setCancelable(false);
+				pDialog.show();
+				// check for internet connection
+				ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+				NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+				if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+					Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+					cancel(true);
+				}
+			}
+
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				if(!isCancelled()){
+					setBeanFromUI();
+					try {
+						//TODO - Un-Comment this code.
+						//UploadImage.upload(picturePath);
+						business.setImageURL(UploadImage.upload_folder+pictureName);
+						return businessDAO.update(business);
+					} catch (ClientProtocolException e) {
+						return false;
+					} catch (IOException e) {
+						return false;
+					}
+
+				}
+				return false;
+			}
+
+			@Override
+			protected void onPostExecute(Boolean param) {
+				super.onPostExecute(param);
+				pDialog.dismiss();
+				if(param){
+					Toast.makeText(getApplicationContext(), "Your business profile has been updated.", Toast.LENGTH_LONG).show();
+					Log.d(LOG_TAG, "Business profile successfully updated, at "+DateTime.now(TimeZone.getDefault()));
+					Intent data = new Intent();
+					data.putExtra(Business.BUSINESS_KEY, business);
+					setResult(RESULT_OK,data);
+					finish();
+				}else{
+					Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
+				}
+			}
+
+			@Override
+			protected void onCancelled() {
+				super.onCancelled();
+				pDialog.dismiss();
 			}
 		}
-		
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			pDialog.dismiss();
+
+		protected void setUIFromBean() {
+			name.setText(business.getName());
+			type.setSelection(typeAdapter.getPosition(business.getType()));
+			checkAC.setChecked(business.getFacilities().isAc());
+			checkVP.setChecked(business.getFacilities().isVp());
+			checkSA.setChecked(business.getFacilities().isSa());
+			checkCC.setChecked(business.getFacilities().isCc());
+			checkVeg.setChecked(business.getFacilities().isVeg());
+			checkNonVeg.setChecked(business.getFacilities().isNonVeg());
+			phone1.setText(business.getPhone1());
+			phone2.setText(business.getPhone2());
+			email.setText(business.getEmail());
+			facebook.setText(business.getFacebook());
+			website.setText(business.getWebsite());
+			addressLine1.setText(business.getAddress().getLine1());
+			addressLine2.setText(business.getAddress().getLine2());
+			locality.setText(business.getAddress().getLocality());
+			city.setText(business.getAddress().getCity());
+			country.setText(business.getAddress().getCountry());
+			pinCode.setText(business.getAddress().getPin());
+			state.setText(business.getAddress().getState());
+
+			String url = business.getImageURL();
+			if(!url.isEmpty()){
+				String imageFileName = url.substring(url.lastIndexOf(File.separator)+1);
+				File imageFile = new File(getApplicationContext().getExternalFilesDir(null)+File.separator+imageFileName);
+				if(imageFile.exists()){
+					picture.setImageURI(Uri.parse(getApplicationContext().getExternalFilesDir(null)+File.separator+imageFileName));
+				}
+			}
 		}
-	}
 
-	protected void setUIFromBean() {
-		name.setText(business.getName());
-		type.setSelection(typeAdapter.getPosition(business.getType()));
-		checkAC.setChecked(business.getFacilities().isAc());
-		checkVP.setChecked(business.getFacilities().isVp());
-		checkSA.setChecked(business.getFacilities().isSa());
-		checkCC.setChecked(business.getFacilities().isCc());
-		checkVeg.setChecked(business.getFacilities().isVeg());
-		checkNonVeg.setChecked(business.getFacilities().isNonVeg());
-		phone1.setText(business.getPhone1());
-		phone2.setText(business.getPhone2());
-		email.setText(business.getEmail());
-		facebook.setText(business.getFacebook());
-		website.setText(business.getWebsite());
-		addressLine1.setText(business.getAddress().getLine1());
-		addressLine2.setText(business.getAddress().getLine2());
-		locality.setText(business.getAddress().getLocality());
-		city.setText(business.getAddress().getCity());
-		country.setText(business.getAddress().getCountry());
-		pinCode.setText(business.getAddress().getPin());
-		state.setText(business.getAddress().getState());	
-	}
+		protected void setBeanFromUI() {
+			business.setName(name.getText().toString());
+			business.setType(type.getSelectedItem().toString());
+			business.getFacilities().setAc(checkAC.isChecked());
+			business.getFacilities().setCc(checkCC.isChecked());
+			business.getFacilities().setSa(checkSA.isChecked());
+			business.getFacilities().setVp(checkVP.isChecked());
+			business.getFacilities().setVeg(checkVeg.isChecked());
+			business.getFacilities().setNonVeg(checkNonVeg.isChecked());
+			business.setPhone1(phone1.getText().toString());
+			business.setPhone2(phone2.getText().toString());
+			business.setEmail(email.getText().toString());
+			business.setFacebook(facebook.getText().toString());
+			business.setWebsite(website.getText().toString());
+			business.getAddress().setLine1(addressLine1.getText().toString());
+			business.getAddress().setLine2(addressLine2.getText().toString());
+			business.getAddress().setLocality(locality.getText().toString());
+			business.getAddress().setCity(city.getText().toString());
+			business.getAddress().setCountry(country.getText().toString());
+			business.getAddress().setPin(pinCode.getText().toString());
+			business.getAddress().setState(state.getText().toString());
+		}
 
-	protected void setBeanFromUI() {
-		business.setName(name.getText().toString());
-		business.setType(type.getSelectedItem().toString());
-		business.getFacilities().setAc(checkAC.isChecked());
-		business.getFacilities().setCc(checkCC.isChecked());
-		business.getFacilities().setSa(checkSA.isChecked());
-		business.getFacilities().setVp(checkVP.isChecked());
-		business.getFacilities().setVeg(checkVeg.isChecked());
-		business.getFacilities().setNonVeg(checkNonVeg.isChecked());
-		business.setPhone1(phone1.getText().toString());
-		business.setPhone2(phone2.getText().toString());
-		business.setEmail(email.getText().toString());
-		business.setFacebook(facebook.getText().toString());
-		business.setWebsite(website.getText().toString());
-		business.getAddress().setLine1(addressLine1.getText().toString());
-		business.getAddress().setLine2(addressLine2.getText().toString());
-		business.getAddress().setLocality(locality.getText().toString());
-		business.getAddress().setCity(city.getText().toString());
-		business.getAddress().setCountry(country.getText().toString());
-		business.getAddress().setPin(pinCode.getText().toString());
-		business.getAddress().setState(state.getText().toString());
 	}
-
-}

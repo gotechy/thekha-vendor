@@ -7,11 +7,6 @@ import java.util.TimeZone;
 
 import org.apache.http.client.ClientProtocolException;
 
-import com.thekha.vendor.bean.Business;
-import com.thekha.vendor.bean.Query;
-import com.thekha.vendor.dao.ContactUsDAO;
-import com.thekha.vendor.dao.LoginDAO;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -21,8 +16,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +23,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.thekha.vendor.bean.Query;
+import com.thekha.vendor.dao.ContactUsDAO;
+import com.thekha.vendor.dao.LoginDAO;
 
 public class ContactUsActivity extends Activity {
 	

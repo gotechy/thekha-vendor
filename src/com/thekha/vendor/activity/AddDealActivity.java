@@ -2,7 +2,13 @@ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -19,10 +25,14 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +42,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -40,10 +51,12 @@ import com.thekha.vendor.bean.Prices;
 import com.thekha.vendor.dao.DealsDAO;
 import com.thekha.vendor.dao.LoginDAO;
 import com.thekha.vendor.dao.PricesDAO;
+import com.thekha.vendor.util.UploadImage;
 
 public class AddDealActivity extends Activity {
 	
 	private String LOG_TAG;
+	private int RESULT_LOAD_IMAGE = 32;
 	
 	ActionBar actionBar;
 	private Deals deal = new Deals();
@@ -54,6 +67,8 @@ public class AddDealActivity extends Activity {
 //	TextView name, type, facilities,  phone1, phone2, address, email,website, facebook;
 	EditText title, description, code, smsCount, emailCount;	
 	CheckBox checkRegular, checkSpecial, checkTopListing, checkHomePageBanner, checkCategoryBanner;
+	ImageButton picture;
+	String picturePath, pictureName;
 	static int fromToFlag;
 	static Button  fromDate, fromTime, toDate, toTime;
 	String imageURL, bid;
@@ -81,6 +96,7 @@ public class AddDealActivity extends Activity {
 		fromTime = (Button) findViewById(R.id.button_aed_deal_active_fromTime);
 		toDate = (Button) findViewById(R.id.button_aed_deal_active_toDate);
 		toTime = (Button) findViewById(R.id.button_aed_deal_active_toTime);
+		picture = (ImageButton) findViewById(R.id.iButton_aed_cover_image);
 		
 		checkRegular = (CheckBox) findViewById(R.id.cb_regular);
 		checkSpecial = (CheckBox) findViewById(R.id.cb_special);
@@ -92,6 +108,14 @@ public class AddDealActivity extends Activity {
 		checkRegular.setChecked(true);
 		checkRegular.setEnabled(false);
 		
+		picture.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(
+						Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				startActivityForResult(i, RESULT_LOAD_IMAGE);
+			}
+		});
 		
 		fromDate.setOnClickListener(new OnClickListener() {
 			@Override
@@ -125,6 +149,45 @@ public class AddDealActivity extends Activity {
 		new GetPriceTask().execute();
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+			Uri selectedImage = data.getData();
+			String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+			Cursor cursor = getContentResolver().query(selectedImage,
+					filePathColumn, null, null, null);
+			cursor.moveToFirst();
+
+			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+			picturePath = cursor.getString(columnIndex);
+			pictureName = picturePath.substring(picturePath.lastIndexOf(File.separator)+1);
+			cursor.close();
+			try {
+				File afile =new File(picturePath);
+				picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;
+				File bfile =new File(picturePath);
+				InputStream inStream = new FileInputStream(afile);
+				
+				OutputStream outStream = new FileOutputStream(bfile);
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((length = inStream.read(buffer)) > 0){
+					outStream.write(buffer, 0, length);
+				}
+				inStream.close();
+				outStream.close();
+				picture.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+			} catch (FileNotFoundException e) {
+				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
+			} catch (IOException e) {
+				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+	
 	private class AddDealTask  extends AsyncTask<Void, Void, Boolean> {
 		
 		@Override
@@ -148,6 +211,9 @@ public class AddDealActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			if(!isCancelled())
 				try {
+					//TODO - Un-Comment this code.
+					//UploadImage.upload(picturePath);
+					deal.setImageURL(UploadImage.upload_folder+pictureName);
 					return dealDAO.add(bid, deal);
 				} catch (ClientProtocolException e) {
 					return false;
@@ -386,10 +452,7 @@ public class AddDealActivity extends Activity {
 			deal.setCode(code.getText().toString());
 		else
 			{makeToastForIncompleteForm();return false;}
-		
-		// TODO - image URL
-		deal.setImageURL("");
-		
+				
 		DateTime temp;
 		if(DateTime.isParseable(fromDate.getText().toString())){
 			temp = new DateTime(fromDate.getText().toString());

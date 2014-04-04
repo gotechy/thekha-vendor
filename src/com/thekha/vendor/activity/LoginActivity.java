@@ -2,7 +2,6 @@ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.TimeZone;
 
@@ -23,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
 public class LoginActivity extends Activity {
