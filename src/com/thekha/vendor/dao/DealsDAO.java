@@ -39,12 +39,8 @@ public class DealsDAO {
 	private static final String TAG_EMAILCOUNT = "emailcount";
 	//private static final String TAG_CREATEDBY = "created_by";
 	//private static final String TAG_UPDATEDBY = "updated_by";
-	private static final String TAG_PAYMENTSTATUS = "payment_status";
-	
-	public static final String PAYMENT_PENDING = "1";
-	public static final String PAYMENT_RECEIVED = "2";
-	public static final String PAYMENT_CHANGE = "3";
-	
+	private static final String TAG_STATUS = "status";
+		
 	// Deal placement tags
 	private static final String TAG_PLACEMENTID = "placement_id";
 	private static final String TAG_REGULAR = "regular";
@@ -58,7 +54,7 @@ public class DealsDAO {
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, bid));
 		
-		reqParams.add(new BasicNameValuePair(TAG_PAYMENTSTATUS, PAYMENT_PENDING));
+		reqParams.add(new BasicNameValuePair(TAG_STATUS, deal.getStatus()));
 		
 		reqParams.add(new BasicNameValuePair(TAG_REGULAR, deal.getPlacement().isRegular()?"1":"0"));
 		reqParams.add(new BasicNameValuePair(TAG_SEPCIAL, deal.getPlacement().isSpecial()?"1":"0"));
@@ -68,8 +64,8 @@ public class DealsDAO {
 		
 		reqParams.add(new BasicNameValuePair(TAG_TITLE, deal.getTitle()));
 		reqParams.add(new BasicNameValuePair(TAG_DESCRIPTION, deal.getDescription()));
-		// TODO - image URL for deals
-		reqParams.add(new BasicNameValuePair(TAG_IMAGEURL, ""));
+		
+		reqParams.add(new BasicNameValuePair(TAG_IMAGEURL, deal.getImageURL()));
 		reqParams.add(new BasicNameValuePair(TAG_CODE, deal.getCode()));
 		reqParams.add(new BasicNameValuePair(TAG_FROM, deal.getFrom().toString()));
 		reqParams.add(new BasicNameValuePair(TAG_TO, deal.getTo().toString()));
@@ -125,8 +121,7 @@ public class DealsDAO {
 		
 		reqParams.add(new BasicNameValuePair(TAG_TITLE, deal.getTitle()));
 		reqParams.add(new BasicNameValuePair(TAG_DESCRIPTION, deal.getDescription()));
-		// TODO - image URL for deals
-		reqParams.add(new BasicNameValuePair(TAG_IMAGEURL, ""));
+		reqParams.add(new BasicNameValuePair(TAG_IMAGEURL, deal.getImageURL()));
 		reqParams.add(new BasicNameValuePair(TAG_CODE, deal.getCode()));
 		reqParams.add(new BasicNameValuePair(TAG_FROM, deal.getFrom().toString()));
 		reqParams.add(new BasicNameValuePair(TAG_TO, deal.getTo().toString()));
@@ -169,6 +164,7 @@ public class DealsDAO {
 				jsonObj.getString(TAG_IMAGEURL),
 				new DateTime(jsonObj.getString(TAG_FROM)),
 				new DateTime(jsonObj.getString(TAG_TO)),
+				Deals.STATUS_ACTIVE, //TODO - change to jsonObj.getString(TAG_STATUS);
 				dp,
 				Integer.parseInt(jsonObj.getString(TAG_SMSCOUNT)),
 				Integer.parseInt(jsonObj.getString(TAG_EMAILCOUNT))

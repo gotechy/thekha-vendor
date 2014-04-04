@@ -11,7 +11,9 @@ public class Deals implements Serializable {
 	 */
 	private static final long serialVersionUID = 5913018284176073902L;
 
-	
+	public static final String STATUS_PENDING = "PENDING";
+	public static final String STATUS_ACTIVE = "ACTIVE";
+	public static final String STATUS_COMPLETED = "COMPLETED";
 	public static final String DEALS_KEY = "deals";
 	
 	private int id;
@@ -21,6 +23,7 @@ public class Deals implements Serializable {
 	private String imageURL ="";
 	private DateTime from;
 	private DateTime to;
+	private String status;
 	private DealsPlacement placement;
 	private int SMSCount;
 	private int emailCount;
@@ -31,29 +34,26 @@ public class Deals implements Serializable {
 		placement = new DealsPlacement();
 	}
 	
-	public Deals(String title, String description, String code, 
-			String imageURL, DateTime from, DateTime to, 
-			DealsPlacement placement, int SMSCount, int emailCount) {
-		
+	public Deals(String title, String description, String code,
+			String imageURL, DateTime from, DateTime to, String status,
+			DealsPlacement placement, int sMSCount, int emailCount) {
 		super();
-		
 		this.title = title;
 		this.description = description;
 		this.code = code;
 		this.imageURL = imageURL;
 		this.from = from;
 		this.to = to;
+		this.status = status;
 		this.placement = placement;
-		this.SMSCount = SMSCount;
+		SMSCount = sMSCount;
 		this.emailCount = emailCount;
 	}
 	
-	public Deals(int id, String title, String description, String code, 
-			String imageURL, DateTime from, DateTime to, 
-			DealsPlacement placement, int SMSCount, int emailCount) {
-		
+	public Deals(int id, String title, String description, String code,
+			String imageURL, DateTime from, DateTime to, String status,
+			DealsPlacement placement, int sMSCount, int emailCount) {
 		super();
-		
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -61,11 +61,21 @@ public class Deals implements Serializable {
 		this.imageURL = imageURL;
 		this.from = from;
 		this.to = to;
+		this.status = status;
 		this.placement = placement;
-		this.SMSCount = SMSCount;
+		SMSCount = sMSCount;
 		this.emailCount = emailCount;
 	}
 	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public int getId() {
 		return id;
 	}

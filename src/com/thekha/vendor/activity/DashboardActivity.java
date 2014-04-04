@@ -45,7 +45,6 @@ public class DashboardActivity extends Activity {
 	Spinner productViewType;
 	ProgressBar profileCompletion;
 	
-	private static final int ADD_DEAL_REQUEST = 0;
 	private static final int CONTACT_US_REQUEST = 1;
 	
 	@Override

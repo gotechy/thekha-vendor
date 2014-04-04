@@ -16,7 +16,7 @@ public class ContactUsDAO {
 	Business b;
 	String jsonResp;
 	
-	// TODO - Query Tags
+	// Query Tags
 	private static final String TAG_NAME = "name";
 	private static final String TAG_TYPE = "type";
 	private static final String TAG_PHONE = "phone";

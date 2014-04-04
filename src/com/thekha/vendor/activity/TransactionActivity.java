@@ -25,6 +25,8 @@ import android.widget.Toast;
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.Prices;
 import com.thekha.vendor.bean.Transaction;
+import com.thekha.vendor.dao.DealsDAO;
+import com.thekha.vendor.dao.LoginDAO;
 import com.thekha.vendor.dao.TransactionDAO;
 
 public class TransactionActivity extends Activity {
@@ -38,8 +40,9 @@ public class TransactionActivity extends Activity {
 	private ProgressDialog pDialog;
 	private Deals deal;
 	private Prices prices;
-	private int total;
-
+	private int total, days;
+	private DealsDAO dealDAO = new DealsDAO();
+	String bid;
 	static final int EDIT_BUSINESS_REQUEST = 1;
 
 	@Override
@@ -50,8 +53,7 @@ public class TransactionActivity extends Activity {
 		LOG_TAG = getString(R.string.app_name);
 
 		actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-
+		
 		regular = (TextView) findViewById(R.id.payment_regular);
 		regular_qty = (TextView) findViewById(R.id.payment_regular_qty);
 		special = (TextView) findViewById(R.id.payment_special);
@@ -69,9 +71,15 @@ public class TransactionActivity extends Activity {
 		totalView = (TextView) findViewById(R.id.payment_total);
 
 		transactionDAO = new TransactionDAO();
+		bid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
 		deal = (Deals) getIntent().getSerializableExtra(Deals.DEALS_KEY);
 		prices = (Prices) getIntent().getSerializableExtra(Prices.PRICES_KEY);
-
+		
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
 		setUpUI();
 	}
 
@@ -79,12 +87,15 @@ public class TransactionActivity extends Activity {
 	 *Sets up UI and calculates the total amount. 
 	 */
 	 private void setUpUI(){
-		String qty, cost;
-		total = 0;
+		String qty, cost, daysstr;
+		days = deal.getFrom().numDaysFrom(deal.getTo());
+		daysstr = String.valueOf(days);
+		
+		total = 0;		
 		if(deal.getPlacement().isRegular()){
-			qty = "1";
+			qty = daysstr;
 			cost = prices.getRegular();
-			total += Integer.valueOf(cost);
+			total += (Integer.valueOf(cost) * days);
 		}else{
 			qty = "0";
 			cost = "0";
@@ -93,56 +104,56 @@ public class TransactionActivity extends Activity {
 		regular.setText(cost);
 
 		if(deal.getPlacement().isSpecial()){
-			qty = "1";
+			qty = daysstr;
 			cost = prices.getSpecial();
-			total += Integer.valueOf(cost);
+			total += (Integer.valueOf(cost) * days);
 		}else{
 			qty = "0";
 			cost = "0";
 		}
-		regular_qty.setText(prices.getSpecial()+" x "+qty);
-		regular.setText(cost);
+		special_qty.setText(prices.getSpecial()+" x "+qty);
+		special.setText(cost);
 
 		if(deal.getPlacement().isTopListing()){
-			qty = "1";
+			qty = daysstr;
 			cost = prices.getTopListing();
-			total += Integer.valueOf(cost);
+			total += (Integer.valueOf(cost) * days);
 		}else{
 			qty = "0";
 			cost = "0";
 		}
-		regular_qty.setText(prices.getTopListing()+" x "+qty);
-		regular.setText(cost);
+		top_qty.setText(prices.getTopListing()+" x "+qty);
+		top.setText(cost);
 
 		if(deal.getPlacement().isHomePageBanner()){
-			qty = "1";
+			qty = daysstr;
 			cost = prices.getHomePageBanner();
-			total += Integer.valueOf(cost);
+			total += (Integer.valueOf(cost) * days);
 		}else{
 			qty = "0";
 			cost = "0";
 		}
-		regular_qty.setText(prices.getHomePageBanner()+" x "+qty);
-		regular.setText(cost);
+		homeBanner_qty.setText(prices.getHomePageBanner()+" x "+qty);
+		homeBanner.setText(cost);
 
 		if(deal.getPlacement().isCategoryBanner()){
-			qty = "1";
+			qty = daysstr;
 			cost = prices.getCategoryBanner();
-			total += Integer.valueOf(cost);
+			total += (Integer.valueOf(cost) * days);
 		}else{
 			qty = "0";
 			cost = "0";
 		}
-		regular_qty.setText(prices.getCategoryBanner()+" x "+qty);
-		regular.setText(cost);
+		categoryBanner_qty.setText(prices.getCategoryBanner()+" x "+qty);
+		categoryBanner.setText(cost);
 
 		sms_qty.setText(prices.getPushSMS()+" x "+deal.getSMSCount());
-		sms.setText(Integer.valueOf(prices.getPushSMS())*deal.getSMSCount());
-		total += Integer.valueOf(prices.getPushSMS())*deal.getSMSCount();
+		sms.setText(String.valueOf(Integer.valueOf(prices.getPushSMS())*deal.getSMSCount()));
+		total += (Integer.valueOf(prices.getPushSMS())*deal.getSMSCount());
 
 		email_qty.setText(prices.getPushEMail()+" x "+deal.getEmailCount());
-		email.setText(Integer.valueOf(prices.getPushEMail())*deal.getEmailCount());
-		total += Integer.valueOf(prices.getPushSMS())*deal.getSMSCount();
+		email.setText(String.valueOf(Integer.valueOf(prices.getPushEMail())*deal.getEmailCount()));
+		total += (Integer.valueOf(prices.getPushEMail())*deal.getEmailCount());
 
 		totalView.setText(String.valueOf(total));
 	 }
@@ -202,7 +213,13 @@ public class TransactionActivity extends Activity {
 		 protected Boolean doInBackground(Void... params) {
 			 if(!isCancelled()){
 				 try {
-					 return transactionDAO.add(String.valueOf(deal.getId()), transaction);
+					 deal.setStatus(Deals.STATUS_PENDING);
+					 if(dealDAO.add(bid, deal)){
+						//TODO - Un-Comment this code.
+						//UploadImage.upload(picturePath);
+						return transactionDAO.add(String.valueOf(deal.getId()), transaction);
+					 }
+						 
 				 } catch (ClientProtocolException e) {
 					 return false;
 				 } catch (IOException e) {
@@ -218,8 +235,8 @@ public class TransactionActivity extends Activity {
 			 super.onPostExecute(param);
 			 pDialog.dismiss();
 				if(param){
-					Toast.makeText(getApplicationContext(), "Your transaction was successful.", Toast.LENGTH_LONG).show();
-					Log.d(LOG_TAG, "Transaction successfully added, at "+DateTime.now(TimeZone.getDefault()));
+					Toast.makeText(getApplicationContext(), "Your transaction was successful and deal has been added.", Toast.LENGTH_LONG).show();
+					Log.d(LOG_TAG, "Transaction and Deal successfully added, at "+DateTime.now(TimeZone.getDefault()));
 					startActivity(new Intent(TransactionActivity.this, DashboardActivity.class));
 					finish();
 				}else{

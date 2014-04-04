@@ -21,7 +21,6 @@ public class DealsPlacement implements Serializable{
 	}
 	
 	public DealsPlacement(Boolean regular, Boolean special, Boolean topListing, Boolean homePageBanner, Boolean categoryBanner) {
-		// TODO Auto-generated constructor stub
 		
 		this.regular = regular;
 		this.special = special;

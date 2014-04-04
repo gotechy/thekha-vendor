@@ -25,12 +25,11 @@ import android.widget.Toast;
 
 import com.thekha.vendor.adapter.DealsListAdapter;
 import com.thekha.vendor.bean.Deals;
-import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.DealsDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
 public class DealsViewActivity extends Activity {
-
+	
 	private String LOG_TAG;
 	
 	DealsListAdapter dealsAdapter;

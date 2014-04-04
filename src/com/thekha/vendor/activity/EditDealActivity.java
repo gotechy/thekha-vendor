@@ -2,65 +2,87 @@ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.TimeZone;
 
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thekha.vendor.bean.Deals;
+import com.thekha.vendor.bean.Prices;
 import com.thekha.vendor.dao.DealsDAO;
+import com.thekha.vendor.dao.PricesDAO;
 
 public class EditDealActivity extends Activity {
-private String LOG_TAG;
 	
+	private String LOG_TAG;
+	private int RESULT_LOAD_IMAGE = 235;
+
 	ActionBar actionBar;
 	Deals deal;
-//	TextView name, type, facilities,  phone1, phone2, address, email,website, facebook;
-	TextView title, description, code, from, to;	
+	TextView title, description, code, from, to, smsMsg, emailMsg;	
 	CheckBox checkRegular, checkSpecial, checkTopListing, checkHomePageBanner, checkCategoryBanner;
 	EditText sms, email;
-	
-	String imageURL;
+	Button changeImage;
+	ImageView picture;
+	String picturePath, pictureName;
+
 	private ProgressDialog pDialog;
 
-	private DealsDAO dealDAO = new DealsDAO();;
+	private DealsDAO dealDAO = new DealsDAO();
 
-	
+	private Prices prices;
+	private PricesDAO pDAO = new PricesDAO();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_deal);
 		setTitle(R.string.title_deals_view);
 		LOG_TAG = getString(R.string.app_name);
-		
+
 		deal = (Deals) getIntent().getSerializableExtra(Deals.DEALS_KEY);
-        
+
 		actionBar = getActionBar();
 
-        title = (TextView) findViewById(R.id.editdeal_title);
+		title = (TextView) findViewById(R.id.editdeal_title);
 		description = (TextView) findViewById(R.id.editdeal_description);
 		code = (TextView) findViewById(R.id.editdeal_code);
-		
+
 		sms = (EditText) findViewById(R.id.editdeal_SMS);
 		email = (EditText) findViewById(R.id.editdeal_email);
-		
+
 		from = (TextView) findViewById(R.id.editdeal_from);
 		to = (TextView) findViewById(R.id.editdeal_to);
 		checkRegular = (CheckBox) findViewById(R.id.editdeal_regular);
@@ -68,37 +90,89 @@ private String LOG_TAG;
 		checkTopListing = (CheckBox) findViewById(R.id.editdeal_top_listing);
 		checkHomePageBanner = (CheckBox) findViewById(R.id.editdeal_home_page_banner);
 		checkCategoryBanner = (CheckBox) findViewById(R.id.editdeal_category_banner);
-		
+		changeImage = (Button) findViewById(R.id.editdeal_cover_image_button);
+		picture = (ImageView) findViewById(R.id.editdeal_cover_image);
+		smsMsg = (TextView) findViewById(R.id.editdeal_SMSmsg);
+		emailMsg = (TextView) findViewById(R.id.editdeal_emailmsg);
+		changeImage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(
+						Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				startActivityForResult(i, RESULT_LOAD_IMAGE);
+			}
+		});
+
 		setUIFromBean();
+		new GetPriceTask().execute();
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+			Uri selectedImage = data.getData();
+			String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+			Cursor cursor = getContentResolver().query(selectedImage,
+					filePathColumn, null, null, null);
+			cursor.moveToFirst();
+
+			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+			picturePath = cursor.getString(columnIndex);
+			pictureName = picturePath.substring(picturePath.lastIndexOf(File.separator)+1);
+			cursor.close();
+			try {
+				File afile =new File(picturePath);
+				picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;
+				File bfile =new File(picturePath);
+				InputStream inStream = new FileInputStream(afile);
+
+				OutputStream outStream = new FileOutputStream(bfile);
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((length = inStream.read(buffer)) > 0){
+					outStream.write(buffer, 0, length);
+				}
+				inStream.close();
+				outStream.close();
+				picture.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+			} catch (FileNotFoundException e) {
+				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
+			} catch (IOException e) {
+				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.actionmenu_edit_deal, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
-	  public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case R.id.deal_done:
-	    	setBeanFromUI();
-	    	new EditDealTask().execute();
-	    	break;
-	    case R.id.deal_cancel:
-	    	setResult(RESULT_CANCELED);
-	    	finish();
-	    default:
-	      break;
-	    }
-	    return true;
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.deal_done:
+			setBeanFromUI();
+			new EditDealTask().execute();
+			break;
+		case R.id.deal_cancel:
+			setResult(RESULT_CANCELED);
+			finish();
+		default:
+			break;
+		}
+		return true;
 	}
-	
-private class EditDealTask  extends AsyncTask<Void, Void, Boolean> {
-		
+
+	private class EditDealTask  extends AsyncTask<Void, Void, Boolean> {
+
 		@Override
-        protected void onPreExecute() {
+		protected void onPreExecute() {
 			super.onPreExecute();
 			// Showing progress dialog
 			pDialog = new ProgressDialog(EditDealActivity.this);
@@ -113,7 +187,7 @@ private class EditDealTask  extends AsyncTask<Void, Void, Boolean> {
 				cancel(true);
 			}
 		}
-		
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			if(!isCancelled()){
@@ -127,23 +201,23 @@ private class EditDealTask  extends AsyncTask<Void, Void, Boolean> {
 			}
 			return false;
 		}
-		
+
 		@Override
-        protected void onPostExecute(Boolean param) {
-            super.onPostExecute(param);
+		protected void onPostExecute(Boolean param) {
+			super.onPostExecute(param);
 			pDialog.dismiss();
 			if(param){
 				Toast.makeText(getApplicationContext(), "Your deal has been updated.", Toast.LENGTH_SHORT).show();
 				Log.d(LOG_TAG, "Deal successfully updated, at "+DateTime.now(TimeZone.getDefault()));
 				Intent data = new Intent();
-		    	data.putExtra(Deals.DEALS_KEY, deal);
-		    	setResult(RESULT_OK,data);
-		    	finish();
+				data.putExtra(Deals.DEALS_KEY, deal);
+				setResult(RESULT_OK,data);
+				finish();
 			}else{
 				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
 			}
 		}
-		
+
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
@@ -152,45 +226,134 @@ private class EditDealTask  extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	private void setBeanFromUI() {
-	
-	deal.setTitle(title.getText().toString());
-	deal.setDescription(description.getText().toString());
-	deal.setCode(code.getText().toString());
-	deal.setImageURL(imageURL);
 
-	deal.setFrom(new DateTime(from.getText().toString()));
-	deal.setTo(new DateTime(to.getText().toString()));
+		deal.setTitle(title.getText().toString());
+		deal.setDescription(description.getText().toString());
+		deal.setCode(code.getText().toString());
 
-	deal.getPlacement().setRegular(checkRegular.isChecked());
-	deal.getPlacement().setSpecial(checkSpecial.isChecked());
-	deal.getPlacement().setTopListing(checkTopListing.isChecked());
-	deal.getPlacement().setHomePageBanner(checkHomePageBanner.isChecked());
-	deal.getPlacement().setCategoryBanner(checkRegular.isChecked());
-	
-	deal.setSMSCount(Integer.parseInt(sms.getText().toString()));
-	deal.setEmailCount(Integer.parseInt(email.getText().toString()));
-	
-	
-}
-	
+		deal.setFrom(new DateTime(from.getText().toString()));
+		deal.setTo(new DateTime(to.getText().toString()));
+
+		deal.getPlacement().setRegular(checkRegular.isChecked());
+		deal.getPlacement().setSpecial(checkSpecial.isChecked());
+		deal.getPlacement().setTopListing(checkTopListing.isChecked());
+		deal.getPlacement().setHomePageBanner(checkHomePageBanner.isChecked());
+		deal.getPlacement().setCategoryBanner(checkRegular.isChecked());
+
+		deal.setSMSCount(Integer.parseInt(sms.getText().toString()));
+		deal.setEmailCount(Integer.parseInt(email.getText().toString()));
+
+
+	}
+
 	private void setUIFromBean() {
 		title.setText(deal.getTitle());
 		description.setText(deal.getDescription());
 		code.setText(deal.getCode());
-		//TODO - image in deals
+		//TODO - image in edit deals
 		//deal.getImageURL(imageURL);
 
 		from.setText(deal.getFrom().toString());
 		to.setText(deal.getTo().toString());
-		
+
 		checkRegular.setChecked(deal.getPlacement().isRegular());
+		// regular deal must be purchased.
+		checkRegular.setChecked(true);
+		checkRegular.setEnabled(false);
+
 		checkSpecial.setChecked(deal.getPlacement().isSpecial());
+		if(deal.getPlacement().isSpecial()){
+			checkSpecial.setChecked(true);
+			checkSpecial.setEnabled(false);
+		}
+
 		checkTopListing.setChecked(deal.getPlacement().isTopListing());
+		if(deal.getPlacement().isTopListing()){
+			checkTopListing.setChecked(true);
+			checkTopListing.setEnabled(false);
+		}
+
 		checkHomePageBanner.setChecked(deal.getPlacement().isHomePageBanner());
+		if(deal.getPlacement().isHomePageBanner()){
+			checkHomePageBanner.setChecked(true);
+			checkHomePageBanner.setEnabled(false);
+		}
+
 		checkCategoryBanner.setChecked(deal.getPlacement().isCategoryBanner());
-		
-		sms.setText(Integer.toString(deal.getSMSCount()));
-		email.setText(Integer.toString(deal.getEmailCount()));
-		
+		if(deal.getPlacement().isCategoryBanner()){
+			checkCategoryBanner.setChecked(true);
+			checkCategoryBanner.setEnabled(false);
+		}
+
+		smsMsg.setText("You have "+Integer.toString(deal.getSMSCount())+" SMS(s), only enter extra SMS(s) you want to buy.");
+		emailMsg.setText("You have "+Integer.toString(deal.getEmailCount())+" E-Mail(s), only enter extra E-Mail(s) you want to buy.");
+
+	}
+
+	private class GetPriceTask  extends AsyncTask<Void, Void, String> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			// Showing progress dialog
+			pDialog = new ProgressDialog(EditDealActivity.this);
+			pDialog.setMessage("Please wait...");
+			pDialog.setCancelable(false);
+			pDialog.show();
+			// check for internet connection
+			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
+				cancel(true);
+			}
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			if(!isCancelled())
+				try {prices = null;
+				prices = pDAO.read();
+				return "Prices loaded successfully.";
+				} catch (JSONException e) {
+					return "Something is very wrong, please contact our support services.";
+				} catch (ClientProtocolException e) {
+					return "Connection cannot be established, please try again later.";
+				} catch (IOException e) {
+					return "Connection cannot be established, please try again later.";
+				} 
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String param) {
+			super.onPostExecute(param);
+			pDialog.dismiss();
+			if(prices != null){
+				setPrices();
+				Log.d(LOG_TAG, param);
+			}else{
+				Log.d(LOG_TAG, param);
+				Toast.makeText(getApplicationContext(), param, Toast.LENGTH_SHORT).show();
+				startActivity(new Intent(EditDealActivity.this, DashboardActivity.class));
+				finish();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			pDialog.dismiss();
+		}
+	}
+
+	private void setPrices() {
+		checkRegular.setText(checkRegular.getText().toString() + " ("+prices.getRegular()+" credits/day)");
+		checkSpecial.setText(checkSpecial.getText().toString() + " ("+prices.getSpecial()+" credits/day)");
+		checkTopListing.setText(checkTopListing.getText().toString() + " ("+prices.getTopListing()+" credits/day)");
+		checkHomePageBanner.setText(checkHomePageBanner.getText().toString() + " ("+prices.getHomePageBanner()+" credits/day)");
+		checkCategoryBanner.setText(checkCategoryBanner.getText().toString() + " ("+prices.getCategoryBanner()+" credits/day)");
+		sms.setHint(sms.getHint().toString() + " ("+prices.getPushSMS()+" credits/sms)");
+		email.setHint(email.getHint().toString() + " ("+prices.getPushEMail()+" credits/email)");
 	}
 }

@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -48,7 +47,6 @@ import android.widget.Toast;
 
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.Prices;
-import com.thekha.vendor.dao.DealsDAO;
 import com.thekha.vendor.dao.LoginDAO;
 import com.thekha.vendor.dao.PricesDAO;
 import com.thekha.vendor.util.UploadImage;
@@ -60,11 +58,9 @@ public class AddDealActivity extends Activity {
 	
 	ActionBar actionBar;
 	private Deals deal = new Deals();
-	private DealsDAO dealDAO = new DealsDAO();
 	private Prices prices;
 	private PricesDAO pDAO = new PricesDAO();
 	
-//	TextView name, type, facilities,  phone1, phone2, address, email,website, facebook;
 	EditText title, description, code, smsCount, emailCount;	
 	CheckBox checkRegular, checkSpecial, checkTopListing, checkHomePageBanner, checkCategoryBanner;
 	ImageButton picture;
@@ -180,70 +176,12 @@ public class AddDealActivity extends Activity {
 				inStream.close();
 				outStream.close();
 				picture.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+				deal.setImageURL(UploadImage.upload_folder+pictureName);
 			} catch (FileNotFoundException e) {
 				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
 			} catch (IOException e) {
 				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
 			}
-		}
-	}
-	
-	private class AddDealTask  extends AsyncTask<Void, Void, Boolean> {
-		
-		@Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Showing progress dialog
-            pDialog = new ProgressDialog(AddDealActivity.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-            // check for internet connection
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
-            	cancel(true);
-            }
-		}
-		
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			if(!isCancelled())
-				try {
-					//TODO - Un-Comment this code.
-					//UploadImage.upload(picturePath);
-					deal.setImageURL(UploadImage.upload_folder+pictureName);
-					return dealDAO.add(bid, deal);
-				} catch (ClientProtocolException e) {
-					return false;
-				} catch (IOException e) {
-					return false;
-				}
-			return false;
-		}
-		
-		@Override
-        protected void onPostExecute(Boolean param) {
-            super.onPostExecute(param);
-			pDialog.dismiss();
-			if(param){
-				Toast.makeText(getApplicationContext(), "Your deal has been added, you will hear from us shortly.", Toast.LENGTH_LONG).show();
-				Log.d(LOG_TAG, "Deal successfully added, at "+DateTime.now(TimeZone.getDefault()));
-				Intent i = new Intent();
-				i.putExtra(Prices.PRICES_KEY, prices);
-				i.putExtra(Deals.DEALS_KEY, deal);
-				startActivity(i);
-				finish();
-			}else{
-				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
-			}
-		}
-		
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			pDialog.dismiss();
 		}
 	}
 	
@@ -305,13 +243,13 @@ public class AddDealActivity extends Activity {
 	}
 	
 	private void setPrices() {
-		checkRegular.setText(checkRegular.getText().toString() + " ("+prices.getRegular()+" credits)");
-		checkSpecial.setText(checkSpecial.getText().toString() + " ("+prices.getSpecial()+" credits)");
-		checkTopListing.setText(checkTopListing.getText().toString() + " ("+prices.getTopListing()+" credits)");
-		checkHomePageBanner.setText(checkHomePageBanner.getText().toString() + " ("+prices.getHomePageBanner()+" credits)");
-		checkCategoryBanner.setText(checkCategoryBanner.getText().toString() + " ("+prices.getCategoryBanner()+" credits)");
-		smsCount.setHint(smsCount.getHint().toString() + " ("+prices.getPushSMS()+" credits per sms)");
-		emailCount.setHint(emailCount.getHint().toString() + " ("+prices.getPushEMail()+" credits per email)");
+		checkRegular.setText(checkRegular.getText().toString() + " ("+prices.getRegular()+" credits/day)");
+		checkSpecial.setText(checkSpecial.getText().toString() + " ("+prices.getSpecial()+" credits/day)");
+		checkTopListing.setText(checkTopListing.getText().toString() + " ("+prices.getTopListing()+" credits/day)");
+		checkHomePageBanner.setText(checkHomePageBanner.getText().toString() + " ("+prices.getHomePageBanner()+" credits/day)");
+		checkCategoryBanner.setText(checkCategoryBanner.getText().toString() + " ("+prices.getCategoryBanner()+" credits/day)");
+		smsCount.setHint(smsCount.getHint().toString() + " ("+prices.getPushSMS()+" credits/sms)");
+		emailCount.setHint(emailCount.getHint().toString() + " ("+prices.getPushEMail()+" credits/email)");
 	}
 
 	public static void setFromToDateTime() {
@@ -337,8 +275,14 @@ public class AddDealActivity extends Activity {
 	  public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.aed_done:
-	    	if(setBeanFromUI())
-	    		new AddDealTask().execute();
+	    	if(setBeanFromUI()){
+	    		Intent i = new Intent(AddDealActivity.this, TransactionActivity.class);
+				i.putExtra(Prices.PRICES_KEY, prices);
+				i.putExtra(Deals.DEALS_KEY, deal);
+				i.putExtra(LoginDAO.TAG_USERID, bid);
+				startActivity(i);
+				finish();
+	    	}
 	    	break;
 	    case R.id.aed_cancel:
 	    	startActivity(getParentActivityIntent());
@@ -439,6 +383,7 @@ public class AddDealActivity extends Activity {
 	}
 
 	private boolean setBeanFromUI() {
+		deal.setStatus(Deals.STATUS_PENDING);
 		if(!title.getText().toString().isEmpty())
 			deal.setTitle(title.getText().toString());
 		else{makeToastForIncompleteForm();return false;}

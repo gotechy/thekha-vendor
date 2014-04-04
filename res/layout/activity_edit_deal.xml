@@ -105,11 +105,13 @@
 			<TextView android:id="@+id/label_aed_push_settings" style="@style/sectionHeader"
 				android:layout_width="match_parent" android:layout_height="wrap_content"
 				android:text="@string/label_push_settings" android:textAppearance="?android:attr/textAppearanceMedium" />
-
+			
 			<EditText android:id="@+id/editdeal_SMS"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:ems="10" android:hint="@string/label_push_settings_SMS"
 				android:inputType="number" />
+			<TextView android:id="@+id/editdeal_SMSmsg"
+				android:layout_width="match_parent" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" />
 
 			<EditText
 			    android:id="@+id/editdeal_email"
@@ -119,6 +121,8 @@
 			    android:hint="@string/label_push_settings_email"
 			    android:inputType="number"
 			    tools:ignore="TextFields" />
+			<TextView android:id="@+id/editdeal_emailmsg"
+				android:layout_width="match_parent" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall" />
 
 		</LinearLayout>
 	</LinearLayout>

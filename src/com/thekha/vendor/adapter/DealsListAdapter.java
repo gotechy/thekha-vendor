@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,14 +71,11 @@ public class DealsListAdapter extends BaseAdapter {
 			convertView = (View) layInf.inflate(R.layout.deals_item, parent, false);
 		}
 		
-		final TextView titleView = (TextView) convertView.findViewById(R.id.dv_deal_title);
-		titleView.setText( deal.getTitle() == null ? "":deal.getTitle());
-		
 		final TextView DescView = (TextView) convertView.findViewById(R.id.dv_deal_desc);
 		DescView.setText(deal.getDescription() == null ? "":deal.getDescription());
 		
-		final ImageButton EditImageView = (ImageButton) convertView.findViewById(R.id.dv_edit);
-		EditImageView.setOnClickListener( new OnClickListener() {
+		final ImageButton editImageView = (ImageButton) convertView.findViewById(R.id.dv_edit);
+		editImageView.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent editDeals = new Intent( mContext.getApplicationContext(), EditDealActivity.class);
@@ -85,6 +83,17 @@ public class DealsListAdapter extends BaseAdapter {
 				((DealsViewActivity) mContext).startActivityForResult(editDeals, DealsViewActivity.EDIT_DEAL_REQUEST);
 			}
 		});
+		
+		final TextView titleView = (TextView) convertView.findViewById(R.id.dv_deal_title);
+		if(deal.getStatus().equals(Deals.STATUS_PENDING)){
+			titleView.setTextColor(mContext.getResources().getColor(R.color.negative_transaction));
+		}else if(deal.getStatus().equals(Deals.STATUS_ACTIVE)){
+			titleView.setTextColor(mContext.getResources().getColor(R.color.positive_transaction));
+		}else if(deal.getStatus().equals(Deals.STATUS_COMPLETED)){
+			titleView.setTextColor(Color.parseColor("#999999"));
+			editImageView.setVisibility(View.INVISIBLE);
+		}
+		titleView.setText( deal.getTitle() == null ? "":deal.getTitle());
 		
 		return convertView;
 	}
