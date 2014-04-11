@@ -210,7 +210,7 @@ public class EditBusinessActivity extends Activity {
 				setBeanFromUI();
 				try {
 					//TODO - Un-Comment this code.
-					//UploadImage.upload(picturePath);
+					UploadImage.upload(picturePath);
 					business.setImageURL(UploadImage.upload_folder+pictureName);
 					return businessDAO.update(business);
 				} catch (ClientProtocolException e) {

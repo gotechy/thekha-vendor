@@ -17,9 +17,9 @@ import org.apache.http.params.CoreProtocolPNames;
 public class UploadImage {
 
 	// TODO - Update upload service path and upload_folder.
-	private static final String service = "http://www.xxx.xxxx.xxx/Projects/test/upload.php";
+	private static final String service = "http://www.gotechy.in/demo/thekha/upload.php";
 
-	public static final String upload_folder = "http://www.gotechy.in/wp-content/uploads/2013/08/";
+	public static final String upload_folder = "http://www.gotechy.in/demo/thekha/images/";
 
 	public static boolean upload(String filePath) throws ClientProtocolException, IOException {
 
@@ -33,7 +33,7 @@ public class UploadImage {
 		httppost.setEntity(mpEntity);
 		HttpResponse response = httpclient.execute(httppost);
 		httpclient.getConnectionManager().shutdown();
-		if(!(response.getStatusLine().toString()).equals("HTTP/1.1 200 OK")){
+		if((response.getStatusLine().toString()).equals("HTTP/1.1 200 OK")){
 			return true;
 		}else{
 			return false;
