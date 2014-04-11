@@ -4,6 +4,7 @@ import hirondelle.date4j.DateTime;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -16,7 +17,6 @@ import org.json.JSONTokener;
 
 import android.content.Context;
 
-import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.DealsPlacement;
 import com.thekha.vendor.util.ServiceHandler;
@@ -49,7 +49,7 @@ public class DealsDAO {
 	private static final String TAG_HOMEPAGEBANNER = "homePageBanner";
 	private static final String TAG_CATEGORYBANNER = "categoryBanner";
 
-	public Boolean add(String bid, Deals deal) throws ClientProtocolException, IOException {
+	public int add(String bid, Deals deal) throws ClientProtocolException, IOException, JSONException {
 		
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, bid));
@@ -79,16 +79,27 @@ public class DealsDAO {
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.CREATE_DEAL_SERVICE, ServiceHandler.POST, reqParams);
 		if (jsonResp.isEmpty()) {
-			return false;
+			return (Integer) null;
 		}
-		return true;
+		Integer n = null;
+		JSONTokener tokener = new JSONTokener(jsonResp);
+		JSONArray jsonArr = new JSONArray(tokener);
+		for(int i=0; i<jsonArr.length(); i++){
+			JSONObject jobj = jsonArr.getJSONObject(i);
+			Iterator itr = jobj.keys();
+			while(itr.hasNext()){
+				String str = (String) itr.next();
+				n = jobj.getInt(str);
+			}
+		}
+		return n;
 	}
 
 	public List<Deals> read(Context c, String uid) throws JSONException, ClientProtocolException, IOException{
 		/*
 		 * Read business profile from cache to get its deals, if data not in cache, invoke get profile service.
 		 */
-		
+		/*
 		BusinessDAO bdao = new BusinessDAO();
 		Business b;
 		try {
@@ -97,10 +108,10 @@ public class DealsDAO {
 			b = bdao.read(uid);
 		} catch (JSONException e) {
 			b = bdao.read(uid);
-		}
+		}*/
 		
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, String.valueOf(b.getId())));
+		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, uid));
 		
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.GET_DEALS_SERVICE, ServiceHandler.GET, reqParams);
@@ -164,7 +175,7 @@ public class DealsDAO {
 				jsonObj.getString(TAG_IMAGEURL),
 				new DateTime(jsonObj.getString(TAG_FROM)),
 				new DateTime(jsonObj.getString(TAG_TO)),
-				Deals.STATUS_ACTIVE, //TODO - change to jsonObj.getString(TAG_STATUS);
+				jsonObj.getString(TAG_STATUS),
 				dp,
 				Integer.parseInt(jsonObj.getString(TAG_SMSCOUNT)),
 				Integer.parseInt(jsonObj.getString(TAG_EMAILCOUNT))

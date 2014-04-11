@@ -32,6 +32,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,6 +83,7 @@ public class AddDealActivity extends Activity {
 		// For current model uid == bid unless app implemented for multiple business profiles.
 		
 		actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
         title = (EditText) findViewById(R.id.edit_aed_deal_title);
 		description = (EditText) findViewById(R.id.edit_aed_deal_description);
@@ -274,6 +277,16 @@ public class AddDealActivity extends Activity {
 	@Override
 	  public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
+	    case android.R.id.home:
+			Intent upIntent = NavUtils.getParentActivityIntent(this);
+			if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+				TaskStackBuilder.create(this)
+				.addNextIntentWithParentStack(upIntent)
+				.startActivities();
+			} else {
+				NavUtils.navigateUpTo(this, upIntent);
+			}
+			break;
 	    case R.id.aed_done:
 	    	if(setBeanFromUI()){
 	    		Intent i = new Intent(AddDealActivity.this, TransactionActivity.class);
@@ -284,9 +297,6 @@ public class AddDealActivity extends Activity {
 				finish();
 	    	}
 	    	break;
-	    case R.id.aed_cancel:
-	    	startActivity(getParentActivityIntent());
-	    	finish();
 	    default:
 	      break;
 	    }
@@ -418,18 +428,18 @@ public class AddDealActivity extends Activity {
 		if(!smsCount.getText().toString().isEmpty())
 			deal.setSMSCount(Integer.parseInt(smsCount.getText().toString()));
 		else
-			{makeToastForIncompleteForm();return false;}
+			{deal.setSMSCount(0);}
 		
 		if(!emailCount.getText().toString().isEmpty())
 			deal.setEmailCount(Integer.parseInt(emailCount.getText().toString()));
 		else
-			{makeToastForIncompleteForm();return false;}
+			{deal.setEmailCount(0);}
 
 		deal.getPlacement().setRegular(checkRegular.isChecked());
 		deal.getPlacement().setSpecial(checkSpecial.isChecked());
 		deal.getPlacement().setTopListing(checkTopListing.isChecked());
 		deal.getPlacement().setHomePageBanner(checkHomePageBanner.isChecked());
-		deal.getPlacement().setCategoryBanner(checkRegular.isChecked());
+		deal.getPlacement().setCategoryBanner(checkCategoryBanner.isChecked());
 		
 		return true;
 	}

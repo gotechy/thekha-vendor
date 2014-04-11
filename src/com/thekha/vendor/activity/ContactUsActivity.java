@@ -16,6 +16,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,9 +89,17 @@ public class ContactUsActivity extends Activity {
 	    	setBeanFromUI();
 			new ContactUsTask().execute(getIntent().getStringExtra(LoginDAO.TAG_USERID));
 			break;
-	    case R.id.contact_cancel:
-			setResult(RESULT_CANCELED);
+	    case android.R.id.home:
+			Intent upIntent = NavUtils.getParentActivityIntent(this);
+			if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+				TaskStackBuilder.create(this)
+				.addNextIntentWithParentStack(upIntent)
+				.startActivities();
+			} else {
+				NavUtils.navigateUpTo(this, upIntent);
+			}
 			finish();
+			break;
 		default:
 			break;
 	    }

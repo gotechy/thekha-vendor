@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -14,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 
 import android.content.Context;
 
@@ -30,6 +32,7 @@ public class LoginDAO {
 
 	// JSON Node names - response
 	public static final String TAG_USERID = "id";
+	public static final String INVLAID_UNAME_PASSWD = "Invalid Username or Password, please try again...";
 	//private static final String TAG_CREATEDBY = "created_by";
 	//private static final String TAG_UPDATEDBY = "updated_by";
 	//private static final String TAG_CREATEDDATE = "created_date";
@@ -44,6 +47,9 @@ public class LoginDAO {
 		reqParams.add(new BasicNameValuePair(TAG_PASSWORD, password));
 		
 		String jsonResp = sh.makeServiceCall(ServiceHandler.LOGIN_SERVICE, ServiceHandler.POST, reqParams);
+		if(jsonResp.isEmpty()){
+			return null;
+		}
 		
 		cache(c, jsonResp);
 		
@@ -52,10 +58,21 @@ public class LoginDAO {
 	}
 	
 	private String parseJSON(String json) throws JSONException{
+		int n;
 		JSONTokener tokener = new JSONTokener(json);
 		JSONArray jsonArr = new JSONArray(tokener);
-		JSONObject jsonObj = jsonArr.getJSONObject(0);
-		return jsonObj.getString(TAG_USERID);
+		for(int i=0; i<jsonArr.length(); i++){
+			JSONObject jobj = jsonArr.getJSONObject(i);
+			Iterator itr = jobj.keys();
+			while(itr.hasNext()){
+				String str = (String) itr.next();
+				n = jobj.getInt(str);
+				if(n!=0){
+					return jobj.getString(str);
+				}
+			}
+		}
+		return null;
 	}
 	
 	public void cache(Context c, String str) throws IOException{

@@ -163,7 +163,7 @@ public class TransactionsViewActivity extends Activity {
 				// navigate up to the logical parent activity.
 				NavUtils.navigateUpTo(this, upIntent);
 			}
-			return true;
+			break;
 		}
 		return true;
 	}

@@ -33,6 +33,8 @@ public class LoginActivity extends Activity {
 	private ProgressDialog pDialog;
 
 	private String username , password;
+	
+	private String  failureReason="";
 
 	LoginDAO ldao = new LoginDAO();
 
@@ -106,8 +108,8 @@ public class LoginActivity extends Activity {
 				try {
 					return ldao.login(getApplicationContext(), params[0], params[1]);
 				} catch (JSONException e) {
-					Toast.makeText(getApplicationContext(), "Something is very wrong, please contact our support services.", Toast.LENGTH_SHORT).show();
 					Log.d(LOG_TAG, "Cannot parse login service JSON response.");
+					failureReason = "Something is very wrong, please contact our support services.";
 					return null;
 				} catch (IOException e) {
 					Log.d(LOG_TAG, "Cannot cache login details.");
@@ -122,14 +124,19 @@ public class LoginActivity extends Activity {
 		protected void onPostExecute(String uid) {
 			super.onPostExecute(uid);
 			pDialog.dismiss();
-			if(uid != null){
-				Log.d(LOG_TAG, "Logged In with UserID "+uid+", at "+DateTime.now(TimeZone.getDefault()));
-				startDashboardActivity(uid);	
+			if (failureReason.isEmpty()){
+				if(uid != null){
+					Log.d(LOG_TAG, "Logged In with UserID "+uid+", at "+DateTime.now(TimeZone.getDefault()));
+					startDashboardActivity(uid);	
+				}
+				else{
+					Toast.makeText(getApplicationContext(), "Invalid Username or Password, please try again...", Toast.LENGTH_SHORT).show();
+					cancel(true);
+				}
 			}
-			else{
-				Toast.makeText(getApplicationContext(), "Could not login now, please try again later. If problem persists, please contact our support services.", Toast.LENGTH_SHORT).show();
-				cancel(true);
-			}
+			else 
+				Toast.makeText(getApplicationContext(), failureReason, Toast.LENGTH_LONG).show();
+			
 		}
 		
 		@Override

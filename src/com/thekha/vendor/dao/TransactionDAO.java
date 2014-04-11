@@ -40,10 +40,11 @@ public class TransactionDAO {
 		return transactions;
 	}
 
-	public Boolean add(String dealID, Transaction t) throws ClientProtocolException, IOException {
+	public Boolean add(String dealID, String vendorID,Transaction t) throws ClientProtocolException, IOException {
 
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(DealsDAO.TAG_DEALID, dealID));
+		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, vendorID));
 
 		reqParams.add(new BasicNameValuePair(TAG_TITLE, t.getTitle()));
 		reqParams.add(new BasicNameValuePair(TAG_AMOUNT, String.valueOf(t.getAmount())));

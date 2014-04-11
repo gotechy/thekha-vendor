@@ -98,16 +98,6 @@ public class BusinessActivity extends Activity {
 		super.onStart();
 	}
 
-	private void cacheData(){
-		try {
-			businessDAO.cache(getApplicationContext());
-		} catch (NullPointerException e) {
-			Log.d(LOG_TAG, "No business object to cache.");
-		} catch (IOException e) {
-			Log.d(LOG_TAG, "Cannot cache business details.");
-		}
-	}
-
 	private void setUIFromBean(){
 		name.setText(business.getName());
 		type.setText(business.getType());
@@ -148,66 +138,6 @@ public class BusinessActivity extends Activity {
 		}
 	}
 
-	class DownloadFileFromURL extends AsyncTask<String, String, String> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn in on and then try again.", Toast.LENGTH_SHORT).show();
-				cancel(true);
-			}
-			pDialog = new ProgressDialog(BusinessActivity.this);
-			pDialog.setMessage("Looking for your cover image..");
-			pDialog.setCancelable(false);
-			pDialog.show();
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			int count;
-			try {
-				URL url = new URL(params[0]);
-				URLConnection conection = url.openConnection();
-				conection.connect();
-				int lenghtOfFile = conection.getContentLength();
-				InputStream input = new BufferedInputStream(url.openStream(), 8192);
-				OutputStream output = new FileOutputStream(getApplicationContext().getExternalFilesDir(null)+File.separator+params[1]);
-				byte data[] = new byte[1024];
-				long total = 0;
-				while ((count = input.read(data)) != -1) {
-					total += count;
-					publishProgress("Downloading your cover image, "+(int)((total*100)/lenghtOfFile)+"% done.");
-					output.write(data, 0, count);
-				}
-				output.flush();
-				output.close();
-				input.close();
-			} catch (Exception e) {
-				Log.d(LOG_TAG, e.getMessage());
-				publishProgress("dwf");
-				pDialog.dismiss();
-				cancel(true);
-			}
-			return getApplicationContext().getExternalFilesDir(null)+File.separator+params[1];
-		}
-
-		protected void onProgressUpdate(String... progress) {
-			Log.d("progress update", progress[0]);
-			if(progress[0].equals("dwf"))
-				Toast.makeText(getApplicationContext(), "Cannot find your cover image.", Toast.LENGTH_LONG).show();
-			else
-				pDialog.setMessage(progress[0]);
-		}
-
-		@Override
-		protected void onPostExecute(String img_path) {
-			pDialog.dismiss();
-			picture.setImageURI(Uri.parse(img_path));
-		}
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -234,7 +164,7 @@ public class BusinessActivity extends Activity {
 				// navigate up to the logical parent activity.
 				NavUtils.navigateUpTo(this, upIntent);
 			}
-			return true;
+			break;
 		case R.id.business_edit:
 			Intent editBusiness = new Intent(getApplicationContext(), EditBusinessActivity.class);
 			editBusiness.putExtra(Business.BUSINESS_KEY, business);
@@ -255,7 +185,6 @@ public class BusinessActivity extends Activity {
 			if(resultCode == RESULT_OK) {
 				business = (Business) data.getSerializableExtra(Business.BUSINESS_KEY);
 				setUIFromBean();
-				cacheData();
 			}
 			if(resultCode == RESULT_CANCELED){
 				setUIFromBean();
@@ -307,8 +236,6 @@ public class BusinessActivity extends Activity {
 			if(business!=null){
 				setUIFromBean();
 				Log.d(LOG_TAG, param);
-				cacheData();
-				Log.d(LOG_TAG, "Business profile cached.");
 			}else{
 				Log.d(LOG_TAG, param);
 				Toast.makeText(getApplicationContext(), param, Toast.LENGTH_SHORT).show();
@@ -321,6 +248,69 @@ public class BusinessActivity extends Activity {
 		protected void onCancelled() {
 			super.onCancelled();
 			pDialog.dismiss();
+		}
+	}
+	
+	class DownloadFileFromURL extends AsyncTask<String, String, String> {
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn in on and then try again.", Toast.LENGTH_SHORT).show();
+				cancel(true);
+			}
+			pDialog = new ProgressDialog(BusinessActivity.this);
+			pDialog.setMessage("Looking for your cover image..");
+			pDialog.setCancelable(false);
+			pDialog.show();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			int count;
+			try {
+				URL url = new URL(params[0]);
+				URLConnection conection = url.openConnection();
+				conection.connect();
+				int lenghtOfFile = conection.getContentLength();
+				InputStream input = new BufferedInputStream(url.openStream(), 8192);
+				OutputStream output = new FileOutputStream(getApplicationContext().getExternalFilesDir(null)+File.separator+params[1]);
+				byte data[] = new byte[1024];
+				long total = 0;
+				while ((count = input.read(data)) != -1) {
+					total += count;
+					publishProgress("Downloading your cover image, "+(int)((total*100)/lenghtOfFile)+"% done.");
+					output.write(data, 0, count);
+				}
+				output.flush();
+				output.close();
+				input.close();
+			} catch (Exception e) {
+				Log.d(LOG_TAG, e.getMessage());
+				publishProgress("dwf");
+				pDialog.dismiss();
+				cancel(true);
+			}
+			return getApplicationContext().getExternalFilesDir(null)+File.separator+params[1];
+		}
+
+		protected void onProgressUpdate(String... progress) {
+			if(progress[0].equals("dwf")){
+				Toast.makeText(getApplicationContext(), "Cannot find your cover image.", Toast.LENGTH_LONG).show();
+				Log.d(LOG_TAG, "Cannot find business profile cover image.");
+			}else{
+				pDialog.setMessage(progress[0]);
+				Log.d(LOG_TAG, progress[0]);
+			}
+				
+		}
+
+		@Override
+		protected void onPostExecute(String img_path) {
+			pDialog.dismiss();
+			picture.setImageURI(Uri.parse(img_path));
 		}
 	}
 }

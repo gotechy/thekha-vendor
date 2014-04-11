@@ -14,10 +14,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.thekha.vendor.activity.DealsViewActivity;
 import com.thekha.vendor.activity.EditDealActivity;
 import com.thekha.vendor.activity.R;
 import com.thekha.vendor.bean.Deals;
+import com.thekha.vendor.dao.LoginDAO;
 
 public class DealsListAdapter extends BaseAdapter {
 
@@ -25,15 +25,18 @@ public class DealsListAdapter extends BaseAdapter {
 	private List<Deals> dealsList; 
 	
 	private final Context mContext;
+	private final String uid;
 	
-	public DealsListAdapter(Context context) {
+	public DealsListAdapter(Context context, String id) {
 		mContext = context;
 		dealsList = new ArrayList<Deals>();
+		uid = id;
 	}
 
-	public DealsListAdapter(Context context, List<Deals> deals) {
+	public DealsListAdapter(Context context, String id, List<Deals> deals) {
 		mContext = context;
 		dealsList = deals;
+		uid = id;
 	}
 
 	public void add(Deals item) {
@@ -75,25 +78,41 @@ public class DealsListAdapter extends BaseAdapter {
 		DescView.setText(deal.getDescription() == null ? "":deal.getDescription());
 		
 		final ImageButton editImageView = (ImageButton) convertView.findViewById(R.id.dv_edit);
-		editImageView.setOnClickListener( new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent editDeals = new Intent( mContext.getApplicationContext(), EditDealActivity.class);
-				editDeals.putExtra(Deals.DEALS_KEY, deal);
-				((DealsViewActivity) mContext).startActivityForResult(editDeals, DealsViewActivity.EDIT_DEAL_REQUEST);
-			}
-		});
-		
 		final TextView titleView = (TextView) convertView.findViewById(R.id.dv_deal_title);
 		if(deal.getStatus().equals(Deals.STATUS_PENDING)){
 			titleView.setTextColor(mContext.getResources().getColor(R.color.negative_transaction));
-		}else if(deal.getStatus().equals(Deals.STATUS_ACTIVE)){
+			titleView.setText(deal.getTitle()+" ("+deal.getStatus()+")");		// deal.getTitle() == null ? "":deal.getTitle()
+			editImageView.setOnClickListener( new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent editDeals = new Intent( mContext.getApplicationContext(), EditDealActivity.class);
+					editDeals.putExtra(Deals.DEALS_KEY, deal);
+					editDeals.putExtra(LoginDAO.TAG_USERID, uid);
+					mContext.startActivity(editDeals);
+					//((DealsViewActivity) mContext).finish();
+					//((DealsViewActivity) mContext).startActivityForResult(editDeals, DealsViewActivity.EDIT_DEAL_REQUEST);
+				}
+			});
+		}
+		if(deal.getStatus().equals(Deals.STATUS_ACTIVE)){
 			titleView.setTextColor(mContext.getResources().getColor(R.color.positive_transaction));
-		}else if(deal.getStatus().equals(Deals.STATUS_COMPLETED)){
+			titleView.setText(deal.getTitle()+" ("+deal.getStatus()+")");
+			editImageView.setOnClickListener( new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent editDeals = new Intent( mContext.getApplicationContext(), EditDealActivity.class);
+					editDeals.putExtra(Deals.DEALS_KEY, deal);
+					editDeals.putExtra(LoginDAO.TAG_USERID, uid);
+					mContext.startActivity(editDeals);
+					//((DealsViewActivity) mContext).finish();
+				}
+			});
+		}
+		if(deal.getStatus().equals(Deals.STATUS_COMPLETED)){
 			titleView.setTextColor(Color.parseColor("#999999"));
+			titleView.setText(deal.getTitle()+" ("+deal.getStatus()+")");
 			editImageView.setVisibility(View.INVISIBLE);
 		}
-		titleView.setText( deal.getTitle() == null ? "":deal.getTitle());
 		
 		return convertView;
 	}
@@ -103,7 +122,6 @@ public class DealsListAdapter extends BaseAdapter {
 			dealsList.set(dealsList.indexOf(item), item);
 			notifyDataSetChanged();
 		}
-		
 	}
 	
 }

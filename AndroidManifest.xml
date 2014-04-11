@@ -48,9 +48,16 @@
 
 		<activity android:name="com.thekha.vendor.activity.AddDealActivity"
 			android:label="@string/title_deals_details"
-			android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" />
+			android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" >
+			<meta-data android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.thekha.vendor.activity.DashboardActivity" />
+		</activity>
 		<activity android:name="com.thekha.vendor.activity.EditDealActivity"
-			android:label="@string/title_deals_details" />
+			android:label="@string/title_deals_details"
+			android:parentActivityName="com.thekha.vendor.activity.DealsViewActivity" >
+			<meta-data android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.thekha.vendor.activity.DealsViewActivity" />
+		</activity>
 		<activity android:name="com.thekha.vendor.activity.DealsViewActivity"
 			android:label="@string/title_deals_view" android:parentActivityName="com.thekha.vendor.activity.DashboardActivity">
 			<meta-data android:name="android.support.PARENT_ACTIVITY"

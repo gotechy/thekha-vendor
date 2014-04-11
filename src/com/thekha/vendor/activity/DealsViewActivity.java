@@ -41,8 +41,6 @@ public class DealsViewActivity extends Activity {
 	private ListView lv;
 	
 	List<Deals> deals;
-	public static final int ADD_DEAL_REQUEST = 0;
-	public static final int EDIT_DEAL_REQUEST = 1;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,17 +57,6 @@ public class DealsViewActivity extends Activity {
 
         new DealsTask().execute();
 	}	
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		 super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == ADD_DEAL_REQUEST && resultCode == RESULT_OK){
-	    	dealsAdapter.add((Deals) data.getSerializableExtra(Deals.DEALS_KEY));
-	    }
-	    if (requestCode == EDIT_DEAL_REQUEST && resultCode == RESULT_OK){
-	    	dealsAdapter.update((Deals) data.getSerializableExtra(Deals.DEALS_KEY));
-	    }
-	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,7 +89,7 @@ public class DealsViewActivity extends Activity {
 	    	// - Save the data and take back to profile.
 	    	Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
     		i.putExtra(LoginDAO.TAG_USERID, uid);
-    		startActivityForResult(i, ADD_DEAL_REQUEST);
+    		startActivity(i);
     		break;
 	    default:
 	      break;
@@ -152,7 +139,7 @@ public class DealsViewActivity extends Activity {
             super.onPostExecute(param);
 			pDialog.dismiss(); 
 			if(deals != null){
-				dealsAdapter = new DealsListAdapter(DealsViewActivity.this, deals);
+				dealsAdapter = new DealsListAdapter(DealsViewActivity.this, uid, deals);
 				lv.setAdapter(dealsAdapter);
 	            Log.d(LOG_TAG, param);
 	            //TODO - implement caching for deals

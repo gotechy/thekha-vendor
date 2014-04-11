@@ -1,9 +1,5 @@
 package com.thekha.vendor.dao;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.content.Context;
-
 import com.thekha.vendor.bean.Address;
 import com.thekha.vendor.bean.Business;
 import com.thekha.vendor.bean.Facilities;
@@ -26,7 +20,7 @@ import com.thekha.vendor.util.ServiceHandler;
 public class BusinessDAO {
 	Business b;
 	String jsonResp;
-	private final String cacheFileName = "business";
+	//private final String cacheFileName = "business";
 		
 	// ID tags
 	public static final String TAG_BID = "business_id";
@@ -39,7 +33,7 @@ public class BusinessDAO {
 	private static final String TAG_IMAGEURL = "imageURL";
 	private static final String TAG_PHONE1 = "phone1";
 	private static final String TAG_PHONE2 = "phone2";
-	private static final String TAG_EMAIL = "business_email";
+	private static final String TAG_EMAIL = "email";
 	private static final String TAG_WEBSITE = "website";
 	private static final String TAG_FACEBOOK = "facebook";
 	
@@ -108,7 +102,7 @@ public class BusinessDAO {
 		return false;
 	}
 	
-	public void cache(Context c) throws IOException, NullPointerException{
+	/*public void cache(Context c) throws IOException, NullPointerException{
 		File cacheFile = new File(c.getCacheDir()+File.separator+cacheFileName);
 
 		if(jsonResp != null){
@@ -130,7 +124,7 @@ public class BusinessDAO {
 		fr.close();
 		inflateBusinessObject();
 		return b;
-	}
+	}*/
 	
 	private void inflateBusinessObject() throws JSONException{
 		JSONTokener tokener = new JSONTokener(jsonResp);
