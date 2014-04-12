@@ -19,7 +19,7 @@ public class UploadImage {
 	// TODO - Update upload service path and upload_folder.
 	private static final String service = "http://www.gotechy.in/demo/thekha/upload.php";
 
-	public static final String upload_folder = "http://www.gotechy.in/demo/thekha/images/";
+	public static final String upload_folder = "http://www.gotechy.in/demo/thekha/images";
 
 	public static boolean upload(String filePath) throws ClientProtocolException, IOException {
 

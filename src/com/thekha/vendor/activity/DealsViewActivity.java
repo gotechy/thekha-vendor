@@ -56,7 +56,13 @@ public class DealsViewActivity extends Activity {
         lv = (ListView) findViewById(R.id.editdeals_listView);
 
         new DealsTask().execute();
-	}	
+	}
+	
+	@Override
+	protected void onRestart() {
+		new DealsTask().execute();
+		super.onRestart();
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,6 +96,7 @@ public class DealsViewActivity extends Activity {
 	    	Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
     		i.putExtra(LoginDAO.TAG_USERID, uid);
     		startActivity(i);
+    		finish();
     		break;
 	    default:
 	      break;

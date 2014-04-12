@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.thekha.vendor.activity.DealsViewActivity;
 import com.thekha.vendor.activity.EditDealActivity;
 import com.thekha.vendor.activity.R;
 import com.thekha.vendor.bean.Deals;
@@ -89,7 +90,7 @@ public class DealsListAdapter extends BaseAdapter {
 					editDeals.putExtra(Deals.DEALS_KEY, deal);
 					editDeals.putExtra(LoginDAO.TAG_USERID, uid);
 					mContext.startActivity(editDeals);
-					//((DealsViewActivity) mContext).finish();
+					((DealsViewActivity) mContext).finish();
 					//((DealsViewActivity) mContext).startActivityForResult(editDeals, DealsViewActivity.EDIT_DEAL_REQUEST);
 				}
 			});
@@ -104,7 +105,7 @@ public class DealsListAdapter extends BaseAdapter {
 					editDeals.putExtra(Deals.DEALS_KEY, deal);
 					editDeals.putExtra(LoginDAO.TAG_USERID, uid);
 					mContext.startActivity(editDeals);
-					//((DealsViewActivity) mContext).finish();
+					((DealsViewActivity) mContext).finish();
 				}
 			});
 		}

@@ -1,6 +1,13 @@
 package com.thekha.vendor.activity;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -12,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -93,7 +101,6 @@ public class EditDealActivity extends Activity {
 		});*/
 
 		setUIFromBean();
-		new GetPriceTask().execute();
 	}
 
 	/*
@@ -211,9 +218,7 @@ public class EditDealActivity extends Activity {
 		title.setText(oldDealObj.getTitle());
 		description.setText(oldDealObj.getDescription());
 		code.setText(oldDealObj.getCode());
-		//TODO - image in edit deals
-		//deal.getImageURL(imageURL);
-
+		
 		from.setText(oldDealObj.getFrom().toString());
 		to.setText(oldDealObj.getTo().toString());
 
@@ -248,7 +253,83 @@ public class EditDealActivity extends Activity {
 
 		smsMsg.setText("You have "+Integer.toString(oldDealObj.getSMSCount())+" SMS(s), only enter extra SMS(s) you want to buy.");
 		emailMsg.setText("You have "+Integer.toString(oldDealObj.getEmailCount())+" E-Mail(s), only enter extra E-Mail(s) you want to buy.");
+		
+		String url = oldDealObj.getImageURL();
+		if(!url.isEmpty()){
+			String imageFileName = url.substring(url.lastIndexOf(File.separator)+1);
+			File imageFile = new File(getApplicationContext().getExternalFilesDir(null)+File.separator+imageFileName);
+			if(imageFile.exists()){
+				picture.setImageURI(Uri.parse(getApplicationContext().getExternalFilesDir(null)+File.separator+imageFileName));
+				new GetPriceTask().execute();
+			}else{
+				new DownloadFileFromURL().execute(url, imageFileName);
+			}
+		}
 
+	}
+	
+	class DownloadFileFromURL extends AsyncTask<String, String, String> {
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn in on and then try again.", Toast.LENGTH_SHORT).show();
+				cancel(true);
+			}
+			pDialog = new ProgressDialog(EditDealActivity.this);
+			pDialog.setMessage("Looking for your cover image..");
+			pDialog.setCancelable(false);
+			pDialog.show();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			int count;
+			try {
+				URL url = new URL(params[0]);
+				URLConnection conection = url.openConnection();
+				conection.connect();
+				int lenghtOfFile = conection.getContentLength();
+				InputStream input = new BufferedInputStream(url.openStream(), 8192);
+				OutputStream output = new FileOutputStream(getApplicationContext().getExternalFilesDir(null)+File.separator+params[1]);
+				byte data[] = new byte[1024];
+				long total = 0;
+				while ((count = input.read(data)) != -1) {
+					total += count;
+					publishProgress("Downloading your cover image, "+(int)((total*100)/lenghtOfFile)+"% done.");
+					output.write(data, 0, count);
+				}
+				output.flush();
+				output.close();
+				input.close();
+			} catch (Exception e) {
+				Log.d(LOG_TAG, e.getMessage());
+				publishProgress("dwf");
+				pDialog.dismiss();
+				cancel(true);
+			}
+			return getApplicationContext().getExternalFilesDir(null)+File.separator+params[1];
+		}
+
+		protected void onProgressUpdate(String... progress) {
+			if(progress[0].equals("dwf")){
+				Toast.makeText(getApplicationContext(), "Cannot find your cover image.", Toast.LENGTH_LONG).show();
+				Log.d(LOG_TAG, "Cannot find business profile cover image.");
+			}else{
+				pDialog.setMessage(progress[0]);
+				Log.d(LOG_TAG, progress[0]);
+			}
+				
+		}
+
+		@Override
+		protected void onPostExecute(String img_path) {
+			pDialog.dismiss();
+			picture.setImageURI(Uri.parse(img_path));
+			new GetPriceTask().execute();
+		}
 	}
 
 	private class GetPriceTask  extends AsyncTask<Void, Void, String> {

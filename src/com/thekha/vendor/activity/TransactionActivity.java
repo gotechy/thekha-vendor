@@ -2,7 +2,12 @@ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +39,7 @@ import com.thekha.vendor.bean.Transaction;
 import com.thekha.vendor.dao.DealsDAO;
 import com.thekha.vendor.dao.LoginDAO;
 import com.thekha.vendor.dao.TransactionDAO;
+import com.thekha.vendor.util.UploadImage;
 
 public class TransactionActivity extends Activity {
 
@@ -49,7 +55,7 @@ public class TransactionActivity extends Activity {
 	private Prices prices;
 	private int total, days;
 	private DealsDAO dealDAO = new DealsDAO();
-	String bid;
+	String bid, picturePath, pictureName;
 	List<Transaction> transactions = new ArrayList<Transaction>();
 	private boolean transactionReady = false;
 
@@ -339,11 +345,30 @@ public class TransactionActivity extends Activity {
 			if(!isCancelled()){
 				try {
 					if(nDeal == null){
+						picturePath = deal.getImageURL();
+						File afile =new File(picturePath);
+						pictureName = "dealImg_"
+								+bid+"_"+DateTime.today(TimeZone.getDefault())
+								+picturePath.substring(picturePath.lastIndexOf("."));
+						//+"."+picturePath.substring(picturePath.lastIndexOf(".")+1);
+						picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;
+						File bfile =new File(picturePath);
+						InputStream inStream;
+						inStream = new FileInputStream(afile);
+						OutputStream outStream = new FileOutputStream(bfile);
+						byte[] buffer = new byte[1024];
+						int length;
+						while ((length = inStream.read(buffer)) > 0){
+							outStream.write(buffer, 0, length);
+						}
+						inStream.close();
+						outStream.close();
+						deal.setImageURL(UploadImage.upload_folder+File.separator+pictureName);
+						
 						deal.setStatus(Deals.STATUS_PENDING);
 						Integer dealid = dealDAO.add(bid, deal);
 						if(dealid != null){
-							//TODO - Un-Comment this code.
-							//UploadImage.upload(picturePath);
+							UploadImage.upload(picturePath);
 							return transactionDAO.add(String.valueOf(dealid), bid, transaction);
 						}
 					}else{

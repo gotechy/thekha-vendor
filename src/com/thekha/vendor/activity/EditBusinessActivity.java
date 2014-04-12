@@ -4,7 +4,6 @@ import hirondelle.date4j.DateTime;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -138,28 +137,9 @@ public class EditBusinessActivity extends Activity {
 
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 			picturePath = cursor.getString(columnIndex);
-			pictureName = picturePath.substring(picturePath.lastIndexOf(File.separator)+1);
+			picture.setImageBitmap(BitmapFactory.decodeFile(picturePath));			
+			//pictureName = picturePath.substring(picturePath.lastIndexOf(File.separator)+1);
 			cursor.close();
-			try {
-				File afile =new File(picturePath);
-				picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;
-				File bfile =new File(picturePath);
-				InputStream inStream = new FileInputStream(afile);
-
-				OutputStream outStream = new FileOutputStream(bfile);
-				byte[] buffer = new byte[1024];
-				int length;
-				while ((length = inStream.read(buffer)) > 0){
-					outStream.write(buffer, 0, length);
-				}
-				inStream.close();
-				outStream.close();
-				picture.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-			} catch (FileNotFoundException e) {
-				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
-			} catch (IOException e) {
-				Toast.makeText(getApplicationContext(), "Cannot find selected cover image.", Toast.LENGTH_SHORT).show();
-			}
 		}
 	}
 	
@@ -209,9 +189,30 @@ public class EditBusinessActivity extends Activity {
 			if(!isCancelled()){
 				setBeanFromUI();
 				try {
-					//TODO - Un-Comment this code.
+					// upload image then update business object.
+					if(picturePath!=null){
+						File afile =new File(picturePath);
+						pictureName = "businessImg_"
+								+business.getId()+"_"+DateTime.today(TimeZone.getDefault())
+								+picturePath.substring(picturePath.lastIndexOf("."));
+						//+"."+picturePath.substring(picturePath.lastIndexOf(".")+1);
+						picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;
+						File bfile =new File(picturePath);
+						InputStream inStream;
+						inStream = new FileInputStream(afile);
+						OutputStream outStream = new FileOutputStream(bfile);
+						byte[] buffer = new byte[1024];
+						int length;
+						while ((length = inStream.read(buffer)) > 0){
+							outStream.write(buffer, 0, length);
+						}
+						inStream.close();
+						outStream.close();
+					}
+					
+					
 					UploadImage.upload(picturePath);
-					business.setImageURL(UploadImage.upload_folder+pictureName);
+					business.setImageURL(UploadImage.upload_folder+File.separator+pictureName);
 					return businessDAO.update(business);
 				} catch (ClientProtocolException e) {
 					return false;
@@ -230,6 +231,7 @@ public class EditBusinessActivity extends Activity {
 			if(param){
 				Toast.makeText(getApplicationContext(), "Your business profile has been updated.", Toast.LENGTH_LONG).show();
 				Log.d(LOG_TAG, "Business profile successfully updated, at "+DateTime.now(TimeZone.getDefault()));
+				
 				Intent data = new Intent();
 				data.putExtra(Business.BUSINESS_KEY, business);
 				setResult(RESULT_OK,data);
