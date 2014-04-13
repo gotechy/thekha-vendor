@@ -21,6 +21,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -68,7 +70,7 @@ public class TransactionActivity extends Activity {
 
 
 		actionBar = getActionBar();
-		actionBar.setHomeButtonEnabled(false);
+		actionBar.setHomeButtonEnabled(true);
 
 		regular = (TextView) findViewById(R.id.payment_regular);
 		regular_qty = (TextView) findViewById(R.id.payment_regular_qty);
@@ -193,7 +195,7 @@ public class TransactionActivity extends Activity {
 	 */
 	private void setUpUIEditDeal(){
 		String qty, cost, daysstr;
-		days = nDeal.getFrom().numDaysFrom(nDeal.getTo());
+		days = nDeal.getFrom().numDaysFrom(nDeal.getTo())+1;
 		daysstr = String.valueOf(days);
 
 		total = 0;		
@@ -322,10 +324,21 @@ public class TransactionActivity extends Activity {
 	}
 
 	private class TransactionTask  extends AsyncTask<Void, Void, Boolean> {
+		
+		int prevOrientation;
 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			//Lork orientation change
+			prevOrientation = getRequestedOrientation();
+			if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			} else {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+			}
 			// Showing progress dialog
 			pDialog = new ProgressDialog(TransactionActivity.this);
 			pDialog.setMessage("Please wait...");
@@ -402,12 +415,14 @@ public class TransactionActivity extends Activity {
 			}else{
 				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
 			}
+			setRequestedOrientation(prevOrientation);
 		}
 
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			pDialog.dismiss();
+			setRequestedOrientation(prevOrientation);
 		}
 	}
 

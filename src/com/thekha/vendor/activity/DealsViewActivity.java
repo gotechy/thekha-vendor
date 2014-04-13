@@ -11,6 +11,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -106,9 +108,20 @@ public class DealsViewActivity extends Activity {
 
 	private class DealsTask  extends AsyncTask<Void, Void, String> {
 		
+		int prevOrientation;
+		
 		@Override
         protected void onPreExecute() {
 			super.onPreExecute();
+			//Lork orientation change
+			prevOrientation = getRequestedOrientation();
+			if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			} else {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+			}
 			// Showing progress dialog
 			pDialog = new ProgressDialog(DealsViewActivity.this);
 			pDialog.setMessage("Please wait...");
@@ -144,7 +157,7 @@ public class DealsViewActivity extends Activity {
 		@Override
         protected void onPostExecute(String param) {
             super.onPostExecute(param);
-			pDialog.dismiss(); 
+			pDialog.dismiss();
 			if(deals != null){
 				dealsAdapter = new DealsListAdapter(DealsViewActivity.this, uid, deals);
 				lv.setAdapter(dealsAdapter);
@@ -157,13 +170,15 @@ public class DealsViewActivity extends Activity {
 				Toast.makeText(getApplicationContext(), param, Toast.LENGTH_SHORT).show();
 				startActivity(new Intent(DealsViewActivity.this, DashboardActivity.class));
             	finish();
-			}           
+			}
+			setRequestedOrientation(prevOrientation);
 		}
 		
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			pDialog.dismiss();
+			setRequestedOrientation(prevOrientation);
 		}
 	}
 	

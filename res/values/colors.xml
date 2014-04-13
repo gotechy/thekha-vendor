@@ -10,4 +10,5 @@
     <color name="negative_transaction">#D73B3E</color>
     <color name="positive_transaction">#85BB65</color>
     <color name="brand_color">#0096DC</color>
+    <color name="drawer_text_color">#0000A0</color>
 </resources>

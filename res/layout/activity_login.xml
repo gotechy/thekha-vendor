@@ -5,83 +5,83 @@
     android:layout_centerInParent="true"
     android:layout_gravity="center"
     android:background="@drawable/login_activity_background" >
-    
-        <TextView
-            android:id="@+id/brand_mantra"
-            android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_gravity="center"
-        	android:layout_centerInParent="true"
-        	android:text="@string/brand_mantra"
-        	android:textAppearance="?android:attr/textAppearanceMedium" />
-        
-        <ImageView
-            android:id="@+id/login_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-        	android:layout_centerInParent="true"
-        	android:layout_above="@id/brand_mantra"
-            android:contentDescription="@string/login_logo"
-            android:src="@drawable/logo2" />
-        
-        <LinearLayout
-            android:id="@+id/login_form"
+
+    <TextView
+        android:id="@+id/brand_mantra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:text="@string/brand_mantra"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/brand_mantra"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:contentDescription="@string/login_logo"
+        android:src="@drawable/logo2" />
+
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/brand_mantra"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <EditText
+            android:id="@+id/login_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-        	android:layout_centerInParent="true"
-        	android:layout_below="@id/brand_mantra"
-        	android:layout_marginTop="10dp"
-        	android:padding="10dp"
-        	android:orientation="vertical" >
-            
-            <EditText
-                android:id="@+id/login_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="username"
-                android:ems="10"
-                android:inputType="text" />
-            
-            <EditText
-                android:id="@+id/login_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="password"
-                android:ems="10"
-                android:inputType="textPassword" />
-            
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:ems="10" />
-        </LinearLayout>
-        
-        <TextView
-            android:id="@+id/login_support"
-            android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center"
-        	android:padding="10dp"
-        	android:layout_centerInParent="true"
-        	android:layout_below="@id/login_form"
-        	android:text="@string/supprt_info"
-        	android:textColor="@android:color/white"
-        	android:textAppearance="?android:attr/textAppearanceSmall" />
-        
-        <TextView
-            android:id="@+id/login_website"
-            android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center"
-        	android:padding="10dp"
-        	android:layout_centerInParent="true"
-        	android:text="@string/website_address"
-        	android:textColor="@android:color/white"
-        	android:layout_below="@id/login_support"
-        	android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:ems="10"
+            android:hint="username"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/login_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="password"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="Login" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/login_support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_form"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/supprt_info"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/login_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_support"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/website_address"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

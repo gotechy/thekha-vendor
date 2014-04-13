@@ -67,13 +67,34 @@ public class ContactUsActivity extends Activity {
 		
 	}
 
-	protected void setBeanFromUI(){
-		query = new Query(name.getText().toString(),
-				type.getSelectedItem().toString(),
-				phone.getText().toString(),
-				email.getText().toString(),
-				subject.getText().toString(),
-				message.getText().toString());
+	protected boolean setBeanFromUI(){
+		query = new Query();
+		if(!name.getText().toString().isEmpty())
+			query.setName(name.getText().toString());
+		else{makeToastForIncompleteForm();return false;}
+		
+		query.setType(type.getSelectedItem().toString());
+		
+		if(!phone.getText().toString().isEmpty())
+			query.setPhone(phone.getText().toString());
+		else{makeToastForIncompleteForm();return false;}
+		
+		if(!email.getText().toString().isEmpty())
+			query.setEmail(email.getText().toString());
+		else{makeToastForIncompleteForm();return false;}
+		
+		if(!subject.getText().toString().isEmpty())
+			query.setSubject(subject.getText().toString());
+		else{makeToastForIncompleteForm();return false;}
+		
+		if(!message.getText().toString().isEmpty())
+			query.setMessage(message.getText().toString());
+		else{makeToastForIncompleteForm();return false;}
+		return true;
+	}
+	
+	private void makeToastForIncompleteForm(){
+		Toast.makeText(getApplicationContext(), "Please completely fill the form.", Toast.LENGTH_LONG).show();
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,8 +107,8 @@ public class ContactUsActivity extends Activity {
 	  public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.contact_done:
-	    	setBeanFromUI();
-			new ContactUsTask().execute(getIntent().getStringExtra(LoginDAO.TAG_USERID));
+	    	if(setBeanFromUI())
+	    		new ContactUsTask().execute(getIntent().getStringExtra(LoginDAO.TAG_USERID));
 			break;
 	    case android.R.id.home:
 			Intent upIntent = NavUtils.getParentActivityIntent(this);

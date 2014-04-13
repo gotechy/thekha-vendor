@@ -8,7 +8,7 @@
 	<dimen name="dashboard_items_horizontal_padding">10dp</dimen>
 	
 <!-- added by Gaurav Rana Start-->		
-	<dimen name="aed_upload_image_height">150dp</dimen>
+	<dimen name="deal_image_height">150dp</dimen>
 	<dimen name="aed_from_to_date_time">100dp</dimen>
 <!-- added by Gaurav Rana End-->	
 </resources>

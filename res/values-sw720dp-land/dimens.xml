@@ -6,4 +6,5 @@
     -->
     <dimen name="activity_horizontal_margin">24dp</dimen>
 	<dimen name="profile_image_height">350dp</dimen>
+	<dimen name="deal_image_height">350dp</dimen>
 </resources>

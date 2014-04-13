@@ -9,7 +9,7 @@
 	<string name="label_cover_image">Cover Image</string>
   	<string name="label_deal_active">Deal Active</string>
 		<string name="label_deal_active_from">From</string>
-		<string name="label_deal_active_to">To</string>
+		<string name="label_deal_active_to">To  </string>
 		<string name="label_deal_active_date">Date</string>
 		<string name="label_deal_active_time">Time</string>
 		

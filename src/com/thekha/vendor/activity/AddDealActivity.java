@@ -236,7 +236,7 @@ public class AddDealActivity extends Activity {
 		DateTime temp2;
 		if(DateTime.isParseable(toDate.getText().toString())){
 			temp2 = new DateTime(toDate.getText().toString());
-			if(temp.lt(temp2))
+			if(temp.lteq(temp2))
 				{deal.setTo(new DateTime(toDate.getText().toString()));}
 			else
 				{Toast.makeText(getApplicationContext(), "From date cannot be after To date.", Toast.LENGTH_LONG).show();return false;}

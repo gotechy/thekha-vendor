@@ -17,6 +17,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -166,10 +168,21 @@ public class EditBusinessActivity extends Activity {
 	}
 
 	private class EditBusinessTask  extends AsyncTask<Void, Void, Boolean> {
+		
+		int prevOrientation;
 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			//Lork orientation change
+			prevOrientation = getRequestedOrientation();
+			if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			} else {
+			    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+			}
 			// Showing progress dialog
 			pDialog = new ProgressDialog(EditBusinessActivity.this);
 			pDialog.setMessage("Please wait...");
@@ -208,11 +221,9 @@ public class EditBusinessActivity extends Activity {
 						}
 						inStream.close();
 						outStream.close();
+						UploadImage.upload(picturePath);
+						business.setImageURL(UploadImage.upload_folder+File.separator+pictureName);
 					}
-					
-					
-					UploadImage.upload(picturePath);
-					business.setImageURL(UploadImage.upload_folder+File.separator+pictureName);
 					return businessDAO.update(business);
 				} catch (ClientProtocolException e) {
 					return false;
@@ -239,12 +250,14 @@ public class EditBusinessActivity extends Activity {
 			}else{
 				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
 			}
+			setRequestedOrientation(prevOrientation);
 		}
 
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			pDialog.dismiss();
+			setRequestedOrientation(prevOrientation);
 		}
 	}
 

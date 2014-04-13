@@ -1,208 +1,212 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools" android:id="@+id/business_scrollView"
-	android:layout_width="fill_parent" android:layout_height="wrap_content">
-	
-	<LinearLayout android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".EditBusinessActivity" >
-    
-    <ImageView
-        android:id="@+id/editbusiness_picture"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/profile_image_height"
-        android:cropToPadding="true"
-        android:layout_gravity="fill"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:contentDescription="@string/description"
-        android:src="@drawable/logo" />
-    
-    <Button
-        android:id="@+id/editbusiness_picture_button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/change_picture" />
-    
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/business_scrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:orientation="vertical" >
-    
-    <EditText
-        android:id="@+id/editbusiness_name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textCapWords"
-        android:hint="@string/business_name" >
-        <requestFocus />
-    </EditText>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context=".EditBusinessActivity" >
 
-    <Spinner
-        android:id="@+id/editbusiness_type"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/business_type"
-        style="@android:style/Widget.Holo.Light.Spinner"
-        android:ems="10" />
-    
-    <TextView
-        android:id="@+id/editbusiness_facilitieslable"
-        style="@style/sectionHeader"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/facilities"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <CheckBox
-        android:id="@+id/check_ac"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ac" />
-    <CheckBox
-        android:id="@+id/check_sa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sa" />
-    <CheckBox
-        android:id="@+id/check_vp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/vp" />
-    <CheckBox
-        android:id="@+id/check_cc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cc" />
-    <CheckBox
-        android:id="@+id/check_veg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/veg" />
-    <CheckBox
-        android:id="@+id/check_nonveg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nonveg" />
+        <ImageView
+            android:id="@+id/editbusiness_picture"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/profile_image_height"
+            android:layout_gravity="fill"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/description"
+            android:cropToPadding="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo" />
 
-    <TextView
-        android:id="@+id/editbusiness_contactlable"
-        style="@style/sectionHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/contact"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <EditText
-        android:id="@+id/editbusiness_phone1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone1"
-        android:ems="10"
-        android:inputType="textUri" />
-    
-    <EditText
-        android:id="@+id/editbusiness_phone2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone2"
-        android:ems="10"
-        android:inputType="textUri" />
-   
-    <EditText
-        android:id="@+id/editbusiness_website"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/website"
-        android:ems="10"
-        android:inputType="textUri" />
-    
-    <EditText
-        android:id="@+id/editbusiness_facebook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/facebook"
-        android:ems="10"
-        android:inputType="textUri" />
-    
-    <EditText
-        android:id="@+id/editbusiness_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/email"
-        android:ems="10"
-        android:inputType="textEmailAddress" />
-    
-    <TextView
-        android:id="@+id/editbusiness_addresslable"
-        style="@style/sectionHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/address"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <EditText
-        android:id="@+id/editbusiness_addressline1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Address Line 1"
-        android:inputType="textCapWords"
-        tools:ignore="HardcodedText" />
-    
-    <EditText
-        android:id="@+id/editbusiness_addressline2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Address Line 2"
-        android:ems="10"
-        android:inputType="textCapWords" />
-    
-    <EditText
-        android:id="@+id/editbusiness_locality"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Locality"
-        android:ems="10"
-        android:inputType="textCapWords" />
-    
-    <EditText
-        android:id="@+id/editbusiness_city"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="City"
-        android:ems="10"
-        android:inputType="textCapWords" />
-    
-    <AutoCompleteTextView
-        android:id="@+id/editbusiness_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="State"
-        android:ems="10"
-        android:inputType="textCapWords" />
-    
-    <EditText
-        android:id="@+id/editbusiness_country"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Country"
-        android:ems="10"
-        android:inputType="textCapWords" />
-    
-    <EditText
-        android:id="@+id/editbusiness_pincode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Pincode"
-        android:ems="10"
-        android:inputType="number" />
-	</LinearLayout>
-</LinearLayout>
+        <Button
+            android:id="@+id/editbusiness_picture_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/change_picture" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/editbusiness_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/business_name"
+                android:inputType="textCapWords" />
+            <Spinner
+                android:id="@+id/editbusiness_type"
+                style="@android:style/Widget.Holo.Light.Spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/business_type" />
+
+            <TextView
+                android:id="@+id/editbusiness_facilitieslable"
+                style="@style/sectionHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/facilities"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <CheckBox
+                android:id="@+id/check_ac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ac" />
+
+            <CheckBox
+                android:id="@+id/check_sa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sa" />
+
+            <CheckBox
+                android:id="@+id/check_vp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vp" />
+
+            <CheckBox
+                android:id="@+id/check_cc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cc" />
+
+            <CheckBox
+                android:id="@+id/check_veg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/veg" />
+
+            <CheckBox
+                android:id="@+id/check_nonveg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nonveg" />
+
+            <TextView
+                android:id="@+id/editbusiness_contactlable"
+                style="@style/sectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editbusiness_phone1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Phone1"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/editbusiness_phone2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Phone2"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/editbusiness_website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/website"
+                android:inputType="textUri" />
+
+            <EditText
+                android:id="@+id/editbusiness_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/facebook"
+                android:inputType="textUri" />
+
+            <EditText
+                android:id="@+id/editbusiness_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                android:id="@+id/editbusiness_addresslable"
+                style="@style/sectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editbusiness_addressline1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Address Line 1"
+                android:inputType="textCapWords"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/editbusiness_addressline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Address Line 2"
+                android:inputType="textCapWords" />
+
+            <EditText
+                android:id="@+id/editbusiness_locality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Locality"
+                android:inputType="textCapWords" />
+
+            <EditText
+                android:id="@+id/editbusiness_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="City"
+                android:inputType="textCapWords" />
+
+            <AutoCompleteTextView
+                android:id="@+id/editbusiness_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="State"
+                android:inputType="textCapWords" />
+
+            <EditText
+                android:id="@+id/editbusiness_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Country"
+                android:inputType="textCapWords" />
+
+            <EditText
+                android:id="@+id/editbusiness_pincode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Pincode"
+                android:inputType="number" />
+        </LinearLayout>
+    </LinearLayout>
 
 </ScrollView>

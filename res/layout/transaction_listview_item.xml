@@ -4,52 +4,52 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout 
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        
+        android:layout_height="wrap_content" >
+
         <TextView
-        	android:id="@+id/transaction_title"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"
-        	android:textAppearance="?android:attr/textAppearanceLarge"
-        	android:textColor="#000000" />
+            android:id="@+id/transaction_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#000000" />
+
         <TextView
-        	android:id="@+id/transaction_amount"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentRight="true"
-        	android:paddingRight="10dp"
-        	android:textAppearance="?android:attr/textAppearanceMedium" />
-        
+            android:id="@+id/transaction_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </RelativeLayout>
-    
+
     <TextView
-        	android:id="@+id/transaction_description"
-        	android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-        	android:ems="10"
-        	android:textAppearance="?android:attr/textAppearanceSmall" />
-    
-    <RelativeLayout 
+        android:id="@+id/transaction_description"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
         <TextView
-        	android:id="@+id/transaction_timestamplable"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"
-        	android:text="Time : "
-        	android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:id="@+id/transaction_timestamplable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Time : "
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
         <TextView
-        	android:id="@+id/transaction_timestamp"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_toRightOf="@id/transaction_timestamplable"
-        	android:textAppearance="?android:attr/textAppearanceSmall" />
-        
+            android:id="@+id/transaction_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/transaction_timestamplable"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
-    
+
 </LinearLayout>
