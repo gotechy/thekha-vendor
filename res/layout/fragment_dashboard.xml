@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="@string/productLable"
+                android:text="Profile"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ProgressBar
@@ -90,7 +90,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="@string/productLable"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
 
@@ -106,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="@string/productviewLable"
+                android:text="Views"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
@@ -122,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/dashboard_productviewtype"
-                android:text="@string/productviewLable"
+                android:text="NA"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
     </LinearLayout>
@@ -156,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="@string/dealsavtivelable"
+                android:text="NA"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ImageView
@@ -192,7 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="@string/dealstilllable"
+                android:text="NA"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
     </LinearLayout>
@@ -219,7 +218,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="@string/creditlable"
+            android:text="NA"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
@@ -254,7 +253,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="@string/dealsavtivelable"
+                android:text="Advertising"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -263,7 +262,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="@string/dealsavtivelable"
+                android:text="NA"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
 
@@ -288,7 +287,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="@string/bannerlable"
+                android:text="NA"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
 
@@ -304,7 +303,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="@string/dealsavtivelable"
+                android:text="@string/clickslable"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -313,7 +312,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="@string/clickslable"
+                android:text="NA"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
     </LinearLayout>

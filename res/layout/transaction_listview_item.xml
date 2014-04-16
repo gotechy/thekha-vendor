@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_alignBaseline="@id/transaction_title"
             android:paddingRight="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </RelativeLayout>

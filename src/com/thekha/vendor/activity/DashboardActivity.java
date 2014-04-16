@@ -51,7 +51,7 @@ public class DashboardActivity extends FragmentActivity {
 		if(savedInstanceState==null)
 			uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
 		else{
-			savedInstanceState.getCharSequence(LoginDAO.TAG_USERID);
+			uid = savedInstanceState.getCharSequence(LoginDAO.TAG_USERID).toString();
 		}
         // ******** Setup Navigation Drawer *********
 		actionBar = getActionBar();
@@ -91,7 +91,7 @@ public class DashboardActivity extends FragmentActivity {
 	}
 	
 	@Override
-	protected void onRestart() {
+	protected void onStart() {
 		// Check UID, if null get from cache, otherwise login user again manually.
 		Log.i(LOG_TAG, "onRestart");
 		if(uid == null){

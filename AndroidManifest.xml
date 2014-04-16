@@ -28,7 +28,8 @@
         <activity android:name="com.thekha.vendor.activity.DashboardActivity" />
         <activity
             android:name="com.thekha.vendor.activity.BusinessActivity"
-            android:parentActivityName="com.thekha.vendor.activity.DashboardActivity" >
+            android:parentActivityName="com.thekha.vendor.activity.DashboardActivity"
+            android:launchMode="singleTop" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.thekha.vendor.activity.DashboardActivity" />

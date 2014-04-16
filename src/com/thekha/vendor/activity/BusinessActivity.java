@@ -150,7 +150,7 @@ public class BusinessActivity extends Activity {
 		switch (item.getItemId()) {
 		// action with ID action_refresh was selected
 		case android.R.id.home:
-			Intent upIntent = NavUtils.getParentActivityIntent(this);
+			Intent upIntent = NavUtils.getParentActivityIntent(BusinessActivity.this);
 			if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
 				// This activity is NOT part of this app's task, so create a new task
 				// when navigating up, with a synthesized back stack.
