@@ -167,8 +167,6 @@ public class ContactUsActivity extends Activity {
 			if(param){
 				Toast.makeText(getApplicationContext(), "Your query has been received. We will contact you in 72Hrs.", Toast.LENGTH_LONG).show();
 				Log.d(LOG_TAG, "Query raised, at "+DateTime.now(TimeZone.getDefault()));
-				Intent data = new Intent();
-				setResult(RESULT_OK,data);
 				finish();
 			}else{
 				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();

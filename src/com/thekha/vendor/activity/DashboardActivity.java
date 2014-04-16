@@ -5,29 +5,28 @@ import java.io.IOException;
 import org.json.JSONException;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.thekha.vendor.bean.Business;
-import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
-public class DashboardActivity extends Activity {
+public class DashboardActivity extends FragmentActivity {
+	
+	private String LOG_TAG;
 		
 	ActionBar actionBar;
 	private ListView drawerList;
@@ -36,26 +35,24 @@ public class DashboardActivity extends Activity {
 	private String[] drawerMenu;
 	private String title, drawerTitle;
 	private String uid;
-		
-	Business business;
-	BusinessDAO businessDAO = new BusinessDAO();;
 	
-	ArrayAdapter<CharSequence> productViewTypeAdapter;
 	ArrayAdapter<String> drawerAdapter;
-	Spinner productViewType;
-	ProgressBar profileCompletion;
-	
-	private static final int CONTACT_US_REQUEST = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_dashboard);
 		setTitle(R.string.dashboard_activity_title);
+		LOG_TAG = getString(R.string.app_name);
+		
+		Log.d(LOG_TAG, "OnCreate");
 		
 		// Get User ID for any other operation from intent.
-		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
-		
+		if(savedInstanceState==null)
+			uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
+		else{
+			savedInstanceState.getCharSequence(LoginDAO.TAG_USERID);
+		}
         // ******** Setup Navigation Drawer *********
 		actionBar = getActionBar();
         title = getResources().getString(R.string.dashboard_activity_title);
@@ -91,26 +88,22 @@ public class DashboardActivity extends Activity {
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
-        
-        //******* Setup Dashboard UI ***********
-        productViewType = (Spinner) findViewById(R.id.dashboard_productviewtype);
-        productViewTypeAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-				R.array.productView_types, R.layout.spinner_item);
-        productViewType.setAdapter(productViewTypeAdapter);
-        
-        profileCompletion = (ProgressBar) findViewById(R.id.dashboard_profile);
-        profileCompletion.setMax(100);
-        profileCompletion.setIndeterminate(false);
-        
 	}
 	
 	@Override
-	protected void onStart() {
+	protected void onRestart() {
 		// Check UID, if null get from cache, otherwise login user again manually.
+		Log.i(LOG_TAG, "onRestart");
 		if(uid == null){
         	try {
         		LoginDAO ldao = new LoginDAO();
     			uid = ldao.loginFromCache(getApplicationContext());
+    			if(uid == null){
+    				Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
+        			Intent i = new Intent(DashboardActivity.this, LoginActivity.class);
+        			startActivity(i);
+        			finish();
+    			}
     		}
     		catch (IOException e) {
     			Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
@@ -154,7 +147,7 @@ public class DashboardActivity extends Activity {
         	if(temp.getText().toString().equals(drawerMenu[4])){
         		Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
         		i.putExtra(LoginDAO.TAG_USERID, uid);
-        		startActivityForResult(i, CONTACT_US_REQUEST);
+        		startActivity(i);
         	}
         	if(temp.getText().toString().equals(drawerMenu[5])){
         		new LoginDAO().logout(getApplicationContext());
@@ -162,27 +155,20 @@ public class DashboardActivity extends Activity {
         	}
         }
     }
-	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		// - Check result code and request code.
-		if(requestCode == CONTACT_US_REQUEST && resultCode == RESULT_OK){
-			// TODO - Result of contact us.
-		}
-	}
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-		// Save the user's current game state
-		savedInstanceState.putString(LoginDAO.TAG_USERID, uid);
 		super.onSaveInstanceState(savedInstanceState);
+		// Save the user's current state
+		Log.i(LOG_TAG, "onSaveInstanceState");
+		savedInstanceState.putString(LoginDAO.TAG_USERID, uid);
 	}
-
+	
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		// Always call the superclass so it can restore the view hierarchy
-		uid = savedInstanceState.getString(LoginDAO.TAG_USERID);
 		super.onRestoreInstanceState(savedInstanceState);
+		Log.i(LOG_TAG, "onRestoreInstanceState");
+		uid = savedInstanceState.getString(LoginDAO.TAG_USERID);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
