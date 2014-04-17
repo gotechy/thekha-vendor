@@ -12,7 +12,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +24,7 @@ import android.widget.Toast;
 import com.thekha.vendor.dao.LoginDAO;
 
 public class DashboardActivity extends FragmentActivity {
-	
-	private String LOG_TAG;
-		
+			
 	ActionBar actionBar;
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
@@ -43,10 +40,7 @@ public class DashboardActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_dashboard);
 		setTitle(R.string.dashboard_activity_title);
-		LOG_TAG = getString(R.string.app_name);
-		
-		Log.d(LOG_TAG, "OnCreate");
-		
+				
 		// Get User ID for any other operation from intent.
 		if(savedInstanceState==null)
 			uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
@@ -93,7 +87,6 @@ public class DashboardActivity extends FragmentActivity {
 	@Override
 	protected void onStart() {
 		// Check UID, if null get from cache, otherwise login user again manually.
-		Log.i(LOG_TAG, "onRestart");
 		if(uid == null){
         	try {
         		LoginDAO ldao = new LoginDAO();
@@ -160,14 +153,12 @@ public class DashboardActivity extends FragmentActivity {
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 		// Save the user's current state
-		Log.i(LOG_TAG, "onSaveInstanceState");
 		savedInstanceState.putString(LoginDAO.TAG_USERID, uid);
 	}
 	
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		Log.i(LOG_TAG, "onRestoreInstanceState");
 		uid = savedInstanceState.getString(LoginDAO.TAG_USERID);
 	}
 

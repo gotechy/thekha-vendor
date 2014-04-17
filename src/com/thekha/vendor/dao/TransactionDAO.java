@@ -24,10 +24,10 @@ public class TransactionDAO {
 	String jsonResp;
 
 	// Tags for transaction
-	private static final String TAG_TITLE = "title";
-	private static final String TAG_AMOUNT = "amount";
-	private static final String TAG_DESCRIPTION = "description";
-	private static final String TAG_TIMESTAMP = "timestamp";
+	public static final String TAG_TITLE = "title";
+	public static final String TAG_AMOUNT = "amount";
+	public static final String TAG_DESCRIPTION = "description";
+	public static final String TAG_TIMESTAMP = "timestamp";
 
 	public List<Transaction> read(Context c, String uid) throws JSONException, ClientProtocolException, IOException{
 
@@ -38,24 +38,6 @@ public class TransactionDAO {
 		jsonResp = sh.makeServiceCall(ServiceHandler.GET_TRANSACTIONS_SERVICE, ServiceHandler.GET, reqParams);
 		inflateTransactionsList();
 		return transactions;
-	}
-
-	public Boolean add(String dealID, String vendorID,Transaction t) throws ClientProtocolException, IOException {
-
-		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(DealsDAO.TAG_DEALID, dealID));
-		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, vendorID));
-
-		reqParams.add(new BasicNameValuePair(TAG_TITLE, t.getTitle()));
-		reqParams.add(new BasicNameValuePair(TAG_AMOUNT, String.valueOf(t.getAmount())));
-		reqParams.add(new BasicNameValuePair(TAG_DESCRIPTION, t.getDescription()));
-		
-		ServiceHandler sh = new ServiceHandler();
-		jsonResp = sh.makeServiceCall(ServiceHandler.CREATE_TRANSACTION_SERVICE, ServiceHandler.POST, reqParams);
-		if (jsonResp.isEmpty()) {
-			return false;
-		}
-		return true;
 	}
 
 	private void inflateTransactionsList() throws JSONException{

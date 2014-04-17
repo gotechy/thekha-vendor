@@ -96,6 +96,14 @@ public class TransactionActivity extends Activity {
 		prices = (Prices) getIntent().getSerializableExtra(Prices.PRICES_KEY);
 		nDeal = (Deals) getIntent().getSerializableExtra("PrivateEDATAKey");
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		//TODO - Save the user's current state
+		Log.i(LOG_TAG, "onSaveInstanceState");
+		//savedInstanceState.putString(LoginDAO.TAG_USERID, uid);
+	}
 
 	@Override
 	protected void onStart() {
@@ -348,7 +356,7 @@ public class TransactionActivity extends Activity {
 			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 			if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and retry.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
 				cancel(true);
 			}
 		}
@@ -361,7 +369,7 @@ public class TransactionActivity extends Activity {
 						picturePath = deal.getImageURL();
 						File afile =new File(picturePath);
 						pictureName = "dealImg_"
-								+bid+"_"+DateTime.today(TimeZone.getDefault())
+								+bid+"_"+DateTime.now(TimeZone.getDefault()).toString()
 								+picturePath.substring(picturePath.lastIndexOf("."));
 						//+"."+picturePath.substring(picturePath.lastIndexOf(".")+1);
 						picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;
@@ -378,19 +386,18 @@ public class TransactionActivity extends Activity {
 						outStream.close();
 						deal.setImageURL(UploadImage.upload_folder+File.separator+pictureName);
 						
-						deal.setStatus(Deals.STATUS_PENDING);
-						Integer dealid = dealDAO.add(bid, deal);
+						deal.setStatus(Deals.STATUS_ACTIVE);
+						UploadImage.upload(picturePath);
+						
+						Integer dealid = dealDAO.add(bid, deal, transaction);
 						if(dealid != null){
-							UploadImage.upload(picturePath);
-							return transactionDAO.add(String.valueOf(dealid), bid, transaction);
+							return true;
 						}
 					}else{
 						nDeal.setSMSCount(deal.getSMSCount()+nDeal.getSMSCount());
 						nDeal.setEmailCount(deal.getEmailCount()+nDeal.getEmailCount());
-						//Integer dealid = dealDAO.update(nDeal);
-						if(dealDAO.update(nDeal)){
-							return transactionDAO.add(String.valueOf(nDeal.getId()), bid, transaction);
-						}
+						nDeal.setStatus(Deals.STATUS_ACTIVE);
+						return dealDAO.update(nDeal, bid, transaction);
 					}
 				} catch (ClientProtocolException e) {
 					return false;
@@ -410,7 +417,6 @@ public class TransactionActivity extends Activity {
 			if(param){
 				Toast.makeText(getApplicationContext(), "Your transaction was successful and deal has been updated.", Toast.LENGTH_LONG).show();
 				Log.d(LOG_TAG, "Transaction and Deal successfully added, at "+DateTime.now(TimeZone.getDefault()));
-				startActivity(new Intent(TransactionActivity.this, DashboardActivity.class));
 				finish();
 			}else{
 				Toast.makeText(getApplicationContext(), "Connection cannot be established, please try again later.", Toast.LENGTH_SHORT).show();
@@ -481,7 +487,6 @@ public class TransactionActivity extends Activity {
 			}else{
 				Log.d(LOG_TAG, param);
 				Toast.makeText(getApplicationContext(), param, Toast.LENGTH_SHORT).show();
-				startActivity(new Intent(TransactionActivity.this, DashboardActivity.class));
 				finish();
 			}
 		}

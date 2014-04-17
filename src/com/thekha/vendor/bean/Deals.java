@@ -11,8 +11,8 @@ public class Deals implements Serializable {
 	 */
 	private static final long serialVersionUID = 5913018284176073902L;
 
-	public static final String STATUS_PENDING = "PENDING";
 	public static final String STATUS_ACTIVE = "ACTIVE";
+	public static final String STATUS_PENDING = "PENDING";
 	public static final String STATUS_COMPLETED = "COMPLETED";
 	public static final String DEALS_KEY = "deals";
 	

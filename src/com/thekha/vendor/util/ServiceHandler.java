@@ -40,7 +40,6 @@ public class ServiceHandler {
 	public static final String GET_PRICES_SERVICE = "getPrices/Transactions";
 	
 	public static final String GET_TRANSACTIONS_SERVICE = "getTransactions/Transactions";
-	public static final String CREATE_TRANSACTION_SERVICE = "createTransaction/Transactions";
 
 	public ServiceHandler() {
 

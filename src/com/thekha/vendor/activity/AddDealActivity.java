@@ -45,27 +45,29 @@ import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.Prices;
 import com.thekha.vendor.dao.LoginDAO;
 import com.thekha.vendor.dao.PricesDAO;
+import com.thekha.vendor.util.DateTimeConversion;
 
 public class AddDealActivity extends Activity {
-	
+
 	private String LOG_TAG;
 	private int RESULT_LOAD_IMAGE = 32;
-	
+
 	ActionBar actionBar;
 	private Deals deal = new Deals();
 	private Prices prices;
 	private PricesDAO pDAO = new PricesDAO();
-	
-	EditText title, description, code, smsCount, emailCount;	
-	CheckBox checkRegular, checkSpecial, checkTopListing, checkHomePageBanner, checkCategoryBanner;
+
+	EditText title, description, code, smsCount, emailCount;
+	CheckBox checkRegular, checkSpecial, checkTopListing, checkHomePageBanner,
+			checkCategoryBanner;
 	ImageButton picture;
 	String picturePath;
 	static int fromToFlag;
-	static Button  fromDate, fromTime, toDate, toTime;
+	static Button fromDate, fromTime, toDate, toTime;
 	String imageURL, bid;
 	private ProgressDialog pDialog;
 	static String dateString, timeString;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,54 +75,56 @@ public class AddDealActivity extends Activity {
 		setTitle(R.string.title_deals_view);
 		LOG_TAG = getString(R.string.app_name);
 		bid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
-		// For current model uid == bid unless app implemented for multiple business profiles.
-		
+		// For current model uid == bid unless app implemented for multiple
+		// business profiles.
+
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-        title = (EditText) findViewById(R.id.edit_aed_deal_title);
+		title = (EditText) findViewById(R.id.edit_aed_deal_title);
 		description = (EditText) findViewById(R.id.edit_aed_deal_description);
 		code = (EditText) findViewById(R.id.edit_aed_deal_code);
 		smsCount = (EditText) findViewById(R.id.edit_aed_deal_SMS);
 		emailCount = (EditText) findViewById(R.id.edit_aed_deal_email);
-		
+
 		fromDate = (Button) findViewById(R.id.button_aed_deal_active_fromDate);
 		fromTime = (Button) findViewById(R.id.button_aed_deal_active_fromTime);
 		toDate = (Button) findViewById(R.id.button_aed_deal_active_toDate);
 		toTime = (Button) findViewById(R.id.button_aed_deal_active_toTime);
 		picture = (ImageButton) findViewById(R.id.iButton_aed_cover_image);
-		
+
 		checkRegular = (CheckBox) findViewById(R.id.cb_regular);
 		checkSpecial = (CheckBox) findViewById(R.id.cb_special);
 		checkTopListing = (CheckBox) findViewById(R.id.cb_top_listing);
 		checkHomePageBanner = (CheckBox) findViewById(R.id.cb_home_page_banner);
 		checkCategoryBanner = (CheckBox) findViewById(R.id.cb_category_banner);
-		
+
 		// regular deal must be purchased.
 		checkRegular.setChecked(true);
 		checkRegular.setEnabled(false);
-		
+
 		picture.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				Intent i = new Intent(
-						Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+						Intent.ACTION_PICK,
+						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 				startActivityForResult(i, RESULT_LOAD_IMAGE);
 			}
 		});
-		
+
 		fromDate.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				showDatePickerDialog();
-				fromToFlag = 1 ;
+				fromToFlag = 1;
 			}
 		});
 		toDate.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				showDatePickerDialog();
-				fromToFlag = 2 ;
+				fromToFlag = 2;
 			}
 		});
 		fromTime.setOnClickListener(new OnClickListener() {
@@ -134,18 +138,19 @@ public class AddDealActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				showTimePickerDialog();
-				fromToFlag = 4 ;
+				fromToFlag = 4;
 			}
 		});
-		
+
 		new GetPriceTask().execute();
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+		if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
+				&& null != data) {
 			Uri selectedImage = data.getData();
 			String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
@@ -155,14 +160,15 @@ public class AddDealActivity extends Activity {
 
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 			picturePath = cursor.getString(columnIndex);
-			picture.setImageBitmap(BitmapFactory.decodeFile(picturePath));			
-			//pictureName = picturePath.substring(picturePath.lastIndexOf(File.separator)+1);
+			picture.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+			// pictureName =
+			// picturePath.substring(picturePath.lastIndexOf(File.separator)+1);
 			cursor.close();
 		}
 	}
 
 	public static void setFromToDateTime() {
-		if ( fromToFlag == 1)
+		if (fromToFlag == 1)
 			fromDate.setText(dateString);
 		else if (fromToFlag == 2)
 			toDate.setText(dateString);
@@ -171,174 +177,225 @@ public class AddDealActivity extends Activity {
 		else if (fromToFlag == 4)
 			toTime.setText(timeString);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.actionmenu_add_edit_deals, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
-	
+
 	@Override
-	  public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case android.R.id.home:
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
 			Intent upIntent = NavUtils.getParentActivityIntent(this);
 			if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
 				TaskStackBuilder.create(this)
-				.addNextIntentWithParentStack(upIntent)
-				.startActivities();
+						.addNextIntentWithParentStack(upIntent)
+						.startActivities();
 			} else {
 				NavUtils.navigateUpTo(this, upIntent);
 			}
 			break;
-	    case R.id.aed_done:
-	    	if(setBeanFromUI()){
-	    		Intent i = new Intent(AddDealActivity.this, TransactionActivity.class);
+		case R.id.aed_done:
+			if (setBeanFromUI()) {
+				Intent i = new Intent(AddDealActivity.this,
+						TransactionActivity.class);
 				i.putExtra(Prices.PRICES_KEY, prices);
 				i.putExtra(Deals.DEALS_KEY, deal);
 				i.putExtra(LoginDAO.TAG_USERID, bid);
 				startActivity(i);
 				finish();
-	    	}
-	    	break;
-	    default:
-	      break;
-	    }
-	    return true;
-	  } 
+			}
+			break;
+		default:
+			break;
+		}
+		return true;
+	}
 
-	
 	private boolean setBeanFromUI() {
 		deal.setStatus(Deals.STATUS_PENDING);
-		if(!title.getText().toString().isEmpty())
+		if (!title.getText().toString().isEmpty())
 			deal.setTitle(title.getText().toString());
-		else{makeToastForIncompleteForm();return false;}
-		
-		if(!description.getText().toString().isEmpty())
+		else {
+			makeToastForIncompleteForm();
+			return false;
+		}
+
+		if (!description.getText().toString().isEmpty())
 			deal.setDescription(description.getText().toString());
-		else
-			{makeToastForIncompleteForm();return false;}
-		
-		if(!code.getText().toString().isEmpty())
+		else {
+			makeToastForIncompleteForm();
+			return false;
+		}
+
+		if (!code.getText().toString().isEmpty())
 			deal.setCode(code.getText().toString());
-		else
-			{makeToastForIncompleteForm();return false;}
-				
-		DateTime temp;
-		if(DateTime.isParseable(fromDate.getText().toString())){
-			temp = new DateTime(fromDate.getText().toString());
-			deal.setFrom(temp);
-		}else
-			{makeToastForIncompleteForm();return false;}
-		
-		DateTime temp2;
-		if(DateTime.isParseable(toDate.getText().toString())){
-			temp2 = new DateTime(toDate.getText().toString());
-			if(temp.lteq(temp2))
-				{deal.setTo(new DateTime(toDate.getText().toString()));}
-			else
-				{Toast.makeText(getApplicationContext(), "From date cannot be after To date.", Toast.LENGTH_LONG).show();return false;}
-		}else
-			{makeToastForIncompleteForm();return false;}
-				
-		if(!smsCount.getText().toString().isEmpty())
+		else {
+			makeToastForIncompleteForm();
+			return false;
+		}
+
+		DateTime tempdate, temptime;
+		if (DateTime.isParseable(fromDate.getText().toString())) {
+			tempdate = new DateTime(fromDate.getText().toString());
+			if (DateTime.isParseable(fromTime.getText().toString())) {
+				temptime = new DateTime(fromTime.getText().toString());
+				tempdate = new DateTime(tempdate.format(DateTimeConversion.DF_NUMERIC_YMD) + " "
+						+ temptime.format(DateTimeConversion.TF_NUMERIC_MH).toString());
+			} else {
+				makeToastForIncompleteForm();
+				return false;
+			}
+			deal.setFrom(tempdate);
+		} else {
+			makeToastForIncompleteForm();
+			return false;
+		}
+
+		DateTime tempdate2;
+		if (DateTime.isParseable(toDate.getText().toString())) {
+			tempdate2 = new DateTime(toDate.getText().toString());
+			if (DateTime.isParseable(toTime.getText().toString())) {
+				temptime = new DateTime(toTime.getText().toString());
+				tempdate2 = new DateTime(tempdate2.format(DateTimeConversion.DF_NUMERIC_YMD) + " "
+						+ temptime.format(DateTimeConversion.TF_NUMERIC_MH).toString());
+			} else {
+				makeToastForIncompleteForm();
+				return false;
+			}
+			if (tempdate.lteq(tempdate2)) {
+				deal.setTo(tempdate2);
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"From date cannot be after To date.", Toast.LENGTH_LONG)
+						.show();
+				return false;
+			}
+		} else {
+			makeToastForIncompleteForm();
+			return false;
+		}
+
+		if (!smsCount.getText().toString().isEmpty())
 			deal.setSMSCount(Integer.parseInt(smsCount.getText().toString()));
-		else
-			{deal.setSMSCount(0);}
-		
-		if(!emailCount.getText().toString().isEmpty())
-			deal.setEmailCount(Integer.parseInt(emailCount.getText().toString()));
-		else
-			{deal.setEmailCount(0);}
+		else {
+			deal.setSMSCount(0);
+		}
+
+		if (!emailCount.getText().toString().isEmpty())
+			deal.setEmailCount(Integer
+					.parseInt(emailCount.getText().toString()));
+		else {
+			deal.setEmailCount(0);
+		}
 
 		deal.getPlacement().setRegular(checkRegular.isChecked());
 		deal.getPlacement().setSpecial(checkSpecial.isChecked());
 		deal.getPlacement().setTopListing(checkTopListing.isChecked());
 		deal.getPlacement().setHomePageBanner(checkHomePageBanner.isChecked());
 		deal.getPlacement().setCategoryBanner(checkCategoryBanner.isChecked());
-		
-		if(picturePath==null){
-			Toast.makeText(getApplicationContext(), "Select a cover image for your deal.", Toast.LENGTH_LONG).show();return false;
-		}else{
+
+		if (picturePath == null) {
+			Toast.makeText(getApplicationContext(),
+					"Select a cover image for your deal.", Toast.LENGTH_LONG)
+					.show();
+			return false;
+		} else {
 			deal.setImageURL(picturePath);
 		}
-		
+
 		return true;
 	}
-	
-	private class GetPriceTask  extends AsyncTask<Void, Void, String> {
-		
+
+	private class GetPriceTask extends AsyncTask<Void, Void, String> {
+
 		@Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Showing progress dialog
-            pDialog = new ProgressDialog(AddDealActivity.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-            // check for internet connection
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-            	Toast.makeText(getApplicationContext(), "Your internet is disabled, turn it on and then try again.", Toast.LENGTH_SHORT).show();
-            	cancel(true);
-            }
+		protected void onPreExecute() {
+			super.onPreExecute();
+			// Showing progress dialog
+			pDialog = new ProgressDialog(AddDealActivity.this);
+			pDialog.setMessage("Please wait...");
+			pDialog.setCancelable(false);
+			pDialog.show();
+			// check for internet connection
+			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetworkInfo = connectivityManager
+					.getActiveNetworkInfo();
+			if (!(activeNetworkInfo != null && activeNetworkInfo.isConnected())) {
+				Toast.makeText(
+						getApplicationContext(),
+						"Your internet is disabled, turn it on and then try again.",
+						Toast.LENGTH_SHORT).show();
+				cancel(true);
+			}
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
-			if(!isCancelled())
-				try {prices = null;
+			if (!isCancelled())
+				try {
+					prices = null;
 					prices = pDAO.read();
 					return "Prices loaded successfully.";
 				} catch (JSONException e) {
-		        	return "Something is very wrong, please contact our support services.";
+					return "Something is very wrong, please contact our support services.";
 				} catch (ClientProtocolException e) {
 					return "Connection cannot be established, please try again later.";
 				} catch (IOException e) {
 					return "Connection cannot be established, please try again later.";
-				} 
+				}
 			return null;
 		}
-		
+
 		@Override
-        protected void onPostExecute(String param) {
-            super.onPostExecute(param);
+		protected void onPostExecute(String param) {
+			super.onPostExecute(param);
 			pDialog.dismiss();
-			if(prices != null){
+			if (prices != null) {
 				setPrices();
-                Log.d(LOG_TAG, param);
-            }else{
-            	Log.d(LOG_TAG, param);
-            	Toast.makeText(getApplicationContext(), param, Toast.LENGTH_SHORT).show();
-            	startActivity(new Intent(AddDealActivity.this, DashboardActivity.class));
-            	finish();
-            }
+				Log.d(LOG_TAG, param);
+			} else {
+				Log.d(LOG_TAG, param);
+				Toast.makeText(getApplicationContext(), param,
+						Toast.LENGTH_SHORT).show();
+				startActivity(new Intent(AddDealActivity.this,
+						DashboardActivity.class));
+				finish();
+			}
 		}
-		
+
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			pDialog.dismiss();
 		}
 	}
-	
+
 	private void setPrices() {
-		checkRegular.setText(checkRegular.getText().toString() + " ("+prices.getRegular()+" credits/day)");
-		checkSpecial.setText(checkSpecial.getText().toString() + " ("+prices.getSpecial()+" credits/day)");
-		checkTopListing.setText(checkTopListing.getText().toString() + " ("+prices.getTopListing()+" credits/day)");
-		checkHomePageBanner.setText(checkHomePageBanner.getText().toString() + " ("+prices.getHomePageBanner()+" credits/day)");
-		checkCategoryBanner.setText(checkCategoryBanner.getText().toString() + " ("+prices.getCategoryBanner()+" credits/day)");
-		smsCount.setHint(smsCount.getHint().toString() + " ("+prices.getPushSMS()+" credits/sms)");
-		emailCount.setHint(emailCount.getHint().toString() + " ("+prices.getPushEMail()+" credits/email)");
+		checkRegular.setText(checkRegular.getText().toString() + " ("
+				+ prices.getRegular() + " credits/day)");
+		checkSpecial.setText(checkSpecial.getText().toString() + " ("
+				+ prices.getSpecial() + " credits/day)");
+		checkTopListing.setText(checkTopListing.getText().toString() + " ("
+				+ prices.getTopListing() + " credits/day)");
+		checkHomePageBanner.setText(checkHomePageBanner.getText().toString()
+				+ " (" + prices.getHomePageBanner() + " credits/day)");
+		checkCategoryBanner.setText(checkCategoryBanner.getText().toString()
+				+ " (" + prices.getCategoryBanner() + " credits/day)");
+		smsCount.setHint(smsCount.getHint().toString() + " ("
+				+ prices.getPushSMS() + " credits/sms)");
+		emailCount.setHint(emailCount.getHint().toString() + " ("
+				+ prices.getPushEMail() + " credits/email)");
 	}
-	
-	private void makeToastForIncompleteForm(){
-		Toast.makeText(getApplicationContext(), "Please completely fill the form.", Toast.LENGTH_LONG).show();
+
+	private void makeToastForIncompleteForm() {
+		Toast.makeText(getApplicationContext(),
+				"Please completely fill the form.", Toast.LENGTH_LONG).show();
 	}
-	
+
 	private void showDatePickerDialog() {
 		DialogFragment newFragment = new DatePickerFragment();
 		newFragment.show(getFragmentManager(), "datePicker");
@@ -348,7 +405,7 @@ public class AddDealActivity extends Activity {
 		DialogFragment newFragment = new TimePickerFragment();
 		newFragment.show(getFragmentManager(), "timePicker");
 	}
-	
+
 	// DialogFragment used to pick a ToDoItem deadline date
 
 	public static class DatePickerFragment extends DialogFragment implements
@@ -359,7 +416,8 @@ public class AddDealActivity extends Activity {
 
 			// Use the current date as the default date in the picker
 
-			final GregorianCalendar c = (GregorianCalendar) GregorianCalendar.getInstance();
+			final GregorianCalendar c = (GregorianCalendar) GregorianCalendar
+					.getInstance();
 			int year = c.get(GregorianCalendar.YEAR);
 			int month = c.get(GregorianCalendar.MONTH);
 			int day = c.get(GregorianCalendar.DAY_OF_MONTH);
@@ -369,7 +427,8 @@ public class AddDealActivity extends Activity {
 		}
 
 		@Override
-		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
 			setDateString(year, monthOfYear, dayOfMonth);
 			setFromToDateTime();
 		}
@@ -390,8 +449,7 @@ public class AddDealActivity extends Activity {
 			int minute = c.get(Calendar.MINUTE);
 
 			// Create a new instance of TimePickerDialog and return
-			return new TimePickerDialog(getActivity(), this, hour, minute,
-					true);
+			return new TimePickerDialog(getActivity(), this, hour, minute, true);
 		}
 
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -399,7 +457,6 @@ public class AddDealActivity extends Activity {
 			setFromToDateTime();
 		}
 	}
-
 
 	private static void setDateString(int year, int monthOfYear, int dayOfMonth) {
 

@@ -19,6 +19,7 @@ import android.content.Context;
 
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.DealsPlacement;
+import com.thekha.vendor.bean.Transaction;
 import com.thekha.vendor.util.ServiceHandler;
 
 public class DealsDAO {
@@ -49,7 +50,7 @@ public class DealsDAO {
 	private static final String TAG_HOMEPAGEBANNER = "homePageBanner";
 	private static final String TAG_CATEGORYBANNER = "categoryBanner";
 
-	public int add(String bid, Deals deal) throws ClientProtocolException, IOException, JSONException {
+	public int add(String bid, Deals deal, Transaction t) throws ClientProtocolException, IOException, JSONException {
 		
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, bid));
@@ -72,9 +73,10 @@ public class DealsDAO {
 		reqParams.add(new BasicNameValuePair(TAG_SMSCOUNT, String.valueOf(deal.getSMSCount())));
 		reqParams.add(new BasicNameValuePair(TAG_EMAILCOUNT, String.valueOf(deal.getEmailCount())));
 		
-		//reqParams.add(new BasicNameValuePair(TAG_CREATEDBY, String.valueOf(uid)));
-		//reqParams.add(new BasicNameValuePair(TAG_UPDATEDBY, String.valueOf(uid)));
-		//reqParams.add(new BasicNameValuePair(TAG_UPDATEDON, DateTime.now(TimeZone.getDefault()).toString()));
+		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, bid));
+		reqParams.add(new BasicNameValuePair("ttitle", t.getTitle()));
+		reqParams.add(new BasicNameValuePair("tamount", String.valueOf(t.getAmount())));
+		reqParams.add(new BasicNameValuePair("tdescription", t.getDescription()));
 
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.CREATE_DEAL_SERVICE, ServiceHandler.POST, reqParams);
@@ -119,7 +121,7 @@ public class DealsDAO {
 		return deals;
 	}
 	
-	public boolean update(Deals deal) throws ClientProtocolException, IOException {
+	public boolean update(Deals deal, String bid, Transaction t) throws ClientProtocolException, IOException, JSONException {
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(TAG_DEALID, String.valueOf(deal.getId())));
 		reqParams.add(new BasicNameValuePair(TAG_PLACEMENTID, String.valueOf(deal.getPlacement().getId())));
@@ -138,13 +140,31 @@ public class DealsDAO {
 		reqParams.add(new BasicNameValuePair(TAG_TO, deal.getTo().toString()));
 		reqParams.add(new BasicNameValuePair(TAG_SMSCOUNT, String.valueOf(deal.getSMSCount())));
 		reqParams.add(new BasicNameValuePair(TAG_EMAILCOUNT, String.valueOf(deal.getEmailCount())));
+		
+		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, bid));
+		reqParams.add(new BasicNameValuePair("ttitle", t.getTitle()));
+		reqParams.add(new BasicNameValuePair("tamount", String.valueOf(t.getAmount())));
+		reqParams.add(new BasicNameValuePair("tdescription", t.getDescription()));
 				
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.UPDATE_DEAL_SERVICE, ServiceHandler.POST, reqParams);
 		if (jsonResp.isEmpty()) {
 			return false;
 		}
-		return true;
+		Integer n = null;
+		JSONTokener tokener = new JSONTokener(jsonResp);
+		JSONArray jsonArr = new JSONArray(tokener);
+		for(int i=0; i<jsonArr.length(); i++){
+			JSONObject jobj = jsonArr.getJSONObject(i);
+			Iterator itr = jobj.keys();
+			while(itr.hasNext()){
+				String str = (String) itr.next();
+				n = jobj.getInt(str);
+				if(n==1)
+					return true;
+			}
+		}
+		return false;
 	}
 
 	private void inflateDealsList() throws JSONException{
