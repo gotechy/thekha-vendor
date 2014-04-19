@@ -31,7 +31,7 @@ public class DashboardActivity extends FragmentActivity {
 	private DrawerLayout drawerLayout;
 	private String[] drawerMenu;
 	private String title, drawerTitle;
-	private String uid;
+	public String uid, LOG_TAG;
 	
 	ArrayAdapter<String> drawerAdapter;
 	
@@ -40,6 +40,8 @@ public class DashboardActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_dashboard);
 		setTitle(R.string.dashboard_activity_title);
+		
+		LOG_TAG = getString(R.string.app_name);
 				
 		// Get User ID for any other operation from intent.
 		if(savedInstanceState==null)

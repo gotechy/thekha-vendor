@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="vertical"
         tools:context=".BusinessActivity" >
@@ -42,6 +41,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Business_Name"
+                    android:textStyle="bold"
+                    android:textColor="@color/brand_color"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
@@ -50,8 +51,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/business_name"
                     android:layout_alignParentRight="true"
+                    android:textStyle="bold"
                     android:text="Business Type"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
             </RelativeLayout>
 
             <TextView
@@ -59,8 +61,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="AC | Smoking | Veg | Non-Veg | Mujra"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="Facilities Available"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
                 android:id="@+id/business_phonelable"

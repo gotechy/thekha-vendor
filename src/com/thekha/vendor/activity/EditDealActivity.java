@@ -306,6 +306,9 @@ public class EditDealActivity extends Activity {
 				input.close();
 			} catch (Exception e) {
 				Log.d(LOG_TAG, e.getMessage());
+				File f = new File(getApplicationContext().getExternalFilesDir(null)+File.separator+params[1]);
+				if(f.exists())
+					f.delete();
 				publishProgress("dwf");
 				pDialog.dismiss();
 				cancel(true);

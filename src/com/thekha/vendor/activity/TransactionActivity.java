@@ -369,7 +369,9 @@ public class TransactionActivity extends Activity {
 						picturePath = deal.getImageURL();
 						File afile =new File(picturePath);
 						pictureName = "dealImg_"
-								+bid+"_"+DateTime.now(TimeZone.getDefault()).toString()
+								+bid+"_"+
+								DateTime.today(TimeZone.getDefault())+"_"+
+								DateTime.now(TimeZone.getDefault()).getMinute()+":"+DateTime.now(TimeZone.getDefault()).getSecond()
 								+picturePath.substring(picturePath.lastIndexOf("."));
 						//+"."+picturePath.substring(picturePath.lastIndexOf(".")+1);
 						picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;

@@ -7,6 +7,7 @@
     android:paddingLeft="20dp"
     android:paddingRight="16dp"
     android:textSize="18sp"
-    android:textColor="@color/brand_color"
-    android:background="?android:attr/activatedBackgroundIndicator"
+    android:textStyle="bold"
+    android:textColor="@android:color/white"
+    android:background="@drawable/list_selector"
     android:minHeight="?android:attr/listPreferredItemHeight"/>

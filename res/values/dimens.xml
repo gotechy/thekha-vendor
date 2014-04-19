@@ -2,14 +2,14 @@
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">8dp</dimen>
-    <dimen name="activity_vertical_margin">0dp</dimen>
-	<dimen name="profile_image_height">150dp</dimen>
+    <dimen name="activity_vertical_margin">20dp</dimen>
+	<dimen name="profile_image_height">250dp</dimen>
+	<dimen name="deal_image_height">250dp</dimen>
 	<dimen name="dashboard_items_vertical_padding">5dp</dimen>
 	<dimen name="dashboard_items_horizontal_padding">10dp</dimen>
-	<dimen name="drawer_width">200dp</dimen>
+	<dimen name="drawer_width">250dp</dimen>
 	
-<!-- added by Gaurav Rana Start-->		
-	<dimen name="deal_image_height">150dp</dimen>
+<!-- added by Gaurav Rana Start-->
 	<dimen name="aed_from_to_date_time">100dp</dimen>
 <!-- added by Gaurav Rana End-->	
 </resources>

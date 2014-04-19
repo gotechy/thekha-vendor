@@ -12,7 +12,7 @@
 
     <item>
         <shape android:shape="rectangle">
-            <gradient android:type="radial" android:gradientRadius="400" android:startColor="@android:color/white"
+            <gradient android:type="radial" android:gradientRadius="800" android:startColor="@android:color/white"
                 android:endColor="@color/brand_color" />
             <!-- border width and color -->
             <stroke android:width="0.5dp" android:color="#FFDDDDDD" />

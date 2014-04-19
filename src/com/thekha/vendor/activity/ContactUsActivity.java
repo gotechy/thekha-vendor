@@ -117,7 +117,8 @@ public class ContactUsActivity extends Activity {
 				.addNextIntentWithParentStack(upIntent)
 				.startActivities();
 			} else {
-				NavUtils.navigateUpTo(this, upIntent);
+				finish();
+				//NavUtils.navigateUpTo(this, upIntent);
 			}
 			finish();
 			break;

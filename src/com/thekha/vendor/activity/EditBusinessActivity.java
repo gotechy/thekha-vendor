@@ -206,7 +206,9 @@ public class EditBusinessActivity extends Activity {
 					if(picturePath!=null){
 						File afile =new File(picturePath);
 						pictureName = "businessImg_"
-								+business.getId()+"_"+DateTime.today(TimeZone.getDefault())
+								+business.getId()+"_"+
+								DateTime.today(TimeZone.getDefault())+"_"+
+								DateTime.now(TimeZone.getDefault()).getMinute()+":"+DateTime.now(TimeZone.getDefault()).getSecond()
 								+picturePath.substring(picturePath.lastIndexOf("."));
 						//+"."+picturePath.substring(picturePath.lastIndexOf(".")+1);
 						picturePath = getApplicationContext().getExternalFilesDir(null) + File.separator + pictureName;
