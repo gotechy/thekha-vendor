@@ -16,18 +16,22 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.thekha.vendor.activity.AddDealActivity;
 import com.thekha.vendor.activity.DashboardActivity;
 import com.thekha.vendor.activity.R;
 import com.thekha.vendor.bean.Dashboard;
 import com.thekha.vendor.dao.DashboardDAO;
+import com.thekha.vendor.dao.LoginDAO;
 
 public class DashboardFragment extends Fragment {
 	
@@ -37,6 +41,7 @@ public class DashboardFragment extends Fragment {
 	private ProgressDialog pDialog;
 	ImageView iv ;
 	TextView businessName, profileViews, noOfDealsActive, noOfDeals, credits, advertising, banner, clciks;
+	ImageView addDeal;
 	
 	Dashboard d;
 	DashboardDAO ddao;
@@ -68,6 +73,18 @@ public class DashboardFragment extends Fragment {
         clciks = (TextView) view.findViewById(R.id.dashboard_clicks);
         
         new BusinessTask().execute();
+        
+        addDeal = (ImageView) view.findViewById(R.id.dashboard_dealsaddbutton);
+        addDeal.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getActivity().getApplicationContext(), AddDealActivity.class);
+        		i.putExtra(LoginDAO.TAG_USERID, ((DashboardActivity)getActivity()).uid);
+        		startActivity(i);
+			}
+		});
+        
+        
         return view;
 	}
 	
