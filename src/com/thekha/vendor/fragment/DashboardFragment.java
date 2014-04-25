@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -30,6 +29,7 @@ import com.thekha.vendor.activity.AddDealActivity;
 import com.thekha.vendor.activity.DashboardActivity;
 import com.thekha.vendor.activity.R;
 import com.thekha.vendor.bean.Dashboard;
+import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.DashboardDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
@@ -79,6 +79,7 @@ public class DashboardFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(getActivity().getApplicationContext(), AddDealActivity.class);
+        		i.putExtra(BusinessDAO.TAG_BID, ((DashboardActivity)getActivity()).bid);
         		i.putExtra(LoginDAO.TAG_USERID, ((DashboardActivity)getActivity()).uid);
         		startActivity(i);
 			}
@@ -112,7 +113,7 @@ public class DashboardFragment extends Fragment {
 			if(!isCancelled()){
 				try {
 					ddao = new DashboardDAO();
-					d = ddao.updateDashboard(((DashboardActivity)getActivity()).uid);
+					d = ddao.updateDashboard(((DashboardActivity)getActivity()).uid,((DashboardActivity)getActivity()).bid);
 					return "Business profile successfully loaded.";
 				} catch (JSONException e) {
 					return "Something is very wrong, please contact our support services.";

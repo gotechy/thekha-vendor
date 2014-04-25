@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.Prices;
 import com.thekha.vendor.bean.Transaction;
+import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.DealsDAO;
 import com.thekha.vendor.dao.LoginDAO;
 import com.thekha.vendor.dao.TransactionDAO;
@@ -57,7 +58,7 @@ public class TransactionActivity extends Activity {
 	private Prices prices;
 	private int total, days;
 	private DealsDAO dealDAO = new DealsDAO();
-	String bid, picturePath, pictureName;
+	String uid, bid, picturePath, pictureName;
 	List<Transaction> transactions = new ArrayList<Transaction>();
 	private boolean transactionReady = false;
 
@@ -91,7 +92,8 @@ public class TransactionActivity extends Activity {
 		infoView = (TextView) findViewById(R.id.payment_info);
 
 		transactionDAO = new TransactionDAO();
-		bid = getIntent().getStringExtra(LoginDAO.TAG_USERID); 
+		bid = getIntent().getStringExtra(BusinessDAO.TAG_BID);
+		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
 		deal = (Deals) getIntent().getSerializableExtra(Deals.DEALS_KEY);
 		prices = (Prices) getIntent().getSerializableExtra(Prices.PRICES_KEY);
 		nDeal = (Deals) getIntent().getSerializableExtra("PrivateEDATAKey");
@@ -301,11 +303,12 @@ public class TransactionActivity extends Activity {
 				.addNextIntentWithParentStack(upIntent)
 				.startActivities();
 			} else {
-				NavUtils.navigateUpTo(this, upIntent);
+				//NavUtils.navigateUpTo(this, upIntent);
+				finish();
 			}
 			break;
 		case R.id.transaction_cancel:
-			startActivity(getParentActivityIntent());
+			//startActivity(getParentActivityIntent());
 			finish();
 			break;
 		case R.id.transaction_done:
@@ -391,7 +394,7 @@ public class TransactionActivity extends Activity {
 						deal.setStatus(Deals.STATUS_ACTIVE);
 						UploadImage.upload(picturePath);
 						
-						Integer dealid = dealDAO.add(bid, deal, transaction);
+						Integer dealid = dealDAO.add(bid, uid, deal, transaction);
 						if(dealid != null){
 							return true;
 						}
@@ -399,7 +402,7 @@ public class TransactionActivity extends Activity {
 						nDeal.setSMSCount(deal.getSMSCount()+nDeal.getSMSCount());
 						nDeal.setEmailCount(deal.getEmailCount()+nDeal.getEmailCount());
 						nDeal.setStatus(Deals.STATUS_ACTIVE);
-						return dealDAO.update(nDeal, bid, transaction);
+						return dealDAO.update(nDeal, uid, transaction);
 					}
 				} catch (ClientProtocolException e) {
 					return false;
@@ -458,7 +461,7 @@ public class TransactionActivity extends Activity {
 			if(!isCancelled()){
 				try {
 					transactions = null;
-					transactions = transactionDAO.read(getApplicationContext(), bid);
+					transactions = transactionDAO.read(getApplicationContext(), uid);
 					return "Transactions successfully loaded.";
 				} catch (JSONException e) {
 					return "Something is very wrong, please contact our support services.";

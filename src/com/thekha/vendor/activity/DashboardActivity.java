@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
 public class DashboardActivity extends FragmentActivity {
@@ -31,24 +32,28 @@ public class DashboardActivity extends FragmentActivity {
 	private DrawerLayout drawerLayout;
 	private String[] drawerMenu;
 	private String title, drawerTitle;
-	public String uid, LOG_TAG;
+	public String uid, bid, LOG_TAG;
 	
 	ArrayAdapter<String> drawerAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
+		if(savedInstanceState==null){
+			uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
+			bid = getIntent().getStringExtra(BusinessDAO.TAG_BID);
+		}
+		else{
+			uid = savedInstanceState.getCharSequence(LoginDAO.TAG_USERID).toString();
+			bid = savedInstanceState.getCharSequence(BusinessDAO.TAG_BID).toString();
+		}
 		setContentView(R.layout.activity_dashboard);
 		setTitle(R.string.dashboard_activity_title);
 		
 		LOG_TAG = getString(R.string.app_name);
 				
 		// Get User ID for any other operation from intent.
-		if(savedInstanceState==null)
-			uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
-		else{
-			uid = savedInstanceState.getCharSequence(LoginDAO.TAG_USERID).toString();
-		}
+		
         // ******** Setup Navigation Drawer *********
 		actionBar = getActionBar();
         title = getResources().getString(R.string.dashboard_activity_title);
@@ -92,7 +97,9 @@ public class DashboardActivity extends FragmentActivity {
 		if(uid == null){
         	try {
         		LoginDAO ldao = new LoginDAO();
-    			uid = ldao.loginFromCache(getApplicationContext());
+    			String temp = ldao.loginFromCache(getApplicationContext());
+    			uid = temp.substring(0, temp.indexOf(":"));
+    			bid = temp.substring(temp.indexOf(":")+1);
     			if(uid == null){
     				Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
         			Intent i = new Intent(DashboardActivity.this, LoginActivity.class);
@@ -121,11 +128,13 @@ public class DashboardActivity extends FragmentActivity {
         	TextView temp = (TextView) view;
         	if(temp.getText().toString().equals(drawerMenu[0])){
         		Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
+        		i.putExtra(BusinessDAO.TAG_BID, bid);
         		i.putExtra(LoginDAO.TAG_USERID, uid);
         		startActivity(i);
         	}
         	if(temp.getText().toString().equals(drawerMenu[1])){
         		Intent i = new Intent(getApplicationContext(), DealsViewActivity.class);
+        		i.putExtra(BusinessDAO.TAG_BID, bid);
         		i.putExtra(LoginDAO.TAG_USERID, uid);
         		startActivity(i);
         	}
@@ -136,7 +145,7 @@ public class DashboardActivity extends FragmentActivity {
         	}
         	if(temp.getText().toString().equals(drawerMenu[3])){
         		Intent i = new Intent(getApplicationContext(), BusinessActivity.class);
-        		i.putExtra(LoginDAO.TAG_USERID, uid);
+        		i.putExtra(BusinessDAO.TAG_BID, bid);
         		startActivity(i);
         	}
         	if(temp.getText().toString().equals(drawerMenu[4])){
@@ -156,12 +165,14 @@ public class DashboardActivity extends FragmentActivity {
 		super.onSaveInstanceState(savedInstanceState);
 		// Save the user's current state
 		savedInstanceState.putString(LoginDAO.TAG_USERID, uid);
+		savedInstanceState.putString(BusinessDAO.TAG_BID, bid);
 	}
 	
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		uid = savedInstanceState.getString(LoginDAO.TAG_USERID);
+		bid = savedInstanceState.getString(BusinessDAO.TAG_BID);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

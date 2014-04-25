@@ -1,4 +1,4 @@
-package com.thekha.vendor.activity;
+ package com.thekha.vendor.activity;
 
 import hirondelle.date4j.DateTime;
 
@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
 public class LoginActivity extends Activity {
@@ -76,9 +77,10 @@ public class LoginActivity extends Activity {
 
 	}
 
-	private void startDashboardActivity(String id){
+	private void startDashboardActivity(String str){
 		Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-		i.putExtra(LoginDAO.TAG_USERID, id);
+		i.putExtra(LoginDAO.TAG_USERID, str.substring(0, str.indexOf(":")));
+		i.putExtra(BusinessDAO.TAG_BID, str.substring(str.indexOf(":")+1));
 		startActivity(i);
 		finish();
 	}
@@ -121,13 +123,13 @@ public class LoginActivity extends Activity {
 
 
 		@Override
-		protected void onPostExecute(String uid) {
-			super.onPostExecute(uid);
+		protected void onPostExecute(String json) {
+			super.onPostExecute(json);
 			pDialog.dismiss();
 			if (failureReason.isEmpty()){
-				if(uid != null){
-					Log.d(LOG_TAG, "Logged In with UserID "+uid+", at "+DateTime.now(TimeZone.getDefault()));
-					startDashboardActivity(uid);	
+				if(json != null){
+					Log.d(LOG_TAG, "Logged In with UserID:BusinessID "+json+", at "+DateTime.now(TimeZone.getDefault()));
+					startDashboardActivity(json);
 				}
 				else{
 					Toast.makeText(getApplicationContext(), "Invalid Username or Password, please try again...", Toast.LENGTH_SHORT).show();

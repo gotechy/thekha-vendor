@@ -50,7 +50,7 @@ public class DealsDAO {
 	private static final String TAG_HOMEPAGEBANNER = "homePageBanner";
 	private static final String TAG_CATEGORYBANNER = "categoryBanner";
 
-	public int add(String bid, Deals deal, Transaction t) throws ClientProtocolException, IOException, JSONException {
+	public int add(String bid, String uid, Deals deal, Transaction t) throws ClientProtocolException, IOException, JSONException {
 		
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, bid));
@@ -73,7 +73,7 @@ public class DealsDAO {
 		reqParams.add(new BasicNameValuePair(TAG_SMSCOUNT, String.valueOf(deal.getSMSCount())));
 		reqParams.add(new BasicNameValuePair(TAG_EMAILCOUNT, String.valueOf(deal.getEmailCount())));
 		
-		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, bid));
+		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, uid));
 		reqParams.add(new BasicNameValuePair("ttitle", t.getTitle()));
 		reqParams.add(new BasicNameValuePair("tamount", String.valueOf(t.getAmount())));
 		reqParams.add(new BasicNameValuePair("tdescription", t.getDescription()));
@@ -121,7 +121,7 @@ public class DealsDAO {
 		return deals;
 	}
 	
-	public boolean update(Deals deal, String bid, Transaction t) throws ClientProtocolException, IOException, JSONException {
+	public boolean update(Deals deal, String uid, Transaction t) throws ClientProtocolException, IOException, JSONException {
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
 		reqParams.add(new BasicNameValuePair(TAG_DEALID, String.valueOf(deal.getId())));
 		reqParams.add(new BasicNameValuePair(TAG_PLACEMENTID, String.valueOf(deal.getPlacement().getId())));
@@ -140,8 +140,9 @@ public class DealsDAO {
 		reqParams.add(new BasicNameValuePair(TAG_TO, deal.getTo().toString()));
 		reqParams.add(new BasicNameValuePair(TAG_SMSCOUNT, String.valueOf(deal.getSMSCount())));
 		reqParams.add(new BasicNameValuePair(TAG_EMAILCOUNT, String.valueOf(deal.getEmailCount())));
+		reqParams.add(new BasicNameValuePair(TAG_STATUS, deal.getStatus()));
 		
-		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, bid));
+		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, uid));
 		reqParams.add(new BasicNameValuePair("ttitle", t.getTitle()));
 		reqParams.add(new BasicNameValuePair("tamount", String.valueOf(t.getAmount())));
 		reqParams.add(new BasicNameValuePair("tdescription", t.getDescription()));

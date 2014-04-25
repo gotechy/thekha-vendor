@@ -51,14 +51,15 @@ public class LoginDAO {
 			return null;
 		}
 		
-		cache(c, jsonResp);
-		
-		return parseJSON(jsonResp);
+		String temp = parseJSON(jsonResp);
+		if(temp!=null)
+			cache(c, jsonResp);
+		return temp;
 		
 	}
 	
 	private String parseJSON(String json) throws JSONException{
-		int n;
+		int ids[] = new int[2];
 		JSONTokener tokener = new JSONTokener(json);
 		JSONArray jsonArr = new JSONArray(tokener);
 		for(int i=0; i<jsonArr.length(); i++){
@@ -66,9 +67,11 @@ public class LoginDAO {
 			Iterator itr = jobj.keys();
 			while(itr.hasNext()){
 				String str = (String) itr.next();
-				n = jobj.getInt(str);
-				if(n!=0){
-					return jobj.getString(str);
+				str = jobj.getString(str);
+				ids[0] = Integer.parseInt(str.substring(0, str.indexOf(":")));
+				ids[1] = Integer.parseInt(str.substring(str.indexOf(":")+1));
+				if(ids[0]!=0){
+					return str;
 				}
 			}
 		}

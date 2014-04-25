@@ -28,7 +28,7 @@ public class ServiceHandler {
 	
 	public static final String LOGIN_SERVICE = "login/UserLogin";
 	
-	public static final String GET_PROFILE_SERVICE = "getProfile/Profile";
+	public static final String GET_PROFILE_SERVICE = "getAndroidProfile/Profile";
 	public static final String UPDATE_PROFILE_SERVICE = "updateProfile/Profile";
 	
 	public static final String CREATE_DEAL_SERVICE = "createDeal/Deal";

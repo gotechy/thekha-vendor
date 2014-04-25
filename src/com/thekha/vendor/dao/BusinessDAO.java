@@ -54,9 +54,9 @@ public class BusinessDAO {
 	private static final String TAG_VEG = "veg";
 	private static final String TAG_NONVEG = "nonveg";
 	
-	public Business read(String uid) throws JSONException, ClientProtocolException, IOException{
+	public Business read(String bid) throws JSONException, ClientProtocolException, IOException{
 		List<NameValuePair> reqParams = new ArrayList<NameValuePair>();
-		reqParams.add(new BasicNameValuePair(LoginDAO.TAG_USERID, uid));
+		reqParams.add(new BasicNameValuePair(BusinessDAO.TAG_BID, bid));
 		
 		ServiceHandler sh = new ServiceHandler();
 		jsonResp = sh.makeServiceCall(ServiceHandler.GET_PROFILE_SERVICE, ServiceHandler.GET, reqParams);
@@ -166,5 +166,4 @@ public class BusinessDAO {
 				f
 		);		
 	}
-
 }

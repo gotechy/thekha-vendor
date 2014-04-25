@@ -47,7 +47,7 @@ public class BusinessActivity extends Activity {
 	ImageView picture;
 	private ProgressDialog pDialog;
 
-	private String uid;
+	private String bid;
 
 	static final int EDIT_BUSINESS_REQUEST = 1;
 
@@ -73,17 +73,18 @@ public class BusinessActivity extends Activity {
 		picture = (ImageView) findViewById(R.id.business_picture);
 
 		businessDAO = new BusinessDAO();
-		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
-		new BusinessTask().execute(uid);
+		bid = getIntent().getStringExtra(BusinessDAO.TAG_BID);
+		new BusinessTask().execute(bid);
 	}
 
 	@Override
 	protected void onStart() {
 		// Check UID, if null get from cache, otherwise login user again manually.
-		if(uid == null){
+		if(bid == null){
 			try {
 				LoginDAO ldao = new LoginDAO();
-				uid = ldao.loginFromCache(getApplicationContext());
+				String temp = ldao.loginFromCache(getApplicationContext());
+    			bid = temp.substring(temp.indexOf(":"));
 			}
 			catch (IOException e) {
 				Toast.makeText(getApplicationContext(), "Please login again.", Toast.LENGTH_SHORT).show();
@@ -168,7 +169,6 @@ public class BusinessActivity extends Activity {
 		case R.id.business_edit:
 			Intent editBusiness = new Intent(getApplicationContext(), EditBusinessActivity.class);
 			editBusiness.putExtra(Business.BUSINESS_KEY, business);
-			editBusiness.putExtra(LoginDAO.TAG_USERID, uid);
 			startActivityForResult(editBusiness, EDIT_BUSINESS_REQUEST);
 			break;
 		default:

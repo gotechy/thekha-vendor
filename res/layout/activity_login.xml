@@ -17,10 +17,13 @@
 
     <ImageView
         android:id="@+id/login_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/loginscreen_logo_width"
+        android:layout_height="@dimen/loginscreen_logo_height"
         android:layout_above="@id/brand_mantra"
         android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:scaleType="fitXY"
         android:layout_gravity="center"
         android:contentDescription="@string/login_logo"
         android:src="@drawable/logo" />

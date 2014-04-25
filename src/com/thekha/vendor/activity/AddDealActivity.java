@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.Prices;
+import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.LoginDAO;
 import com.thekha.vendor.dao.PricesDAO;
 import com.thekha.vendor.util.DateTimeConversion;
@@ -64,7 +65,7 @@ public class AddDealActivity extends Activity {
 	String picturePath;
 	static int fromToFlag;
 	static Button fromDate, fromTime, toDate, toTime;
-	String imageURL, bid;
+	String imageURL, bid, uid;
 	private ProgressDialog pDialog;
 	static String dateString, timeString;
 
@@ -74,10 +75,9 @@ public class AddDealActivity extends Activity {
 		setContentView(R.layout.activity_add_deal);
 		setTitle(R.string.title_deals_view);
 		LOG_TAG = getString(R.string.app_name);
-		bid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
-		// For current model uid == bid unless app implemented for multiple
-		// business profiles.
-
+		bid = getIntent().getStringExtra(BusinessDAO.TAG_BID);
+		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
+		
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -204,7 +204,8 @@ public class AddDealActivity extends Activity {
 						TransactionActivity.class);
 				i.putExtra(Prices.PRICES_KEY, prices);
 				i.putExtra(Deals.DEALS_KEY, deal);
-				i.putExtra(LoginDAO.TAG_USERID, bid);
+				i.putExtra(LoginDAO.TAG_USERID, uid);
+				i.putExtra(BusinessDAO.TAG_BID, bid);
 				startActivity(i);
 				finish();
 			}

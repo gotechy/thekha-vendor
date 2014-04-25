@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.thekha.vendor.bean.Deals;
 import com.thekha.vendor.bean.DealsPlacement;
 import com.thekha.vendor.bean.Prices;
+import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.LoginDAO;
 import com.thekha.vendor.dao.PricesDAO;
 
@@ -53,7 +54,7 @@ public class EditDealActivity extends Activity {
 	Button changeImage;
 	ImageView picture;
 	//String picturePath, pictureName;
-	String uid;
+	String bid, uid;
 
 	private ProgressDialog pDialog;
 
@@ -68,6 +69,7 @@ public class EditDealActivity extends Activity {
 		LOG_TAG = getString(R.string.app_name);
 
 		oldDealObj = (Deals) getIntent().getSerializableExtra(Deals.DEALS_KEY);
+		bid = getIntent().getStringExtra(BusinessDAO.TAG_BID);
 		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
 
 		actionBar = getActionBar();
@@ -169,6 +171,7 @@ public class EditDealActivity extends Activity {
 				Intent i = new Intent(EditDealActivity.this, TransactionActivity.class);
 				i.putExtra(Prices.PRICES_KEY, prices);
 				i.putExtra(Deals.DEALS_KEY, oldDealObj);
+				i.putExtra(BusinessDAO.TAG_BID, bid);
 				i.putExtra(LoginDAO.TAG_USERID, uid);
 				i.putExtra("PrivateEDATAKey", newDealObj);
 				startActivity(i);

@@ -18,6 +18,7 @@ import com.thekha.vendor.activity.DealsViewActivity;
 import com.thekha.vendor.activity.EditDealActivity;
 import com.thekha.vendor.activity.R;
 import com.thekha.vendor.bean.Deals;
+import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
 public class DealsListAdapter extends BaseAdapter {
@@ -26,18 +27,20 @@ public class DealsListAdapter extends BaseAdapter {
 	private List<Deals> dealsList; 
 	
 	private final Context mContext;
-	private final String uid;
+	private final String bid, uid;
 	
-	public DealsListAdapter(Context context, String id) {
+	public DealsListAdapter(Context context, String bid1, String uid1) {
 		mContext = context;
 		dealsList = new ArrayList<Deals>();
-		uid = id;
+		bid = bid1;
+		uid = uid1;
 	}
 
-	public DealsListAdapter(Context context, String id, List<Deals> deals) {
+	public DealsListAdapter(Context context, String bid1, String uid1, List<Deals> deals) {
 		mContext = context;
 		dealsList = deals;
-		uid = id;
+		bid = bid1;
+		uid = uid1;
 	}
 
 	public void add(Deals item) {
@@ -88,6 +91,7 @@ public class DealsListAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					Intent editDeals = new Intent( mContext.getApplicationContext(), EditDealActivity.class);
 					editDeals.putExtra(Deals.DEALS_KEY, deal);
+					editDeals.putExtra(BusinessDAO.TAG_BID, bid);
 					editDeals.putExtra(LoginDAO.TAG_USERID, uid);
 					mContext.startActivity(editDeals);
 					((DealsViewActivity) mContext).finish();
@@ -103,6 +107,7 @@ public class DealsListAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					Intent editDeals = new Intent( mContext.getApplicationContext(), EditDealActivity.class);
 					editDeals.putExtra(Deals.DEALS_KEY, deal);
+					editDeals.putExtra(BusinessDAO.TAG_BID, bid);
 					editDeals.putExtra(LoginDAO.TAG_USERID, uid);
 					mContext.startActivity(editDeals);
 					((DealsViewActivity) mContext).finish();

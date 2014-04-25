@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.thekha.vendor.adapter.DealsListAdapter;
 import com.thekha.vendor.bean.Deals;
+import com.thekha.vendor.dao.BusinessDAO;
 import com.thekha.vendor.dao.DealsDAO;
 import com.thekha.vendor.dao.LoginDAO;
 
@@ -38,7 +39,7 @@ public class DealsViewActivity extends Activity {
 	Deals deal;	
 	ActionBar actionBar;
 	private ProgressDialog pDialog;
-	String uid;
+	String bid, uid;
 	private DealsDAO dealDAO;
 	private ListView lv;
 	
@@ -49,6 +50,7 @@ public class DealsViewActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_deals_view);
 		LOG_TAG = getString(R.string.app_name);
+		bid = getIntent().getStringExtra(BusinessDAO.TAG_BID);
 		uid = getIntent().getStringExtra(LoginDAO.TAG_USERID);
 		dealDAO = new DealsDAO();
 		
@@ -90,12 +92,14 @@ public class DealsViewActivity extends Activity {
           } else {
               // This activity is part of this app's task, so simply
               // navigate up to the logical parent activity.
-              NavUtils.navigateUpTo(this, upIntent);
+              //NavUtils.navigateUpTo(this, upIntent);
+        	  finish();
           }
           return true;
 	    case R.id.dv_add_deals:
 	    	// - Save the data and take back to profile.
 	    	Intent i = new Intent(getApplicationContext(), AddDealActivity.class);
+    		i.putExtra(BusinessDAO.TAG_BID, bid);
     		i.putExtra(LoginDAO.TAG_USERID, uid);
     		startActivity(i);
     		finish();
@@ -141,7 +145,7 @@ public class DealsViewActivity extends Activity {
 			if(!isCancelled()){
 				try {
 					deals = null;
-					deals = dealDAO.read(getApplicationContext(), uid);
+					deals = dealDAO.read(getApplicationContext(), bid);
 					return "Deals successfully loaded.";
 				} catch (JSONException e) {
 		        	return "Something is very wrong, please contact our support services.";
@@ -159,7 +163,7 @@ public class DealsViewActivity extends Activity {
             super.onPostExecute(param);
 			pDialog.dismiss();
 			if(deals != null){
-				dealsAdapter = new DealsListAdapter(DealsViewActivity.this, uid, deals);
+				dealsAdapter = new DealsListAdapter(DealsViewActivity.this, bid, uid, deals);
 				lv.setAdapter(dealsAdapter);
 	            Log.d(LOG_TAG, param);
 	            //TODO - implement caching for deals
