@@ -1,6 +1,7 @@
 package com.thekha.vendor.adapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -32,6 +33,7 @@ public class DealsListAdapter extends BaseAdapter {
 	public DealsListAdapter(Context context, String bid1, String uid1) {
 		mContext = context;
 		dealsList = new ArrayList<Deals>();
+		Collections.reverse(dealsList);
 		bid = bid1;
 		uid = uid1;
 	}
@@ -39,6 +41,7 @@ public class DealsListAdapter extends BaseAdapter {
 	public DealsListAdapter(Context context, String bid1, String uid1, List<Deals> deals) {
 		mContext = context;
 		dealsList = deals;
+		Collections.reverse(dealsList);
 		bid = bid1;
 		uid = uid1;
 	}

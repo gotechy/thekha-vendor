@@ -1,6 +1,8 @@
 package com.thekha.vendor.adapter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -21,11 +23,13 @@ public class TransactionsAdapter extends BaseAdapter {
 	public TransactionsAdapter(Context c){
 		context = c;
 		transactions = new ArrayList<Transaction>();
+		Collections.reverse(transactions);
 	}
 	
 	public TransactionsAdapter(Context c, List<Transaction> ts){
 		context = c;
 		transactions = ts;
+		Collections.reverse(transactions);
 	}
 	
 	public void add(Transaction t){

@@ -225,6 +225,7 @@ public class EditBusinessActivity extends Activity {
 						outStream.close();
 						UploadImage.upload(picturePath);
 						business.setImageURL(UploadImage.upload_folder+File.separator+pictureName);
+						//business.setImageURL(pictureName);
 					}
 					return businessDAO.update(business);
 				} catch (ClientProtocolException e) {
